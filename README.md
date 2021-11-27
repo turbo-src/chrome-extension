@@ -18,7 +18,7 @@ To tackle this, create a new GitHub Access Token.
 
    OR
 
-   Right-click on enhanced-github extension and click on `Options` in the dropdown menu.
+   Right-click on extension and click on `Options` in the dropdown menu.
 
 5. Enter the valid GitHub Access Token
 6. Click on `SAVE` and Enjoy the benefits.
@@ -43,15 +43,3 @@ This browser extension will automatically pick this valid access token and Bingo
 4. Enable developer mode
 5. Click on load unpacked extension and select the generated folder.
 6. [Admin Access Only] - run `yarn build` for generating zip file to be uploaded on _Chrome Web Store_, _Firefox Add-ons_, and _Microsoft Edge Addons_.
-
-> The [MIT license](https://opensource.org/licenses/MIT) (MIT)
->
-> Copyright (c) 2021 turbo-src
->
-> Copyright (c) 2016-2021 Varun Malhotra
->
-> Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
->
-> The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
->
-> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
