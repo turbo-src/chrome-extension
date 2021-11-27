@@ -15,13 +15,10 @@ To tackle this, create a new GitHub Access Token.
 2. Generate a new token, select `repo` scope and create a one.
 3. Copy and store the generated token which looks something like: `17c1a8d5b399d66b6212382d98d4c67a94d58955` (a fake one :P).
 4. Click on extension icon and then on `Settings-Options` on top right.
-   <img src="screenshots/extension-popup-screenshot.png" width="380" />
 
    OR
 
    Right-click on enhanced-github extension and click on `Options` in the dropdown menu.
-
-   <img src="screenshots/extension-options-page.png" width="380" />
 
 5. Enter the valid GitHub Access Token
 6. Click on `SAVE` and Enjoy the benefits.
