@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>CSS Grid - line-based placement starting point</title>
+    <style>
+        body {
+            width: 90%;
+            max-width: 900px;
+            margin: 2em auto;
+            font: .9em/1.2 Arial, Helvetica, sans-serif;
+        }
+
+       .container {
+       display: grid;
+       grid-template-columns: 1fr 1fr 1fr;
+       }
+
+
+        .header {
+        text-align: center;
+        },
+        footer {
+            border-radius: 5px;
+            padding: 10px;
+            background-color: rgb(207,232,220);
+            border: 2px solid rgb(79,185,227);
+        }
+
+        aside {
+            border-right: 1px solid #999;
+        }
+    </style>
+</head>
+<div class="header">
+  <h1>turbo-src</h1>
+</div>
+<body>
+    <div class="container">
+      <ul>yes</ul>
+      <ul>7db9a</ul>
+      <ul>issue_3473</ul>
+    </div>
+    <div class="container">
+      <ul>yes</ul>
+      <ul>7db9a</ul>
+      <ul>issue_3473</ul>
+    </div>
+
+</body>
+
+</html>
