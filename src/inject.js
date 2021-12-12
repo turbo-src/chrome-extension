@@ -11,7 +11,6 @@ const { useDispatch } = require('react-redux')
 const { createClient } = require('graphql-ws');
 //const { createClient: redisCreateClient } = require('redis');
 //const WebSocket = require('ws');
-
 const messageListenerUtil = require('./utils/messageListenerUtil');
 const domUtil = require('./utils/domUtil');
 const storageUtil = require('./utils/storageUtil');
@@ -19,6 +18,7 @@ const CommonEnum = require('./enums/CommonEnum');
 const superagent = require('superagent');
 const commonUtil = require("./utils/commonUtil");
 const authContributor = require("./authorizedContributor");
+const reactTable = require('./reactTable');
 
 var isRepoTurboSrcToken = false;
 
@@ -91,57 +91,48 @@ if (like_button_container.length) {
 //if (window.opener && window.opener !== window) {
   // you are in a popup
   // Button react component
-  const e = React.createElement;
+//const e = React.createElement;
+//
+//  var issueId = 'waiting...';
+//  class LikeButton extends React.Component {
+//    constructor(props) {
+//      super(props);
+//      this.state = {
+//        vote: 'waiting...' };
+//    }
+//
+//    componentDidMount() {
+//      client.on('message',(data) => {
+//        console.log('mount')
+//        this.setState({vote: issueId})
+//      })
+//    }
+//
+//    componentDidUpdate() {
+//      if (votes.length !== 0) {
+//        issueId = votes.pop();
+//        this.setState({vote: issueId});
+//      } else {
+//        //this.setState({vote: issueId})
+//      }
+//    }
+//
+//    render() {
+//      //if (this.state.vote) {
+//      //  return "none"
+//      //}
+//      return e(
+//        'output',
+//        null,
+//        this.state.vote
+//      );
+//    }
+//  }
+//
+//const domContainer = document.querySelector('#like_button_container');
+//render(e(LikeButton), domContainer);
 
-  //function like() {
-  //  const dispatch = useDispatch();
-  //  const [input, setInput] = useState('');
-
-  //  useEffect(() => {
-  //    client.on('message',(data) => {
-  //     dispatch({input: data});
-  //    })
-  //  })
-  //}
-
-  var issueId = 'waiting...';
-  class LikeButton extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-        vote: 'waiting...' };
-    }
-
-    componentDidMount() {
-      client.on('message',(data) => {
-        console.log('mount')
-        this.setState({vote: issueId})
-      })
-    }
-
-    componentDidUpdate() {
-      if (votes.length !== 0) {
-        issueId = votes.pop();
-        this.setState({vote: issueId});
-      } else {
-        //this.setState({vote: issueId})
-      }
-    }
-
-    render() {
-      //if (this.state.vote) {
-      //  return "none"
-      //}
-      return e(
-        'output',
-        null,
-        this.state.vote
-      );
-    }
-  }
-
-const domContainer = document.querySelector('#like_button_container');
-render(e(LikeButton), domContainer);
+//render(<reactTable />, document.getElementById('root'))
 } else {
 
   async function get_repo_status(repo_id) {

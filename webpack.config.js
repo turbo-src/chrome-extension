@@ -83,7 +83,11 @@ module.exports = function(_env, argv) {
           test: /\.js$/,
           exclude: /node_modules|dist/,
           use: {
-            loader: 'babel-loader'
+            loader: 'babel-loader',
+            options: {
+              presets: ['babel-preset-react-app'],
+              plugins: ['@babel/plugin-syntax-jsx', 'styled-components']
+            }
           }
         }
       ]
