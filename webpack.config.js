@@ -69,12 +69,12 @@ function addPlugins(argv) {
 module.exports = function(_env, argv) {
   return {
     entry: {
-      [libraryName]: './popup.js'
+      [libraryName]: './src/inject.js'
     },
     mode: argv.mode,
     output: {
       path: destination,
-      filename: 'popup.js',
+      filename: 'src/inject.js',
       library: libraryName
       // libraryTarget: 'global'
     },
