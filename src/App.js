@@ -33,7 +33,7 @@ const Styles = styled.div`
 `
 
 let sourceGridData = []
-const updateRateMS = 2000
+const updateRateMS = 1000
 
 function Table({ columns }) {
   // Use the state and functions returned from useTable to build your UI
@@ -94,7 +94,7 @@ function Table({ columns }) {
         </div>
 
         <div {...getTableBodyProps()}>
-          {rows.slice(0, 10).map(row => {
+          {rows.slice(0, undefined).map(row => {
             prepareRow(row)
             return (
               <div
