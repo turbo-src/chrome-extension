@@ -43,7 +43,6 @@ function addPlugins(argv) {
         { from: 'options.js', to: destination },
         { from: 'popup.js', to: destination },
         { from: '*html', to: destination },
-        { from: 'index.css', to: destination },
         { from: 'manifest.json', to: destination },
         { from: 'icons/*.png', to: destination },
         { from: 'src/background.js', to: destination },
@@ -92,6 +91,10 @@ module.exports = function(_env, argv) {
               }
             }
           ]
+        },
+        {
+          test: /\.css$/i,
+          use: ["style-loader", "css-loader"],
         }
       ]
     },
