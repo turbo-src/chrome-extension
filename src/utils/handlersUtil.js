@@ -1,9 +1,8 @@
 const commonUtil = require('./commonUtil');
-const authContributor =  require("../authorizedContributor")
+const authContributor = require('../authorizedContributor');
 
 const handlersUtil = {
   onPathContentFetchedForBtns: data => {
-
     commonUtil.removePrevInstancesOf('.js-file-clipboard');
     commonUtil.removePrevInstancesOf('.js-file-download');
 
@@ -15,27 +14,22 @@ const handlersUtil = {
     btnGroup.insertAdjacentHTML('beforeend', btnGroupHtml);
   },
   onPathContentFetched: (data = []) => {
-
     setTimeout(function() {
       commonUtil.removePrevInstancesOf('.eg-download'); // remove before adding new ones
 
-      const containerItems = document.querySelectorAll(
-        '.js-issue-row'
-      );
+      const containerItems = document.querySelectorAll('.js-issue-row');
 
-      let actualDataIndex = 0;
-      let startIndex = 0;
+      const actualDataIndex = 0;
+      const startIndex = 0;
 
       const repoPath = commonUtil.getUsernameWithReponameFromGithubURL();
 
-      if (
-        window.location.pathname !== `/${repoPath.user}/${repoPath.repo}/pulls`
-      ) {
+      if (window.location.pathname !== `/${repoPath.user}/${repoPath.repo}/pulls`) {
         return;
       }
 
       // Get contributor_id from chain web wallet extension
-      const contributor_id =  authContributor.getAuthContributor();
+      const contributor_id = authContributor.getAuthContributor();
       const svg_vote_yes = `
              href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAABGdBTUEAALGPC/xhBQAAACBjSFJN
          AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAC1lBMVEUAAACKPb2EQdCJPrqI
@@ -70,7 +64,7 @@ const handlersUtil = {
          Auz9d/0AAAAldEVYdGRhdGU6Y3JlYXRlADIwMjEtMTItMDZUMjE6MTU6MjUrMDA6MDBStHcXAAAA
          JXRFWHRkYXRlOm1vZGlmeQAyMDIxLTEyLTA2VDIxOjE1OjI1KzAwOjAwI+nPqwAAAABJRU5ErkJg
          gg==" />
-     `
+     `;
 
       const svg_vote_no = `
             href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAABGdBTUEAALGPC/xhBQAAACBjSFJN
@@ -101,37 +95,41 @@ const handlersUtil = {
         xlGNSLWvqqwoR4TFKSosyI+LjbR6OUo2YiIsb0a6ELixsdc/ykD0F6Hp41+UYqWeAAAAJXRFWHRk
         YXRlOmNyZWF0ZQAyMDIxLTEyLTA3VDAzOjMwOjAxKzAwOjAwdcHGiwAAACV0RVh0ZGF0ZTptb2Rp
         ZnkAMjAyMS0xMi0wN1QwMzozMDowMSswMDowMAScfjcAAAAASUVORK5CYII=" />
-     `
+     `;
       for (var i = startIndex; i < containerItems.length; i++) {
-            var issue_id = containerItems[i].getAttribute('id');
+        var issue_id = containerItems[i].getAttribute('id');
 
-            const voteYesHtml = `
+        const voteYesHtml =
+          `
               <div id="gridcell" class="mr-2 text-gray-light eg-download style="width: 18px;">
                 <span class="css-truncate css-truncate-target d-block">
                   <a style="float: right" title="Vote Yes" class="tooltipped tooltipped-s"
                     }">
                     <svg class="octicon octicon-cloud-download" aria-hidden="true" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="18px" height="18px" viewBox="0 0 18 18" enable-background="new 0 0 18 18" xml:space="preserve">  <image id="voteYes" width="18" height="18" x="0" y="0" issue_id="${issue_id}" contributor_id="${contributor_id}"` +
-                    svg_vote_yes + `
+          svg_vote_yes +
+          `
                 </svg
                   </a>
                 </span>
               </div>
             `;
 
-            const voteNoHtml = `
+        const voteNoHtml =
+          `
               <div id="gridcell" class="mr-2 text-gray-light eg-download style="width: 18px;">
                 <span class="css-truncate css-truncate-target d-block">
                   <a style="float: right" title="Vote No"" class="tooltipped tooltipped-s"
                     }">
                     <svg class="octicon octicon-cloud-download" aria-hidden="true" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="18px" height="18px" viewBox="0 0 18 18" enable-background="new 0 0 18 18" xml:space="preserve">  <image id="voteNo" width="18" height="18" x="0" y="0" issue_id="${issue_id}" contributor_id="${contributor_id}"` +
-                    svg_vote_no + `
+          svg_vote_no +
+          `
                 </svg
                   </a>
                 </span>
               </div>
             `;
-            containerItems[i].querySelector('.flex-shrink-0').insertAdjacentHTML('beforeend', voteYesHtml + voteNoHtml);
-            //containerItems[i].querySelector('.flex-shrink-0').insertAdjacentHTML('beforebegin', voteNoHtml);
+        containerItems[i].querySelector('.flex-shrink-0').insertAdjacentHTML('beforeend', voteYesHtml + voteNoHtml);
+        // containerItems[i].querySelector('.flex-shrink-0').insertAdjacentHTML('beforebegin', voteNoHtml);
       }
     }, 1000);
   }

@@ -10,7 +10,7 @@ const commonUtil = {
             name
           }
         }
-      }`,
+      }`
     });
 
     const options = {
@@ -21,14 +21,14 @@ const commonUtil = {
       headers: {
         'Content-Type': 'application/json',
         'Content-Length': data.length
-      },
+      }
     };
 
-    const req = https.request(options, (res) => {
+    const req = https.request(options, res => {
       let data = '';
       console.log(`statusCode: ${res.statusCode}`);
 
-      res.on('data', (d) => {
+      res.on('data', d => {
         data += d;
       });
       res.on('end', () => {
@@ -36,7 +36,7 @@ const commonUtil = {
       });
     });
 
-    req.on('error', (error) => {
+    req.on('error', error => {
       console.error(error);
     });
 
@@ -48,11 +48,11 @@ const commonUtil = {
     // New definition
     const result = str.match(/.*[p][ul][l][l]\/(.*)/); // pull :D
     // Previous definition
-    //const result = str.match(/.*[bt][lr][oe][be]\/[^//]+\/(.*)/); // blob/tree :D
+    // const result = str.match(/.*[bt][lr][oe][be]\/[^//]+\/(.*)/); // blob/tree :D
     return result && result.length && result[1];
   },
   // There is no branch in pulls path (window.location.href)
-  /*getBranch: function() {
+  /* getBranch: function() {
     const str = window.location.href;
     const result = str.match(/.*(blob|tree|commits)\/([^//]+).*$/); // just after blob/tree
     return result && result.length && result[2];
@@ -132,7 +132,7 @@ const commonUtil = {
   },
   getFileSizeAndUnit: function(data) {
     // We don't care anymore about file sizes
-    //const formatBytes = commonUtil.convertSizeToHumanReadableFormat(data.size);
+    // const formatBytes = commonUtil.convertSizeToHumanReadableFormat(data.size);
     const size = 10;
     const unit = 'votes';
 

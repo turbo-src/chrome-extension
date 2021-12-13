@@ -10,7 +10,7 @@ function getVote() {
   const data = JSON.stringify({
     query: `{
       vote(way: true)
-    }`,
+    }`
   });
 
   const options = {
@@ -21,13 +21,13 @@ function getVote() {
     headers: {
       'Content-Type': 'application/json',
       'Content-Length': data.length
-    },
+    }
   };
-  const req = https.request(options, (res) => {
+  const req = https.request(options, res => {
     let data = '';
     console.log(`statusCode: ${res.statusCode}`);
 
-    res.on('data', (d) => {
+    res.on('data', d => {
       data += d;
     });
     res.on('end', () => {
@@ -35,14 +35,14 @@ function getVote() {
     });
   });
 
-  req.on('error', (error) => {
+  req.on('error', error => {
     console.error(error);
   });
 
   req.write(data);
   req.end();
 
-  return "hello";
+  return 'hello';
 }
 
 function fetchDataAndCreateDOMElements() {
@@ -124,11 +124,11 @@ const domUtil = {
         return;
       }
 
-      //if (storageUtil.get('repoSize')) {
+      // if (storageUtil.get('repoSize')) {
       //  fetchDataAndCreateDOMElements();
       //  domUtil.appendRepoSizeElement();
       //  return;
-      //}
+      // }
 
       apiUtil.getRepoContent(
         function(data) {
@@ -136,11 +136,11 @@ const domUtil = {
             return;
           }
 
-          //storageUtil.set('repoSize', data.size);
-          //storageUtil.set('defaultBranch', data.default_branch);
+          // storageUtil.set('repoSize', data.size);
+          // storageUtil.set('defaultBranch', data.default_branch);
 
           fetchDataAndCreateDOMElements();
-          //domUtil.appendRepoSizeElement();
+          // domUtil.appendRepoSizeElement();
         },
         '',
         true
@@ -150,9 +150,9 @@ const domUtil = {
   addCopyAndDownloadButton: function() {
     const btnGroup = document.querySelectorAll('.BtnGroup:not(.d-md-none)')[0];
 
-    //https://github.com/turbo-src/extension/blob/master/src/inject.js
+    // https://github.com/turbo-src/extension/blob/master/src/inject.js
     // Previous conditional
-    //if (btnGroup && window.location.href && window.location.href.indexOf('blob/' + commonUtil.getBranch()) > -1) {
+    // if (btnGroup && window.location.href && window.location.href.indexOf('blob/' + commonUtil.getBranch()) > -1) {
     // New conditional
     if (btnGroup && window.location.href && window.location.href.indexOf('pulls') > -1) {
       // instantiate copy to clipborad

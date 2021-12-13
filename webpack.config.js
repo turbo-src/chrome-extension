@@ -43,6 +43,7 @@ function addPlugins(argv) {
         { from: 'options.js', to: destination },
         { from: 'popup.js', to: destination },
         { from: '*html', to: destination },
+        // { from: 'index.css', to: destination },
         { from: 'manifest.json', to: destination },
         { from: 'icons/*.png', to: destination },
         { from: 'src/background.js', to: destination },
@@ -74,21 +75,23 @@ module.exports = function(_env, argv) {
     output: {
       path: destination,
       filename: 'src/inject.js',
-      library: libraryName,
-      //libraryTarget: 'global'
+      library: libraryName
+      // libraryTarget: 'global'
     },
     module: {
       rules: [
         {
           test: /\.js$/,
           exclude: /node_modules|dist/,
-          use: {
-            loader: 'babel-loader',
-            options: {
-              presets: ['babel-preset-react-app'],
-              plugins: ['@babel/plugin-syntax-jsx', 'styled-components']
+          use: [
+            {
+              loader: 'babel-loader',
+              options: {
+                presets: ['react-app'],
+                plugins: ['@babel/plugin-syntax-jsx', 'styled-components']
+              }
             }
-          }
+          ]
         }
       ]
     },
