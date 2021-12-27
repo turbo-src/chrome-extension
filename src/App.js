@@ -99,6 +99,8 @@ function Table({ columns }) {
           var issue_id = votes.pop();
           console.log('new pull: ' + issue_id)
           //sourceGridData.push(makeRow(sourceGridData.length))
+
+          //makeRow should have baseRepoAccount and voteStatus
           sourceGridData.push(makeRow('open', issue_id, side, contributor))
         }
         let newData = [...sourceGridData]
