@@ -187,13 +187,26 @@ render(e(App), domContainer);
               console.log('handleClick')
               //modal.style.display = "none";
             }
-            return (
-                <Button
-                 // variant="open" className="textColor bgColor"
-                  style={{ color: "white", background: "green" }}
-                  onClick={handleClick}
-                >T</Button>
-            );
+
+            const status = await postGetPRvoteStatus(user, repo, issue_id, contributor_id, side);
+            const displayOpenStatus = (status === 'none' || status === 'open')
+            if (displayOpenStatus) {
+              return (
+                  <Button
+                   // variant="open" className="textColor bgColor"
+                    style={{ color: "white", background: "green" }}
+                    onClick={handleClick}
+                  >T</Button>
+              );
+            } else {
+              return (
+                  <Button
+                   // variant="open" className="textColor bgColor"
+                    style={{ color: "white", background: "red" }}
+                    onClick={handleClick}
+                  >T</Button>
+              );
+            }
           }
 
         }
@@ -359,11 +372,11 @@ render(e(App), domContainer);
           console.log('status: ' + status)
           displayOpenStatus = (status === 'none' || status === 'open')
           domContainerTurboSrcButton = document.querySelector(`#turbo-src-btn-${issue_id}-${contributor_id}`);
-          if (displayOpenStatus) {
-           render(ce(TurboSrcButtonOpen), domContainerTurboSrcButton);
-          } else {
-           render(ce(TurboSrcButtonClosed), domContainerTurboSrcButton);
-          }
+          //if (displayOpenStatus) {
+          render(ce(TurboSrcButtonOpen), domContainerTurboSrcButton);
+          //} else {
+          // render(ce(TurboSrcButtonClosed), domContainerTurboSrcButton);
+          //}
         }
 
         document.addEventListener(
