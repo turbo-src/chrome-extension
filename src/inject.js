@@ -458,7 +458,7 @@ render(e(App), domContainer);
                 if (voteYesTotals && voteNoTotals) {
                    voteYesTotals = ((voteYesTotals / (voteYesTotals + voteNoTotals))*100).toFixed(1)
                    voteNoTotals = (100 - voteYesTotals).toFixed(1)
-                   //this.setState({voteTotals: voteTotalsReact})
+                   this.setState({voteTotals: voteTotalsReact})
                    this.setState({voteYesTotals: voteYesTotals})
                    this.setState({voteNoTotals: voteNoTotals})
                    //console.log('status CDMV: ' + voteTotalsReact)
@@ -500,7 +500,7 @@ render(e(App), domContainer);
                 if (voteYesTotals && voteNoTotals) {
                    voteYesTotals = ((voteYesTotals / (voteYesTotals + voteNoTotals))*100).toFixed(1)
                    voteNoTotals = (100 - voteYesTotals).toFixed(1)
-                   //this.setState({voteTotals: voteTotalsReact})
+                   this.setState({voteTotals: voteTotalsReact})
                    this.setState({voteYesTotals: voteYesTotals})
                    this.setState({voteNoTotals: voteNoTotals})
                    //console.log('status CDMV: ' + voteTotalsReact)
@@ -519,9 +519,9 @@ render(e(App), domContainer);
             return (
                 <Button
                  // variant="open" className="textColor bgColor"
-                  style={{ color: "white", background: this.state.background }}
+                  style={{ color: "white", background: "SlateGrey" }}
                   onClick={handleClick}
-                >{this.state.voteYesTotals}% | {this.state.voteNoTotals}%</Button>
+                >Yes {this.state.voteYesTotals}%  |  No {this.state.voteNoTotals}%  |  Total Voted {this.state.voteTotals}%</Button>
             );
           }
 
