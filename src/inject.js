@@ -143,6 +143,48 @@ render(e(App), domContainer);
     return json.data.getPRvoteTotals
   }
 
+  async function postGetPRvoteYesTotals(owner, repo, issue_id, contributor_id, side) {
+    const res = await superagent
+      .post('http://localhost:4000/graphql')
+      .send(
+        //{ query: '{ name: 'Manny', species: 'cat' }' }
+        //{ query: '{ newPullRequest(pr_id: "first", contributorId: "1", side: 1) { vote_code } }' }
+        //{ query: '{ getVote(pr_id: "default", contributorId: 1) {side} }' }
+        //{ query: '{ getVoteAll(pr_id: "default") { vote_code } }' }
+        //{ query: `{ getVoteEverything }` }
+        { query: `{ getPRvoteYesTotals(owner: "${owner}", repo: "${repo}", pr_id: "${issue_id}", contributor_id: "${contributor_id}", side: "${side}") }` }
+        //{ query: '{ setVote(pr_id: "default" contributorId: "2", side: 1 ) { vote_code }' }
+      ) // sends a JSON post body
+      .set('accept', 'json')
+      //.end((err, res) => {
+        // Calling the end function will send the request
+      //});
+    const json = JSON.parse(res.text)
+    console.log(json)
+    return json.data.getPRvoteYesTotals
+  }
+
+  async function postGetPRvoteNoTotals(owner, repo, issue_id, contributor_id, side) {
+    const res = await superagent
+      .post('http://localhost:4000/graphql')
+      .send(
+        //{ query: '{ name: 'Manny', species: 'cat' }' }
+        //{ query: '{ newPullRequest(pr_id: "first", contributorId: "1", side: 1) { vote_code } }' }
+        //{ query: '{ getVote(pr_id: "default", contributorId: 1) {side} }' }
+        //{ query: '{ getVoteAll(pr_id: "default") { vote_code } }' }
+        //{ query: `{ getVoteEverything }` }
+        { query: `{ getPRvoteNoTotals(owner: "${owner}", repo: "${repo}", pr_id: "${issue_id}", contributor_id: "${contributor_id}", side: "${side}") }` }
+        //{ query: '{ setVote(pr_id: "default" contributorId: "2", side: 1 ) { vote_code }' }
+      ) // sends a JSON post body
+      .set('accept', 'json')
+      //.end((err, res) => {
+        // Calling the end function will send the request
+      //});
+    const json = JSON.parse(res.text)
+    console.log(json)
+    return json.data.getPRvoteNoTotals
+  }
+
   async function postSetVote(owner, repo, issue_id, contributor_id, side) {
     superagent
       .post('http://localhost:4000/graphql')
@@ -380,7 +422,9 @@ render(e(App), domContainer);
               repo: repo,
               issueID: issue_id,
               contributorID: contributor_id,
-              voteTotals: "0.0"
+              voteTotals: "0.0",
+              voteYesTotals: "0.0",
+              voteNoTotals: "0.0"
             }
           }
 
@@ -394,13 +438,33 @@ render(e(App), domContainer);
                   this.state.contributorID,
                   this.state.side
                 );
+                var voteYesTotals = await postGetPRvoteYesTotals(
+                  this.state.user,
+                  this.state.repo,
+                  this.state.issueID,
+                  this.state.contributorID,
+                  this.state.side
+                );
+                var voteNoTotals = await postGetPRvoteNoTotals(
+                  this.state.user,
+                  this.state.repo,
+                  this.state.issueID,
+                  this.state.contributorID,
+                  this.state.side
+                );
                 voteTotalsReact = (Number(voteTotalsReact)*100).toFixed(1).toString()
-                if (voteTotalsReact) {
-                   this.setState({voteTotals: voteTotalsReact})
-                } else {
-                   this.setState({voteTotals: "0.0"})
+                voteYesTotals = (Number(voteYesTotals))
+                voteNoTotals = (Number(voteNoTotals))
+                if (voteYesTotals && voteNoTotals) {
+                   voteYesTotals = ((voteYesTotals / (voteYesTotals + voteNoTotals))*100).toFixed(1)
+                   voteNoTotals = (100 - voteYesTotals).toFixed(1)
+                   //this.setState({voteTotals: voteTotalsReact})
+                   this.setState({voteYesTotals: voteYesTotals})
+                   this.setState({voteNoTotals: voteNoTotals})
+                   //console.log('status CDMV: ' + voteTotalsReact)
+                   console.log('status CDMV: ' + voteYesTotals)
+                   console.log('status CDMV: ' + voteNoTotals)
                 }
-                console.log('status CDMV: ' + voteTotalsReact)
               })()
                 //this.setState({background: "yellow"})
             }, 1000)
@@ -416,13 +480,33 @@ render(e(App), domContainer);
                   this.state.contributorID,
                   this.state.side
                 );
+                var voteYesTotals = await postGetPRvoteYesTotals(
+                  this.state.user,
+                  this.state.repo,
+                  this.state.issueID,
+                  this.state.contributorID,
+                  this.state.side
+                );
+                var voteNoTotals = await postGetPRvoteNoTotals(
+                  this.state.user,
+                  this.state.repo,
+                  this.state.issueID,
+                  this.state.contributorID,
+                  this.state.side
+                );
                 voteTotalsReact = (Number(voteTotalsReact)*100).toFixed(1).toString()
-                if (voteTotalsReact) {
-                   this.setState({voteTotals: voteTotalsReact})
-                } else {
-                   this.setState({voteTotals: "0.0"})
+                voteYesTotals = (Number(voteYesTotals))
+                voteNoTotals = (Number(voteNoTotals))
+                if (voteYesTotals && voteNoTotals) {
+                   voteYesTotals = ((voteYesTotals / (voteYesTotals + voteNoTotals))*100).toFixed(1)
+                   voteNoTotals = (100 - voteYesTotals).toFixed(1)
+                   //this.setState({voteTotals: voteTotalsReact})
+                   this.setState({voteYesTotals: voteYesTotals})
+                   this.setState({voteNoTotals: voteNoTotals})
+                   //console.log('status CDMV: ' + voteTotalsReact)
+                   console.log('status CDMV: ' + voteYesTotals)
+                   console.log('status CDMV: ' + voteNoTotals)
                 }
-                console.log('status CDUV: ' + voteTotalsReact)
               })()
             }, 1000)
 
@@ -437,7 +521,7 @@ render(e(App), domContainer);
                  // variant="open" className="textColor bgColor"
                   style={{ color: "white", background: this.state.background }}
                   onClick={handleClick}
-                >{this.state.voteTotals}%</Button>
+                >{this.state.voteYesTotals}% | {this.state.voteNoTotals}%</Button>
             );
           }
 
