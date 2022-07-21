@@ -36,7 +36,6 @@ export default function Ethereum() {
 
   async function submitHandler(e) {
     e.preventDefault();
-    console.log('input', ethereumAddress, user.login, ethereumKey);
 
     try {
       await postCreateUser('', '', ethereumAddress, user.login, ethereumKey);

@@ -5,6 +5,8 @@ import Fail from './Fail';
 import Success from './Success';
 import Loader from './Loader';
 export default function ApiKey(props) {
+  let user = useSelector(state => state.auth.user);
+
   let { repo, amount, currency } = props;
 
   const navigate = useNavigate();

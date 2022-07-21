@@ -105,20 +105,23 @@ export default function Routes() {
       return await postGetContributorSignature('', '', '', contributorId).then(res => res);
     };
 
-    if (auth.isLoggedIn === true && auth.user.ethereumAddress !== 'none' && auth.user.ethereumKey !== 'none') {
+    if (auth.isLoggedIn === true) {
       return;
     } else if (user) {
       let githubUser = JSON.parse(user);
       //If turbo-src service server is running use following:
       getContributorId(githubUser.login)
-        .then(res => (githubUser.ethereumAddress = res || 'none'))
+        .then(res => (res ? (githubUser.ethereumAddress = res) : (githubUser.ethereumKey = 'none')))
+        // .then(res => console.log('res add', res));
         .then(() =>
-          getContributorSignature(githubUser.ethereumAddress).then(key => (githubUser.ethereumKey = key || 'none'))
+          getContributorSignature(githubUser.ethereumAddress).then(key =>
+            key ? (githubUser.ethereumKey = key) : (githubUser.ethereumKey = 'none')
+          )
         );
       dispatch(setAuth(githubUser));
     }
   }, [user]);
-  console.log('user', auth.user.login, auth.user.ethereumAddress, auth.user.ethereumKey);
+
   return auth.isLoggedIn ? (
     <BrowserRouter>
       <div className="container">

@@ -29,16 +29,9 @@ export default function Home(props) {
       .post('http://localhost:4000/graphql')
       .send({ query: `{ getRepoStatus(repo_id: "${repo_id}") }` })
       .set('accept', 'json');
-    //.end((err, res) => {
-    //  //console.log(repo_id)
-    //  //console.log('hey')
-    //  //console.log('res: ' + res['body']['data']['getRepoStatus'])
-    //  //const text= res['text'];
-    //  //console.log(text);
-    //  //isRepoTurboSrcToken = res;
-    //  // Calling the end function will send the request
-    //  return res
-    //})
+    // .end((err, res) => {
+    //   return res;
+    // });
   }
   async function postGetContributorTokenAmount(owner, repo, issue_id, contributor_id, side) {
     const res = await superagent
@@ -69,17 +62,16 @@ export default function Home(props) {
     const getRepoStatus = async id => {
       await get_repo_status(id).then(res => setTokenized(res?.body.data.getRepoStatus));
     };
-
     getRepoStatus(`${owner}/${repo}`);
   });
-  console.log('tokenized', tokenized);
+
   useEffect(() => {
     const getTokenAmount = async () => {
       await postGetContributorTokenAmount(owner, repo, '', user.ethereumAddress, '').then(res => setTokens(res));
     };
     getTokenAmount();
   }, [repo, owner]);
-
+  console.log('tokenized', tokenized);
   return (
     <div className="content">
       <div className="home">
