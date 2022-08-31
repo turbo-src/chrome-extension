@@ -105,7 +105,7 @@ export default function Routes() {
       return await postGetContributorSignature('', '', '', contributorId).then(res => res);
     };
 
-    if (auth.isLoggedIn === true) {
+    if (auth.isLoggedIn === true && auth.user.ethereumAddress !== 'none' && auth.user.ethereumKey !== 'none') {
       return;
     } else if (user) {
       let githubUser = JSON.parse(user);
@@ -114,14 +114,12 @@ export default function Routes() {
         .then(res => (res ? (githubUser.ethereumAddress = res) : (githubUser.ethereumKey = 'none')))
         // .then(res => console.log('res add', res));
         .then(() =>
-          getContributorSignature(githubUser.ethereumAddress).then(key =>
-            key ? (githubUser.ethereumKey = key) : (githubUser.ethereumKey = 'none')
-          )
+          getContributorSignature(githubUser.ethereumAddress).then(key => (githubUser.ethereumKey = key || 'none'))
         );
       dispatch(setAuth(githubUser));
     }
   }, [user]);
-
+  console.log('user', auth.user.login, auth.user.ethereumAddress, auth.user.ethereumKey);
   return auth.isLoggedIn ? (
     <BrowserRouter>
       <div className="container">

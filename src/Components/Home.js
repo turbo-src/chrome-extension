@@ -29,9 +29,16 @@ export default function Home(props) {
       .post('http://localhost:4000/graphql')
       .send({ query: `{ getRepoStatus(repo_id: "${repo_id}") }` })
       .set('accept', 'json');
-    // .end((err, res) => {
-    //   return res;
-    // });
+    //.end((err, res) => {
+    //  //console.log(repo_id)
+    //  //console.log('hey')
+    //  //console.log('res: ' + res['body']['data']['getRepoStatus'])
+    //  //const text= res['text'];
+    //  //console.log(text);
+    //  //isRepoTurboSrcToken = res;
+    //  // Calling the end function will send the request
+    //  return res
+    //})
   }
   async function postGetContributorTokenAmount(owner, repo, issue_id, contributor_id, side) {
     const res = await superagent

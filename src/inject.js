@@ -61,7 +61,7 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
 
 async function get_repo_status(repo_id) {
   return await superagent
-    .post('https://turbosrc-service.fly.dev/graphql')
+    .post('http://localhost:4000/graphql')
     .send({ query: `{ getRepoStatus(repo_id: "${repo_id}") }` })
     .set('accept', 'json');
   //.end((err, res) => {
@@ -77,14 +77,14 @@ async function get_repo_status(repo_id) {
 }
 async function get_authorized_contributor(contributor_id, repo_id) {
   return await superagent
-    .post('https://turbosrc-service.fly.dev/graphql')
+    .post('http://localhost:4000/graphql')
     .send({ query: `{ getAuthorizedContributor(contributor_id: "${contributor_id}", repo_id: "${repo_id}") }` })
     .set('accept', 'json');
 }
 
 async function postPullFork(owner, repo, issue_id, contributor_id) {
   return await superagent
-    .post('https://turbosrc-service.fly.dev/graphql')
+    .post('http://localhost:4001/graphql')
     .send({
       query: `{ getPRfork(owner: "${owner}", repo: "${repo}", pr_id: "${issue_id}", contributor_id: "${contributor_id}") }`
     }) // sends a JSON post body
@@ -93,7 +93,7 @@ async function postPullFork(owner, repo, issue_id, contributor_id) {
 
 async function postGetPRforkStatus(owner, repo, issue_id, contributor_id) {
   const res = await superagent
-    .post('https://turbosrc-service.fly.dev/graphql')
+    .post('http://localhost:4000/graphql')
     .send({
       query: `{ getPRforkStatus(owner: "${owner}", repo: "${repo}", pr_id: "${issue_id}", contributor_id: "${contributor_id}") }`
     }) // sends a JSON post body
@@ -107,7 +107,7 @@ async function postGetPRforkStatus(owner, repo, issue_id, contributor_id) {
 
 async function postGetContributorID(owner, repo, issue_id, contributor_name) {
   const res = await superagent
-    .post('https://turbosrc-service.fly.dev/graphql')
+    .post('http://localhost:4000/graphql')
     .send(
       //{ query: '{ name: 'Manny', species: 'cat' }' }
       //{ query: '{ newPullRequest(pr_id: "first", contributorId: "1", side: 1) { vote_code } }' }
@@ -129,7 +129,7 @@ async function postGetContributorID(owner, repo, issue_id, contributor_name) {
 
 async function postGetPRvoteStatus(owner, repo, issue_id, contributor_id, side) {
   const res = await superagent
-    .post('https://turbosrc-service.fly.dev/graphql')
+    .post('http://localhost:4000/graphql')
     .send(
       //{ query: '{ newPullRequest(pr_id: "first", contributorId: "1", side: 1) { vote_code } }' }
       //{ query: '{ getVote(pr_id: "default", contributorId: 1) {side} }' }
@@ -151,7 +151,7 @@ async function postGetPRvoteStatus(owner, repo, issue_id, contributor_id, side) 
 
 async function postGetPRvoteTotals(owner, repo, issue_id, contributor_id, side) {
   const res = await superagent
-    .post('https://turbosrc-service.fly.dev/graphql')
+    .post('http://localhost:4000/graphql')
     .send(
       //{ query: '{ name: 'Manny', species: 'cat' }' }
       //{ query: '{ newPullRequest(pr_id: "first", contributorId: "1", side: 1) { vote_code } }' }
@@ -174,7 +174,7 @@ async function postGetPRvoteTotals(owner, repo, issue_id, contributor_id, side) 
 
 async function postGetPRvoteYesTotals(owner, repo, issue_id, contributor_id, side) {
   const res = await superagent
-    .post('https://turbosrc-service.fly.dev/graphql')
+    .post('http://localhost:4000/graphql')
     .send(
       //{ query: '{ name: 'Manny', species: 'cat' }' }
       //{ query: '{ newPullRequest(pr_id: "first", contributorId: "1", side: 1) { vote_code } }' }
@@ -197,7 +197,7 @@ async function postGetPRvoteYesTotals(owner, repo, issue_id, contributor_id, sid
 
 async function postGetPRvoteNoTotals(owner, repo, issue_id, contributor_id, side) {
   const res = await superagent
-    .post('https://turbosrc-service.fly.dev/graphql')
+    .post('http://localhost:4000/graphql')
     .send(
       //{ query: '{ name: 'Manny', species: 'cat' }' }
       //{ query: '{ newPullRequest(pr_id: "first", contributorId: "1", side: 1) { vote_code } }' }
@@ -220,7 +220,7 @@ async function postGetPRvoteNoTotals(owner, repo, issue_id, contributor_id, side
 
 async function postSetVote(owner, repo, issue_id, contributor_id, side) {
   superagent
-    .post('https://turbosrc-service.fly.dev/graphql')
+    .post('http://localhost:4000/graphql')
     .send(
       //{ query: '{ name: 'Manny', species: 'cat' }' }
       //{ query: '{ newPullRequest(pr_id: "first", contributorId: "1", side: 1) { vote_code } }' }

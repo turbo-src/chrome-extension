@@ -70,10 +70,7 @@ export default function Onboard2() {
   const createRepo = async () => {
     if (verified) {
       setLoader(true);
-
-      let res = await postCreateRepo(user.login, repo, '', user.ethereumAddress, '').then(() => setLoader(false));
-
-      console.log('res create repo', res);
+      await postCreateRepo(user.login, repo, '', user.ethereumAddress, '').then(() => setLoader(false));
     }
   };
 
