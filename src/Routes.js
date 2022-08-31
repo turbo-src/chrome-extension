@@ -111,8 +111,7 @@ export default function Routes() {
       let githubUser = JSON.parse(user);
       //If turbo-src service server is running use following:
       getContributorId(githubUser.login)
-        .then(res => (res ? (githubUser.ethereumAddress = res) : (githubUser.ethereumKey = 'none')))
-        // .then(res => console.log('res add', res));
+        .then(res => (githubUser.ethereumAddress = res || 'none'))
         .then(() =>
           getContributorSignature(githubUser.ethereumAddress).then(key => (githubUser.ethereumKey = key || 'none'))
         );

@@ -72,13 +72,14 @@ export default function Home(props) {
     getRepoStatus(`${owner}/${repo}`);
   });
 
+  console.log('tokenized', tokenized);
   useEffect(() => {
     const getTokenAmount = async () => {
       await postGetContributorTokenAmount(owner, repo, '', user.ethereumAddress, '').then(res => setTokens(res));
     };
     getTokenAmount();
   }, [repo, owner]);
-  console.log('tokenized', tokenized);
+
   return (
     <div className="content">
       <div className="home">
