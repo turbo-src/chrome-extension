@@ -101,15 +101,17 @@ async function get_authorized_contributor(contributor_id, repo_id) {
       return json.data.getAuthorizedContributor;
 }
 
-async function postPullFork(owner, repo, issue_id, contributor_id) {
-  return await superagent
-    .post(`${port}/graphql`)
-    .send({
-      query: `{ getPRfork(owner: "${owner}", repo: "${repo}", pr_id: "${issue_id}", contributor_id: "${contributor_id}") }`
-    }) // sends a JSON post body
-    .set('accept', 'json');
-}
+// Deprecating should be services anyway, not called here.
+//async function postPullFork(owner, repo, issue_id, contributor_id) {
+//  return await superagent
+//    .post(`${port}/graphql`)
+//    .send({
+//      query: `{ getPRfork(owner: "${owner}", repo: "${repo}", pr_id: "${issue_id}", contributor_id: "${contributor_id}") }`
+//    }) // sends a JSON post body
+//    .set('accept', 'json');
+//}
 
+// Never gets called because forkStatus is hardcoded 'valid'. Will replace functionality with Git service.
 async function postGetPRforkStatus(owner, repo, issue_id, contributor_id) {
   const res = await superagent
     .post(`${port}/graphql`)
@@ -304,7 +306,9 @@ async function postGetPRforkStatus(owner, repo, issue_id, contributor_id) {
             {
               onClick: () => {
                 (async () => {
-                  var forkStatus = await postGetPRforkStatus(user, repo, issue_id, contributor_id);
+		  // We need to query Github to verify PR and then later verify using Git service.
+                  //var forkStatus = await postGetPRforkStatus(user, repo, issue_id, contributor_id);
+		  var forkStatus = 'valid';
                   console.log('fork status');
                   console.log(forkStatus);
                   if (forkStatus === 'notOnGithub') {
@@ -324,7 +328,7 @@ async function postGetPRforkStatus(owner, repo, issue_id, contributor_id) {
                     console.log(contributor_id);
                     console.log(this.state.side);
                     console.log('i 209');
-                    await postPullFork(user, repo, issue_id, contributor_id, this.state.side);
+                    //await postPullFork(user, repo, issue_id, contributor_id, this.state.side);
                     console.log('i 211');
                     forkStatus = await postGetPRforkStatus(user, repo, issue_id, contributor_id, this.state.side);
                     console.log('i 213');
