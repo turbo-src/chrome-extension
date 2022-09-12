@@ -24,18 +24,19 @@ const commonUtil = require('./utils/commonUtil');
 const authContributor = require('./authorizedContributor');
 const { getRepoStatus } = require('./requests');
 
-const { postSetVote,
-        postGetPRvoteStatus,
-        postGetPRvoteYesTotals,
-        postGetPRvoteNoTotals,
-        postGetPRvoteTotals,
-        postCreateRepo,
-        postNewPullRequest,
-        postGetContributorID,
-        postGetContributorName,
-      } = require('./requests')
+const {
+  postSetVote,
+  postGetPRvoteStatus,
+  postGetPRvoteYesTotals,
+  postGetPRvoteNoTotals,
+  postGetPRvoteTotals,
+  postCreateRepo,
+  postNewPullRequest,
+  postGetContributorID,
+  postGetContributorName
+} = require('./requests');
 
-const port = "http://localhost:4000";
+const port = 'http://localhost:4000';
 
 var isRepoTurboSrcToken = false;
 
@@ -60,7 +61,7 @@ const reqBody = { code: newUrl[1] };
 window.history.pushState({}, null, newUrl[0]);
 //Send code from url which to Github API for an access token
 //The access token is then exchanged for the user's profile. Done in server/index.js.
-fetch('https://turbosrc-auth.fly.dev/authenticate', {
+fetch('http://turbosrc-auth.fly.dev/authenticate', {
   method: 'POST',
   body: JSON.stringify(reqBody)
 })
@@ -75,16 +76,16 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
 
 // Add to requests.js (reconcile privateStoreRequests.js
 async function get_authorized_contributor(contributor_id, repo_id) {
-    const res = await superagent
-      .post(`${port}/graphql`)
-      .send({
-        query: `{ getAuthorizedContributor(contributor_id: "${contributor_id}", repo_id: "${repo_id}") }`,
-      })
-      .set("accept", "json");
+  const res = await superagent
+    .post(`${port}/graphql`)
+    .send({
+      query: `{ getAuthorizedContributor(contributor_id: "${contributor_id}", repo_id: "${repo_id}") }`
+    })
+    .set('accept', 'json');
 
-      const json = JSON.parse(res.text);
-      console.log('getAuthorizedContributor:' + json.data.getAuthorizedContributor);
-      return json.data.getAuthorizedContributor;
+  const json = JSON.parse(res.text);
+  console.log('getAuthorizedContributor:' + json.data.getAuthorizedContributor);
+  return json.data.getAuthorizedContributor;
 }
 
 async function postPullFork(owner, repo, issue_id, contributor_id) {
@@ -141,7 +142,7 @@ async function postGetPRforkStatus(owner, repo, issue_id, contributor_id) {
   //Check if repo is tokenized
   const resIsRepoTurboSrcToken = await getRepoStatus(repo_id);
   const isRepoTurboSrcToken = resIsRepoTurboSrcToken.exists;
-  console.log('isRepoTurboSrcToken: ' + isRepoTurboSrcToken)
+  console.log('isRepoTurboSrcToken: ' + isRepoTurboSrcToken);
   //Function to get items from chrome storage set from Extension
   let getFromStorage = keys =>
     new Promise((resolve, reject) => chrome.storage.local.get([keys], result => resolve(result[keys])));
@@ -182,9 +183,9 @@ async function postGetPRforkStatus(owner, repo, issue_id, contributor_id) {
                 this.state.contributorName,
                 this.state.side
               );
-              const statusOpenMount = commonUtil.isObjEqual(statusReact, { status: 200, type: 0 } );
-              const statusClosedMount = commonUtil.isObjEqual(statusReact, { status: 200, type: 1 } );
-              const statusMergedMount = commonUtil.isObjEqual(statusReact, { status: 200, type: 2 } );
+              const statusOpenMount = commonUtil.isObjEqual(statusReact, { status: 200, type: 0 });
+              const statusClosedMount = commonUtil.isObjEqual(statusReact, { status: 200, type: 1 });
+              const statusMergedMount = commonUtil.isObjEqual(statusReact, { status: 200, type: 2 });
 
               if (statusOpenMount) {
                 this.setState({ background: 'royalblue' });
@@ -220,15 +221,15 @@ async function postGetPRforkStatus(owner, repo, issue_id, contributor_id) {
               );
 
               //console.log('status CDU: ', statusReact)
-              const statusOpenUpdate = commonUtil.isObjEqual(statusReact, { status: 200, type: 0 } );
-              const statusClosedUpdate = commonUtil.isObjEqual(statusReact, { status: 200, type: 1 } );
-              const statusMergedUpdate = commonUtil.isObjEqual(statusReact, { status: 200, type: 2 } );
+              const statusOpenUpdate = commonUtil.isObjEqual(statusReact, { status: 200, type: 0 });
+              const statusClosedUpdate = commonUtil.isObjEqual(statusReact, { status: 200, type: 1 });
+              const statusMergedUpdate = commonUtil.isObjEqual(statusReact, { status: 200, type: 2 });
 
               if (statusOpenUpdate) {
                 this.setState({ background: 'royalblue' });
               } else if (statusClosedUpdate) {
                 this.setState({ background: 'red' });
-              } else if (statusMergedUpdate){
+              } else if (statusMergedUpdate) {
                 this.setState({ background: 'darkorchid' });
               } else {
                 this.setState({ background: 'green' });
@@ -244,15 +245,15 @@ async function postGetPRforkStatus(owner, repo, issue_id, contributor_id) {
           };
           var buttonDisplay;
 
-          const statusOpenUpdate = commonUtil.isObjEqual(statusReact, { status: 200, type: 0 } );
-          const statusClosedUpdate = commonUtil.isObjEqual(statusReact, { status: 200, type: 1 } );
-          const statusMergedUpdate = commonUtil.isObjEqual(statusReact, { status: 200, type: 2 } );
+          const statusOpenUpdate = commonUtil.isObjEqual(statusReact, { status: 200, type: 0 });
+          const statusClosedUpdate = commonUtil.isObjEqual(statusReact, { status: 200, type: 1 });
+          const statusMergedUpdate = commonUtil.isObjEqual(statusReact, { status: 200, type: 2 });
 
           if (statusOpenUpdate) {
             buttonDisplay = 'open';
           } else if (statusClosedUpdate) {
             buttonDisplay = 'closed';
-          } else if (statusMergedUpdate){
+          } else if (statusMergedUpdate) {
             buttonDisplay = 'merged';
           } else {
             buttonDisplay = 'vote';

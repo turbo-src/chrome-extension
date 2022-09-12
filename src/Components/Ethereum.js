@@ -6,7 +6,7 @@ import Loader from './Loader';
 import { setAuth } from '../store/auth';
 import { postCreateUser } from '../requests';
 
-const port = "http://localhost:4000";
+const port = 'http://localhost:4000';
 
 export default function Ethereum() {
   let user = useSelector(state => state.auth.user);
@@ -19,10 +19,10 @@ export default function Ethereum() {
 
   async function submitHandler(e) {
     e.preventDefault();
-    console.log('input', ethereumAddress, user.login, ethereumKey);
+    console.log('input', ethereumAddress, user.login, ethereumKey, user.token);
 
     try {
-      await postCreateUser('', '', ethereumAddress, user.login, ethereumKey);
+      await postCreateUser('', '', ethereumAddress, user.login, ethereumKey, user.token);
 
       chrome.storage.local.set({ contributor_name: user.login });
       chrome.storage.local.set({ contributor_id: ethereumAddress });
