@@ -61,7 +61,7 @@ const reqBody = { code: newUrl[1] };
 window.history.pushState({}, null, newUrl[0]);
 //Send code from url which to Github API for an access token
 //The access token is then exchanged for the user's profile. Done in server/index.js.
-fetch('http://turbosrc-auth.fly.dev/authenticate', {
+fetch('https://turbosrc-auth.fly.dev/authenticate', {
   method: 'POST',
   body: JSON.stringify(reqBody)
 })
