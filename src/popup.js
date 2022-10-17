@@ -5,16 +5,20 @@ import App from './App.js';
 const e = React.createElement;
 var issueId = 'waiting...';
 chrome.tabs.query(
-                 {active:true, lastFocusedWindow:true},
-                 tabs=>{
-                            const tab=tabs[0];
-                            console.log("URL:", tab)
-                            }
-                             )
+  {active:true, lastFocusedWindow:true},
+  tabs=>{
+    const tab=tabs[0];
+    const pathnames = tab.url.split('/');
+    const user = pathnames[3];
+    const repo = pathnames[4];
+    
+    fetch(`https://api.github.com/repos/${user}/${repo}`).then((response) => response.json())
+    .then((data) => {
+      console.log('data', data)
+      const domContainer = document.querySelector('#rootcontainer');
+      ReactDOM.render(e(App), domContainer);
+    })
+    
+  }
+)
 
-
-document.addEventListener('DOMContentLoaded', function() {
-  const domContainer = document.querySelector('#rootcontainer');
-
-  ReactDOM.render(e(App), domContainer);
-});
