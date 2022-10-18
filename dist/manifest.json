@@ -1,0 +1,36 @@
+{
+  "name": "turbo-src",
+  "short_name": "turbo-src",
+  "version": "0.0.1",
+  "manifest_version": 2,
+  "description": "Vote on pull requests.",
+  "homepage_url": "https://github.com/softvar/enhanced-github",
+  "author": "turbo-src",
+  "icons": {
+    "16": "icons/turbo-src16.png",
+    "48": "icons/turbo-src48.png",
+    "128": "icons/turbo-src128.png"
+  },
+  "browser_action": {
+    "default_icon": "icons/turbo-src48.png",
+    "default_popup": "popup.html",
+    "default_title": "turbo-src"
+  },
+    "permissions": ["*://*.github.com/*", "http://localhost:4000/graphql/*", "https://turbosrc-auth.fly.dev/*", "storage", "webRequest", "webNavigation", "activeTab"],
+    "content_security_policy": "script-src 'self' 'unsafe-eval' https://unpkg.com/react@17/umd/react.development.js 'unsafe-eval' https://unpkg.com/react-dom@17/umd/react-dom.development.js 'unsafe-eval' https://unpkg.com/graphql@16.0.1/index.js 'unsafe-eval' https://cdn.jsdelivr.net/npm/graphql-ws@5.5.5/umd/graphql-ws.min.js; object-src 'self'",
+  "content_scripts": [
+    {
+      "matches": ["*://*.github.com/*", "https://turbosrc-auth.fly.dev/*"],
+      "css": ["./modal.css"],
+      "js": ["inject.bundle.js"]
+    }
+  ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": true
+  },
+  "options_ui": {
+    "page": "options.html",
+    "chrome_style": true
+  }
+}
