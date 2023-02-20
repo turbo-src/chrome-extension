@@ -1,4 +1,9 @@
-class VoteButton extends React.Component {
+const React = require('react');
+const render = require('react-dom');
+const { postSetVote,
+      } = require('./../requests')
+
+export class VoteButton extends React.Component {
   constructor(props) {
     super(props);
     this.state = { voted: '', lastIssueId: '', side: sideText };
@@ -85,4 +90,4 @@ class VoteButton extends React.Component {
       sideText
     );
   }
-} 
+}
