@@ -83,6 +83,7 @@ module.exports = function(_env, argv) {
       library: libraryName
       //libraryTarget: 'global'
     },
+    devtool: 'source-map',
     module: {
       rules: [
         {
