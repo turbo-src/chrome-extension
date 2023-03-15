@@ -11,7 +11,8 @@ async function postCreateUser(
   contributor_id,
   contributor_name,
   contributor_signature,
-  token
+  token,
+  port
 ) {
     const res = await superagent
       .post(`${port}/graphql`)
@@ -24,7 +25,7 @@ async function postCreateUser(
     return json.data.createUser;
 }
 
-async function postGetContributorName(owner, repo, defaultHash, contributor_id) {
+async function postGetContributorName(owner, repo, defaultHash, contributor_id, port) {
     const res = await superagent
       .post(`${port}/graphql`)
       .send(
@@ -48,7 +49,7 @@ async function postGetContributorName(owner, repo, defaultHash, contributor_id) 
     return json.data.getContributorName;
 }
 
-async function postGetContributorID(owner, repo, defaultHash, contributor_name) {
+async function postGetContributorID(owner, repo, defaultHash, contributor_name, port) {
     const res = await superagent
       .post(`${port}/graphql`)
       .send(
@@ -76,7 +77,8 @@ async function postGetContributorSignature(
   owner,
   repo,
   defaultHash,
-  contributor_id
+  contributor_id,
+  port
 ) {
   const res = await superagent
     .post(`${port}/graphql`)
@@ -106,7 +108,9 @@ async function postFindOrCreateUser(
   contributor_id,
   contributor_name,
   contributor_signature,
-  token) {
+  token,
+  port
+) {
     console.log('extension findOrCreateUser called')
   const res = await superagent
     .post(`${port}/graphql`)
@@ -122,6 +126,7 @@ async function postCheckGithubTokenPermissions(
   repo,
   contributor_name,
   token,
+  port
 ) {
   const res = await superagent
     .post(`${port}/graphql`)
@@ -134,7 +139,7 @@ async function postCheckGithubTokenPermissions(
   const json = JSON.parse(res.text);
   return json.data.checkGithubTokenPermissions;
 }
-async function postCreateRepo(owner, repo, defaultHash, contributor_id, side, token) {
+async function postCreateRepo(owner, repo, defaultHash, contributor_id, side, token, port) {
     const res = await superagent
       .post(`${port}/graphql`)
       .send({
@@ -152,7 +157,8 @@ async function postGetContributorTokenAmount(
   defaultHash,
   contributor_id,
   side,
-  token
+  token,
+  port
 ) {
     const res = await superagent
       .post(`${port}/graphql`)
@@ -177,7 +183,7 @@ async function postGetContributorTokenAmount(
     return json.data.getContributorTokenAmount;
 }
 
-async function postTransferTokens(owner, repo, from, to, amount, token) {
+async function postTransferTokens(owner, repo, from, to, amount, token, port) {
   superagent
     .post(`${port}/graphql`)
     .send(
@@ -197,7 +203,7 @@ async function postTransferTokens(owner, repo, from, to, amount, token) {
     });
 }
 
-async function postNewPullRequest(owner, repo, defaultHash, contributor_id, side) {
+async function postNewPullRequest(owner, repo, defaultHash, contributor_id, side, port) {
     superagent
       .post(`${port}/graphql`)
       .send(
@@ -217,8 +223,7 @@ async function postNewPullRequest(owner, repo, defaultHash, contributor_id, side
       });
 }
 
-
-async function postSetVote(owner, repo, defaultHash, childDefaultHash, mergeable, contributor_id, side, token) {
+async function postSetVote(owner, repo, defaultHash, childDefaultHash, mergeable, contributor_id, side, token, port) {
     const res = await superagent
       .post(`${port}/graphql`)
       .send(
@@ -238,9 +243,9 @@ async function postSetVote(owner, repo, defaultHash, childDefaultHash, mergeable
     //   });
     const json = JSON.parse(res.text);
     return json.data.setVote;
-} 
+}
 
-  async function getRepoStatus(repo_id) {
+async function getRepoStatus(repo_id, port) {
     const res = await superagent
       .post(`${port}/graphql`)
       .send({
@@ -254,7 +259,7 @@ async function postSetVote(owner, repo, defaultHash, childDefaultHash, mergeable
     return json.data.getRepoStatus;
   }
 
-async function get_authorized_contributor(contributor_id, repo_id) {
+async function get_authorized_contributor(contributor_id, repo_id, port) {
   return await superagent
     .post(`${port}/graphql`)
     .send({
@@ -272,7 +277,7 @@ async function postPullFork(owner, repo, issue_id, contributor_id) {
     .set("accept", "json");
 }
 
-async function postGetPRforkStatus(owner, repo, issue_id, contributor_id) {
+async function postGetPRforkStatus(owner, repo, issue_id, contributor_id, port) {
   const res = await superagent
     .post(`${port}/graphql`)
     .send({
@@ -286,7 +291,7 @@ async function postGetPRforkStatus(owner, repo, issue_id, contributor_id) {
   return json.data.getPRforkStatus;
 }
 
-async function postGetPullRequest(owner, repo, defaultHash, contributor_id, side) {
+async function postGetPullRequest(owner, repo, defaultHash, contributor_id, side, port) {
    const res = await superagent
      .post(`${port}/graphql`)
      .send({
@@ -305,7 +310,8 @@ async function postGetPRpercentVotedQuorum(
   repo,
   defaultHash,
   contributor_id,
-  side
+  side,
+  port
 ) {
     const res = await superagent
       .post(`${port}/graphql`)
@@ -329,7 +335,7 @@ async function postGetPRpercentVotedQuorum(
     return json.data.percentVotedQuorum;
 }
 
-async function postGetPRvoteTotals(owner, repo, defaultHash, contributor_id, side) {
+async function postGetPRvoteTotals(owner, repo, defaultHash, contributor_id, side, port) {
   const res = await superagent
     .post(`${port}/graphql`)
     .send(
@@ -357,7 +363,8 @@ async function postGetPRvoteYesTotals(
   repo,
   defaultHash,
   contributor_id,
-  side
+  side,
+  port
 ) {
   const res = await superagent
     .post(`${port}/graphql`)
@@ -386,7 +393,8 @@ async function postGetPRvoteNoTotals(
   repo,
   defaultHash,
   contributor_id,
-  side
+  side,
+  port
 ) {
   const res = await superagent
     .post(`${port}/graphql`)
@@ -410,7 +418,7 @@ async function postGetPRvoteNoTotals(
   return json.data.getPRvoteNoTotals;
 }
 
-async function postClosePullRequest(owner, repo, defaultHash, contributor_id, side) {
+async function postClosePullRequest(owner, repo, defaultHash, contributor_id, side, port) {
     superagent
       .post(`${port}/graphql`)
       .send(
@@ -430,7 +438,7 @@ async function postClosePullRequest(owner, repo, defaultHash, contributor_id, si
       });
 }
 
-async function postMergePullRequest(owner, repo, defaultHash, contributor_id, side) { 
+async function postMergePullRequest(owner, repo, defaultHash, contributor_id, side, port) {
     superagent
       .post(`${port}/graphql`)
       .send(
@@ -450,7 +458,7 @@ async function postMergePullRequest(owner, repo, defaultHash, contributor_id, si
       });
 }
 
-async function postCreatePullRequest(owner, repo, fork_branch, issue_id, title) {
+async function postCreatePullRequest(owner, repo, fork_branch, issue_id, title, port) {
   superagent
     .post(`${port}/graphql`)
     .send(
@@ -470,7 +478,7 @@ async function postCreatePullRequest(owner, repo, fork_branch, issue_id, title) 
     });
 }
 
-async function postFork(owner, repo, org) {
+async function postFork(owner, repo, org, port) {
   superagent
     .post(`${port}/graphql`)
     .send(
@@ -488,7 +496,7 @@ async function postFork(owner, repo, org) {
     });
 }
 
-async function getGitHubPullRequest(owner, repo, defaultHash)  {
+async function getGitHubPullRequest(owner, repo, defaultHash, port)  {
     const res = await superagent
       .post(`${port}/graphql`)
       .send({
