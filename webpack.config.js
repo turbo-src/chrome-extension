@@ -87,6 +87,7 @@ module.exports = function (_env, argv) {
       extensions: ['.js', '.jsx'],
       alias: {
         config: path.resolve(__dirname, 'config.js'),
+      },
     },
     module: {
       rules: [
