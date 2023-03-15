@@ -5,8 +5,8 @@
   "main": "src/inject.js",
   "scripts": {
     "start": "node server",
-    "dev": "NODE_ENV=development BABEL_ENV=development webpack --watch --mode=development",
-    "prod": "NODE_ENV=production BABEL_ENV=production webpack --mode=production",
+    "dev": "node generate-config.js && NODE_ENV=development BABEL_ENV=development webpack --watch --mode=development",
+    "prod": "node generate-config.js && NODE_ENV=production BABEL_ENV=production webpack --mode=production",
     "lint": "eslint '**/*.js' --fix",
     "prettier": "./node_modules/prettier/bin-prettier.js --write",
     "test:dev": "jest --config=jest.config.js --watch --debug --colors --errorOnDeprecated",
