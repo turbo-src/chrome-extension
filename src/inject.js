@@ -138,7 +138,7 @@ async function postGetPRforkStatus(owner, repo, issue_id, contributor_id) {
   repo_id = `${path.user}/${path.repo}`;
   repo = path.repo;
   user = path.user;
-  var tsrcPRstatus = await postGetPullRequest(user, repo, issue_id, contributor_id, side);
+  var tsrcPRstatus = await postGetPullRequest(user, repo, issue_id, contributor_id, side, port);
   var gitHubPRstatus = await getGitHubPullRequest(user, repo, issue_id)
 
   //Set Github Repo and User from browser window for chrome extension
@@ -199,6 +199,7 @@ async function postGetPRforkStatus(owner, repo, issue_id, contributor_id) {
                     /*pr_id:*/ this.state.issueID,
                     /*contributor_id:*/ this.state.contributorID,
                     /*side:*/ "",
+                    port
                 );
                 const voteNoTotal = await postGetPRvoteNoTotals(
                     /*owner:*/ this.state.user,
@@ -206,6 +207,7 @@ async function postGetPRforkStatus(owner, repo, issue_id, contributor_id) {
                     /*pr_id:*/ this.state.issueID,
                     /*contributor_id:*/ this.state.contributorID,
                     /*side:*/ "",
+                    port
                 );
                 const resYes = mathUtil.votePercentToMergeInteger(voteYesTotal)
                 const resNo = mathUtil.votePercentToMergeInteger(voteNoTotal)
@@ -288,7 +290,8 @@ async function postGetPRforkStatus(owner, repo, issue_id, contributor_id) {
                   this.state.repo,
                   this.state.issueID,
                   this.state.contributorID,
-                  this.state.side
+                  this.state.side,
+                  port
                 );
 	      var textMath = this.state.voteButton.textMath
 	      try {
@@ -298,6 +301,7 @@ async function postGetPRforkStatus(owner, repo, issue_id, contributor_id) {
                     /*pr_id:*/ this.state.issueID,
                     /*contributor_id:*/ this.state.contributorID,
                     /*side:*/ "",
+                    port
                 );
                 const voteNoTotal = await postGetPRvoteNoTotals(
                     /*owner:*/ this.state.user,
@@ -305,6 +309,7 @@ async function postGetPRforkStatus(owner, repo, issue_id, contributor_id) {
                     /*pr_id:*/ this.state.issueID,
                     /*contributor_id:*/ this.state.contributorID,
                     /*side:*/ "",
+                    port
                 );
 		console.log('voteYes ', voteYesTotal)
 		console.log('voteYNo ', voteNoTotal)
@@ -463,7 +468,7 @@ async function postGetPRforkStatus(owner, repo, issue_id, contributor_id) {
 
                   this.setState({ voted: 'valid', lastIssueId: issue_id, side: this.state.side });
 
-                  await postSetVote(user, repo, issue_id, issue_id, false, contributor_id, this.state.side, githubUser.token);
+                  await postSetVote(user, repo, issue_id, issue_id, false, contributor_id, this.state.side, githubUser.token, port);
                   this.setState({ voted: 'done', lastIssueId: issue_id, side: this.state.side });
                   //var forkStatus = await postGetPRforkStatus(user, repo, issue_id, contributor_id);
                   //console.log('fork status');
@@ -528,21 +533,24 @@ async function postGetPRforkStatus(owner, repo, issue_id, contributor_id) {
                 this.state.repo,
                 this.state.issueID,
                 this.state.contributorID,
-                this.state.side
+                this.state.side,
+                port
               );
               var voteYesTotals = await postGetPRvoteYesTotals(
                 this.state.user,
                 this.state.repo,
                 this.state.issueID,
                 this.state.contributorID,
-                this.state.side
+                this.state.side,
+                port
               );
               var voteNoTotals = await postGetPRvoteNoTotals(
                 this.state.user,
                 this.state.repo,
                 this.state.issueID,
                 this.state.contributorID,
-                this.state.side
+                this.state.side,
+                port
               );
 
               voteTotalsReact = (Number(voteTotalsReact) * 100).toFixed(1).toString();
@@ -680,7 +688,7 @@ async function postGetPRforkStatus(owner, repo, issue_id, contributor_id) {
       for (var i = startIndex; i < containerItems.length; i++) {
         issue_id = containerItems[i].getAttribute('id');
         //if (i < 2) {
-        status = await postGetPullRequest(user, repo, issue_id, contributor_id, side);
+        status = await postGetPullRequest(user, repo, issue_id, contributor_id, side, port);
 	// Update so knows what the state is inside.
 	tsrcPRstatus = status
         gitHubPRstatus = await getGitHubPullRequest(user, repo, issue_id)
