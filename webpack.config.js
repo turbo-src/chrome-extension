@@ -70,7 +70,7 @@ function addPlugins(argv) {
   return plugins;
 }
 
-module.exports = function(_env, argv) {
+module.exports = function (_env, argv) {
   return {
     entry: {
       [libraryName]: './src/popup.js',
@@ -82,6 +82,11 @@ module.exports = function(_env, argv) {
       filename: '[name].bundle.js',
       library: libraryName
       //libraryTarget: 'global'
+    },
+    resolve: {
+      extensions: ['.js', '.jsx'],
+      alias: {
+        config: path.resolve(__dirname, 'config.js'),
     },
     module: {
       rules: [
