@@ -37,7 +37,10 @@ const { postSetVote,
         getGitHubPullRequest
       } = require('./requests')
 
-const port = "http://localhost:4000";
+
+const port = CONFIG.port;
+console.log('Port:', port);
+//const port = "http://localhost:4000";
 //const port = "https://turbosrc-service.fly.dev"
 
 var isRepoTurboSrcToken = false;
