@@ -37,7 +37,7 @@ const { postSetVote,
         postGetContributorName,
         getGitHubPullRequest
       } = require('./requests')
-const CONFIG = require("./config");
+const CONFIG = require("../config");
 
 const port = CONFIG.port;
 console.log('Port:', port);
