@@ -4,6 +4,7 @@
  *
  * Licensed MIT (c) Varun Malhotra
  */
+
 const React = require('react');
 const { useState } = require('react');
 const { unmountComponentAtNode, render } = require('react-dom');
@@ -36,7 +37,7 @@ const { postSetVote,
         postGetContributorName,
         getGitHubPullRequest
       } = require('./requests')
-
+const CONFIG = require("./config");
 
 const port = CONFIG.port;
 console.log('Port:', port);
