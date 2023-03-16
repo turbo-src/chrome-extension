@@ -52,7 +52,6 @@ function addPlugins(argv) {
         { from: 'icons/*.png', to: destination },
         { from: 'src/background.js', to: destination },
         { from: 'LICENSE', to: destination },
-        { from: 'config.js', to: destination }
       ],
       { copyUnmodified: true }
     )
@@ -83,6 +82,11 @@ module.exports = function (_env, argv) {
       filename: '[name].bundle.js',
       library: libraryName
       //libraryTarget: 'global'
+    },
+    resolve: {
+      alias: {
+        config: path.resolve(__dirname, 'src', 'config.js'),
+      },
     },
     module: {
       rules: [

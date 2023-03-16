@@ -40,7 +40,7 @@ const { postSetVote,
 
 //const port = "http://localhost:4000";
 //const port = "https://turbosrc-service.fly.dev"
-let CONFIG = require('../config.js')
+let CONFIG = require('./config.js')
 const port = CONFIG.port;
 console.log('Port:', port);
 console.log('CONFIG:', CONFIG);

@@ -9,4 +9,4 @@ const config = require(configFilePath);
 // Generate a JavaScript file with the required variables
 const configJs = `const CONFIG = ${JSON.stringify(config)};
 module.exports = CONFIG;`;
-fs.writeFileSync(path.join(__dirname, 'config.js'), configJs);
+fs.writeFileSync(path.join(__dirname, 'src', 'config.js'), configJs);
