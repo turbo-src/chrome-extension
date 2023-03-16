@@ -27,22 +27,39 @@ const authContributor = require('./authorizedContributor');
 const { getRepoStatus } = require('./requests');
 
 const { postSetVote,
-        postGetPullRequest, // updated
-        postGetPRvoteYesTotals,
-        postGetPRvoteNoTotals,
-        postGetPRvoteTotals,
-        postCreateRepo,
-        postNewPullRequest,
-        postGetContributorID,
-        postGetContributorName,
-        getGitHubPullRequest
-      } = require('./requests')
-const CONFIG = require("../config");
+  postGetPullRequest, // updated
+  postGetPRvoteYesTotals,
+  postGetPRvoteNoTotals,
+  postGetPRvoteTotals,
+  postCreateRepo,
+  postNewPullRequest,
+  postGetContributorID,
+  postGetContributorName,
+  getGitHubPullRequest
+} = require('./requests')
 
-const port = CONFIG.port;
-console.log('Port:', port);
 //const port = "http://localhost:4000";
 //const port = "https://turbosrc-service.fly.dev"
+let CONFIG;
+let configLoadedPromise = new Promise(async (resolve) => {
+  const configUrlCheck = chrome.runtime.getURL('config.js');
+  console.log('Config URL:', configUrlCheck);
+
+  const response = await fetch(chrome.runtime.getURL('config.js'));
+  const content = await response.text();
+  const configScript = new Blob([content], { type: 'text/javascript' });
+  const configUrl = URL.createObjectURL(configScript);
+  const script = document.createElement('script');
+  script.src = configUrl;
+  script.onload = () => {
+    CONFIG = window.CONFIG;
+    URL.revokeObjectURL(configUrl);
+    resolve(CONFIG);
+  };
+  document.head.appendChild(script);
+});
+
+// Usage example:
 
 var isRepoTurboSrcToken = false;
 
@@ -82,16 +99,16 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
 
 // Add to requests.js (reconcile privateStoreRequests.js
 async function get_authorized_contributor(contributor_id, repo_id) {
-    const res = await superagent
-      .post(`${port}/graphql`)
-      .send({
-        query: `{ getAuthorizedContributor(contributor_id: "${contributor_id}", repo_id: "${repo_id}") }`,
-      })
-      .set("accept", "json");
+  const res = await superagent
+    .post(`${port}/graphql`)
+    .send({
+      query: `{ getAuthorizedContributor(contributor_id: "${contributor_id}", repo_id: "${repo_id}") }`,
+    })
+    .set("accept", "json");
 
-      const json = JSON.parse(res.text);
-      console.log('getAuthorizedContributor:' + json.data.getAuthorizedContributor);
-      return json.data.getAuthorizedContributor;
+  const json = JSON.parse(res.text);
+  console.log('getAuthorizedContributor:' + json.data.getAuthorizedContributor);
+  return json.data.getAuthorizedContributor;
 }
 
 async function postPullFork(owner, repo, issue_id, contributor_id) {
@@ -117,10 +134,16 @@ async function postGetPRforkStatus(owner, repo, issue_id, contributor_id) {
   return json.data.getPRforkStatus;
 }
 
-(async function() {
+(async function () {
   window.enhancedGithub = {
     config: {}
   };
+
+  await configLoadedPromise;
+  const port = CONFIG.port;
+  console.log('Port:', port);
+  console.log('CONFIG:', CONFIG);
+
   const getStorageData = key =>
     new Promise((resolve, reject) =>
       chrome.storage.sync.get(key, result =>
@@ -157,12 +180,12 @@ async function postGetPRforkStatus(owner, repo, issue_id, contributor_id) {
   contributor_name = await getFromStorage('contributor_name');
   contributor_id = await getFromStorage('contributor_id');
   //Check if current contributor is authorized for this repo
-  const githubUser = await getFromStorage('githubUser').then(res=>JSON.parse(res))
+  const githubUser = await getFromStorage('githubUser').then(res => JSON.parse(res))
 
   const isAuthorizedContributor = await get_authorized_contributor(contributor_id, repo_id);
   console.log('isAuthorizedContributor: ' + isAuthorizedContributor);
 
-  const readyStateCheckInterval = setInterval(async function() {
+  const readyStateCheckInterval = setInterval(async function () {
     if ((document.readyState === 'complete') & (isRepoTurboSrcToken === true) & (isAuthorizedContributor === true)) {
       // When the user clicks the button, open the modal
       const ce = React.createElement;
@@ -180,27 +203,27 @@ async function postGetPRforkStatus(owner, repo, issue_id, contributor_id) {
             contributorID: contributor_id,
             background: 'white',
             dynamicBool: true,
-	    voteButton: { color: 'gray', text: '?' },
-	    tsrcPRstatus: this.props.tsrcPRstatus,
-	    voteYesTotal: 0.0,
-	    textMath: 0
+            voteButton: { color: 'gray', text: '?' },
+            tsrcPRstatus: this.props.tsrcPRstatus,
+            voteYesTotal: 0.0,
+            textMath: 0
           };
         }
 
         componentDidMount() {
           setTimeout(() => {
             (async () => {
-	      let tsrcPRstatusComponent = this.state.tsrcPRstatus
+              let tsrcPRstatusComponent = this.state.tsrcPRstatus
 
-	      var textMath = this.state.voteButton.textMath
-	      try {
+              var textMath = this.state.voteButton.textMath
+              try {
                 const voteYesTotal = await postGetPRvoteYesTotals(
                     /*owner:*/ this.state.user,
                     /*repo:*/ this.state.repo,
                     /*pr_id:*/ this.state.issueID,
                     /*contributor_id:*/ this.state.contributorID,
                     /*side:*/ "",
-                    port
+                  port
                 );
                 const voteNoTotal = await postGetPRvoteNoTotals(
                     /*owner:*/ this.state.user,
@@ -208,77 +231,77 @@ async function postGetPRforkStatus(owner, repo, issue_id, contributor_id) {
                     /*pr_id:*/ this.state.issueID,
                     /*contributor_id:*/ this.state.contributorID,
                     /*side:*/ "",
-                    port
+                  port
                 );
                 const resYes = mathUtil.votePercentToMergeInteger(voteYesTotal)
                 const resNo = mathUtil.votePercentToMergeInteger(voteNoTotal)
-		if (resYes !== null && resNo !== null) {
-	          textMath = resYes/2 + resNo/2
-		}
-	      } catch(error) {
-	      }
-	      console.log('tsrcPRstatusComponent ', tsrcPRstatusComponent)
-              const statusProblemComponent = (tsrcPRstatusComponent === null || tsrcPRstatusComponent  === undefined)
-	      if (statusProblemComponent) {
-		 tsrcPRstatusComponent = {}
-                 tsrcPRstatusComponent.mergeableCodeHost = true
-                 tsrcPRstatusComponent.status = 404
-                 tsrcPRstatusComponent.state = ""
-	      }
-
-              //const statusOpenComponent = commonUtil.isObjEqual(tsrcPRstatusComponent, { status: 200, type: 0 } );
-              const statusPreOpenComponent = (tsrcPRstatusComponent.status === 200 && tsrcPRstatusComponent.state  === "pre-open")
-              const statusOpenComponent = (tsrcPRstatusComponent.status === 200 &&  tsrcPRstatusComponent.state  === "open")
-              //const statusClosedComponent = commonUtil.isObjEqual(tsrcPRstatusComponent, { status: 200, type: 1 } );
-              const statusClosedComponent = (tsrcPRstatusComponent.status === 200 &&  tsrcPRstatusComponent.state  === "close")
-              //const statusMergedComponent = commonUtil.isObjEqual(tsrcPRstatusComponent, { status: 200, type: 2 } );
-              const statusMergedComponent = (tsrcPRstatusComponent.status === 200 &&  tsrcPRstatusComponent.state === "merge")
-	      
-	      const checkVoteButtonPreOpen = commonUtil.isObjEqual(this.state.voteButton, { color: 'green', text: `${textMath}%` } );
-	      const checkVoteButtonOpen = commonUtil.isObjEqual(this.state.voteButton, { color: 'orchid', text: `${textMath}%` } );
-	      const checkVoteButtonClosed = commonUtil.isObjEqual(this.state.voteButton, { color: 'red', text: 'closed' } );
-	      const checkVoteButtonMerged = commonUtil.isObjEqual(this.state.voteButton, { color: 'darkorchid', text: 'merged' } );
-	      const checkVoteButtonVote = commonUtil.isObjEqual(this.state.voteButton, { color: 'lightgreen', text: 'vote' } );
-	      const checkVoteButtonConflict = commonUtil.isObjEqual(this.state.voteButton, { color: 'orange', text: 'conflict' } );
-	      const checkVoteButtonProblem = commonUtil.isObjEqual(this.state.voteButton, { color: 'gray', text: '?' } );
-
-	      modalDisplay = 'hide' // only show modal if open or on vote.
-              if (statusPreOpenComponent) {
-	        modalDisplay = 'show'
-              //if (statusOpenComponent && gitHubPRstatus.mergeable) {
-		if (!checkVoteButtonPreOpen) {
-                   this.setState({ voteButton: { color: 'green', text: `${textMath}%` } });
-		}
-	      } else if (statusOpenComponent) {
-	        modalDisplay = 'show'
-              //if (statusOpenComponent && gitHubPRstatus.mergeable) {
-		if (!checkVoteButtonOpen) {
-                   this.setState({ voteButton: { color: 'orchid', text: `${textMath}%` } });
-		}
-              } else if (statusClosedComponent) {
-		if (!checkVoteButtonClosed) {
-                  this.setState({ voteButton: { color: 'red', text: 'closed' } });
-	        }
-              } else if (statusMergedComponent) {
-		if (!checkVoteButtonMerged) {
-                  this.setState({ voteButton: { color: 'darkorchid', text: 'merged' } });
-	        }
-	      } else if (tsrcPRstatusComponent.mergeableCodeHost === true) {
-	        modalDisplay = 'show'
-		if (!checkVoteButtonVote) {
-                  this.setState({ voteButton: { color: 'lightgreen', text: 'vote' } });
-		}
-	      } else if (tsrcPRstatusComponent.mergeableCodeHost === false) {
-		if (!checkVoteButtonConflict) {
-                  this.setState({ voteButton: { color: 'orange', text: 'conflict' } });
-		}
-              } else {
-		if (!checkVoteButtonProblem) {
-                  this.setState({ voteButton: { color: 'gray', text: '?' } });
-		}
+                if (resYes !== null && resNo !== null) {
+                  textMath = resYes / 2 + resNo / 2
+                }
+              } catch (error) {
+              }
+              console.log('tsrcPRstatusComponent ', tsrcPRstatusComponent)
+              const statusProblemComponent = (tsrcPRstatusComponent === null || tsrcPRstatusComponent === undefined)
+              if (statusProblemComponent) {
+                tsrcPRstatusComponent = {}
+                tsrcPRstatusComponent.mergeableCodeHost = true
+                tsrcPRstatusComponent.status = 404
+                tsrcPRstatusComponent.state = ""
               }
 
-	      // For modal.style.display (how it knows to popup if vote button clicked).
+              //const statusOpenComponent = commonUtil.isObjEqual(tsrcPRstatusComponent, { status: 200, type: 0 } );
+              const statusPreOpenComponent = (tsrcPRstatusComponent.status === 200 && tsrcPRstatusComponent.state === "pre-open")
+              const statusOpenComponent = (tsrcPRstatusComponent.status === 200 && tsrcPRstatusComponent.state === "open")
+              //const statusClosedComponent = commonUtil.isObjEqual(tsrcPRstatusComponent, { status: 200, type: 1 } );
+              const statusClosedComponent = (tsrcPRstatusComponent.status === 200 && tsrcPRstatusComponent.state === "close")
+              //const statusMergedComponent = commonUtil.isObjEqual(tsrcPRstatusComponent, { status: 200, type: 2 } );
+              const statusMergedComponent = (tsrcPRstatusComponent.status === 200 && tsrcPRstatusComponent.state === "merge")
+
+              const checkVoteButtonPreOpen = commonUtil.isObjEqual(this.state.voteButton, { color: 'green', text: `${textMath}%` });
+              const checkVoteButtonOpen = commonUtil.isObjEqual(this.state.voteButton, { color: 'orchid', text: `${textMath}%` });
+              const checkVoteButtonClosed = commonUtil.isObjEqual(this.state.voteButton, { color: 'red', text: 'closed' });
+              const checkVoteButtonMerged = commonUtil.isObjEqual(this.state.voteButton, { color: 'darkorchid', text: 'merged' });
+              const checkVoteButtonVote = commonUtil.isObjEqual(this.state.voteButton, { color: 'lightgreen', text: 'vote' });
+              const checkVoteButtonConflict = commonUtil.isObjEqual(this.state.voteButton, { color: 'orange', text: 'conflict' });
+              const checkVoteButtonProblem = commonUtil.isObjEqual(this.state.voteButton, { color: 'gray', text: '?' });
+
+              modalDisplay = 'hide' // only show modal if open or on vote.
+              if (statusPreOpenComponent) {
+                modalDisplay = 'show'
+                //if (statusOpenComponent && gitHubPRstatus.mergeable) {
+                if (!checkVoteButtonPreOpen) {
+                  this.setState({ voteButton: { color: 'green', text: `${textMath}%` } });
+                }
+              } else if (statusOpenComponent) {
+                modalDisplay = 'show'
+                //if (statusOpenComponent && gitHubPRstatus.mergeable) {
+                if (!checkVoteButtonOpen) {
+                  this.setState({ voteButton: { color: 'orchid', text: `${textMath}%` } });
+                }
+              } else if (statusClosedComponent) {
+                if (!checkVoteButtonClosed) {
+                  this.setState({ voteButton: { color: 'red', text: 'closed' } });
+                }
+              } else if (statusMergedComponent) {
+                if (!checkVoteButtonMerged) {
+                  this.setState({ voteButton: { color: 'darkorchid', text: 'merged' } });
+                }
+              } else if (tsrcPRstatusComponent.mergeableCodeHost === true) {
+                modalDisplay = 'show'
+                if (!checkVoteButtonVote) {
+                  this.setState({ voteButton: { color: 'lightgreen', text: 'vote' } });
+                }
+              } else if (tsrcPRstatusComponent.mergeableCodeHost === false) {
+                if (!checkVoteButtonConflict) {
+                  this.setState({ voteButton: { color: 'orange', text: 'conflict' } });
+                }
+              } else {
+                if (!checkVoteButtonProblem) {
+                  this.setState({ voteButton: { color: 'gray', text: '?' } });
+                }
+              }
+
+              // For modal.style.display (how it knows to popup if vote button clicked).
             })();
           });
         }
@@ -287,22 +310,22 @@ async function postGetPRforkStatus(owner, repo, issue_id, contributor_id) {
           setTimeout(() => {
             (async () => {
               let tsrcPRstatusComponent = await postGetPullRequest(
-                  this.state.user,
-                  this.state.repo,
-                  this.state.issueID,
-                  this.state.contributorID,
-                  this.state.side,
-                  port
-                );
-	      var textMath = this.state.voteButton.textMath
-	      try {
+                this.state.user,
+                this.state.repo,
+                this.state.issueID,
+                this.state.contributorID,
+                this.state.side,
+                port
+              );
+              var textMath = this.state.voteButton.textMath
+              try {
                 const voteYesTotal = await postGetPRvoteYesTotals(
                     /*owner:*/ this.state.user,
                     /*repo:*/ this.state.repo,
                     /*pr_id:*/ this.state.issueID,
                     /*contributor_id:*/ this.state.contributorID,
                     /*side:*/ "",
-                    port
+                  port
                 );
                 const voteNoTotal = await postGetPRvoteNoTotals(
                     /*owner:*/ this.state.user,
@@ -310,100 +333,100 @@ async function postGetPRforkStatus(owner, repo, issue_id, contributor_id) {
                     /*pr_id:*/ this.state.issueID,
                     /*contributor_id:*/ this.state.contributorID,
                     /*side:*/ "",
-                    port
+                  port
                 );
-		console.log('voteYes ', voteYesTotal)
-		console.log('voteYNo ', voteNoTotal)
+                console.log('voteYes ', voteYesTotal)
+                console.log('voteYNo ', voteNoTotal)
                 const resYes = mathUtil.votePercentToMergeInteger(voteYesTotal)
                 const resNo = mathUtil.votePercentToMergeInteger(voteNoTotal)
-		console.log('resYes ', resYes)
-		console.log('resNo ', resNo)
-		if (resYes !== null && resNo !== null) {
-	          textMath = resYes/2 + resNo/2
-		}
-	      } catch(error) {
-		textMath = ""
-	      }
+                console.log('resYes ', resYes)
+                console.log('resNo ', resNo)
+                if (resYes !== null && resNo !== null) {
+                  textMath = resYes / 2 + resNo / 2
+                }
+              } catch (error) {
+                textMath = ""
+              }
 
 
-	      console.log('update tsrcPRstatusComponent ', tsrcPRstatusComponent)
-              const statusProblemComponent = (tsrcPRstatusComponent === null || tsrcPRstatusComponent  === undefined)
+              console.log('update tsrcPRstatusComponent ', tsrcPRstatusComponent)
+              const statusProblemComponent = (tsrcPRstatusComponent === null || tsrcPRstatusComponent === undefined)
 
-	      if (statusProblemComponent) {
-		 tsrcPRstatusComponent = {}
-                 tsrcPRstatusComponent.status = this.state.tsrcPRstatus.status
-                 tsrcPRstatusComponent.state = this.state.tsrcPRstatus.state
-	      }
-	      
-              const statusPreOpenComponent = (tsrcPRstatusComponent.status === 200 && tsrcPRstatusComponent.state  === "pre-open")
+              if (statusProblemComponent) {
+                tsrcPRstatusComponent = {}
+                tsrcPRstatusComponent.status = this.state.tsrcPRstatus.status
+                tsrcPRstatusComponent.state = this.state.tsrcPRstatus.state
+              }
+
+              const statusPreOpenComponent = (tsrcPRstatusComponent.status === 200 && tsrcPRstatusComponent.state === "pre-open")
               //const statusOpenComponent = commonUtil.isObjEqual(tsrcPRstatusComponent, { status: 200, type: 0 } );
-              const statusOpenComponent = (tsrcPRstatusComponent.status === 200 &&  tsrcPRstatusComponent.state  === "open")
+              const statusOpenComponent = (tsrcPRstatusComponent.status === 200 && tsrcPRstatusComponent.state === "open")
               //const statusClosedComponent = commonUtil.isObjEqual(tsrcPRstatusComponent, { status: 200, type: 1 } );
-              const statusClosedComponent = (tsrcPRstatusComponent.status === 200 &&  tsrcPRstatusComponent.state  === "close")
+              const statusClosedComponent = (tsrcPRstatusComponent.status === 200 && tsrcPRstatusComponent.state === "close")
               //const statusMergedComponent = commonUtil.isObjEqual(tsrcPRstatusComponent, { status: 200, type: 2 } );
-              const statusMergedComponent = (tsrcPRstatusComponent.status === 200 &&  tsrcPRstatusComponent.state === "merge")
-	      
-	      //const checkVoteButtonOpen = (textMath !== null && textMath !== textMathLast);
-	      const checkVoteButtonPreOpen = commonUtil.isObjEqual(this.state.voteButton, { color: 'green', text: `${textMath}%` } );
-	      const checkVoteButtonOpen = commonUtil.isObjEqual(this.state.voteButton, { color: 'orchid', text: `${textMath}%` } );
-	      const checkVoteButtonClosed = commonUtil.isObjEqual(this.state.voteButton, { color: 'red', text: 'closed' } );
-	      const checkVoteButtonMerged = commonUtil.isObjEqual(this.state.voteButton, { color: 'darkorchid', text: 'merged' } );
-	      const checkVoteButtonVote = commonUtil.isObjEqual(this.state.voteButton, { color: 'lightgreen', text: 'vote' } );
-	      const checkVoteButtonConflict = commonUtil.isObjEqual(this.state.voteButton, { color: 'orange', text: 'conflict' } );
-	      const checkVoteButtonProblem = commonUtil.isObjEqual(this.state.voteButton, { color: 'gray', text: '?' } );
+              const statusMergedComponent = (tsrcPRstatusComponent.status === 200 && tsrcPRstatusComponent.state === "merge")
 
-	      modalDisplay = 'hide' // only show modal if open or on vote.
+              //const checkVoteButtonOpen = (textMath !== null && textMath !== textMathLast);
+              const checkVoteButtonPreOpen = commonUtil.isObjEqual(this.state.voteButton, { color: 'green', text: `${textMath}%` });
+              const checkVoteButtonOpen = commonUtil.isObjEqual(this.state.voteButton, { color: 'orchid', text: `${textMath}%` });
+              const checkVoteButtonClosed = commonUtil.isObjEqual(this.state.voteButton, { color: 'red', text: 'closed' });
+              const checkVoteButtonMerged = commonUtil.isObjEqual(this.state.voteButton, { color: 'darkorchid', text: 'merged' });
+              const checkVoteButtonVote = commonUtil.isObjEqual(this.state.voteButton, { color: 'lightgreen', text: 'vote' });
+              const checkVoteButtonConflict = commonUtil.isObjEqual(this.state.voteButton, { color: 'orange', text: 'conflict' });
+              const checkVoteButtonProblem = commonUtil.isObjEqual(this.state.voteButton, { color: 'gray', text: '?' });
+
+              modalDisplay = 'hide' // only show modal if open or on vote.
               if (statusPreOpenComponent) {
-	        modalDisplay = 'show'
-              //if (statusOpenComponent && gitHubPRstatus.mergeable) {
-		if (!checkVoteButtonPreOpen) {
-                   this.setState({ voteButton: { color: 'green', text: `${textMath}%` } });
-		} else {
-                  this.setState({tsrcPRstatus: tsrcPRstatusComponent });
-	        }
-	      } else if (statusOpenComponent) {
-              //if (statusOpenComponent && gitHubPRstatus.mergeable) {
-	        modalDisplay = 'show'
-		if (!checkVoteButtonOpen) {
-                   this.setState({ voteButton: { color: 'orchid', text: `${textMath}%` } });
-		} else {
-                  this.setState({tsrcPRstatus: tsrcPRstatusComponent });
-	        }
+                modalDisplay = 'show'
+                //if (statusOpenComponent && gitHubPRstatus.mergeable) {
+                if (!checkVoteButtonPreOpen) {
+                  this.setState({ voteButton: { color: 'green', text: `${textMath}%` } });
+                } else {
+                  this.setState({ tsrcPRstatus: tsrcPRstatusComponent });
+                }
+              } else if (statusOpenComponent) {
+                //if (statusOpenComponent && gitHubPRstatus.mergeable) {
+                modalDisplay = 'show'
+                if (!checkVoteButtonOpen) {
+                  this.setState({ voteButton: { color: 'orchid', text: `${textMath}%` } });
+                } else {
+                  this.setState({ tsrcPRstatus: tsrcPRstatusComponent });
+                }
               } else if (statusClosedComponent) {
-		if (!checkVoteButtonClosed) {
+                if (!checkVoteButtonClosed) {
                   this.setState({ voteButton: { color: 'red', text: 'closed' } });
-		} else {
-                  this.setState({tsrcPRstatus: tsrcPRstatusComponent });
-	        }
+                } else {
+                  this.setState({ tsrcPRstatus: tsrcPRstatusComponent });
+                }
               } else if (statusMergedComponent) {
-		if (!checkVoteButtonMerged) {
+                if (!checkVoteButtonMerged) {
                   this.setState({ voteButton: { color: 'darkorchid', text: 'merged' } });
-		} else {
-                  this.setState({tsrcPRstatus: tsrcPRstatusComponent });
-	        }
-	      } else if (tsrcPRstatusComponent.mergeableCodeHost === true) {
-	        modalDisplay = 'show'
-		if (!checkVoteButtonVote) {
+                } else {
+                  this.setState({ tsrcPRstatus: tsrcPRstatusComponent });
+                }
+              } else if (tsrcPRstatusComponent.mergeableCodeHost === true) {
+                modalDisplay = 'show'
+                if (!checkVoteButtonVote) {
                   this.setState({ voteButton: { color: 'lightgreen', text: 'vote' } });
-		} else {
-                  this.setState({tsrcPRstatus: tsrcPRstatusComponent });
-	        }
-	      } else if (tsrcPRstatusComponent.mergeableCodeHost === false) {
-		if (!checkVoteButtonConflict) {
+                } else {
+                  this.setState({ tsrcPRstatus: tsrcPRstatusComponent });
+                }
+              } else if (tsrcPRstatusComponent.mergeableCodeHost === false) {
+                if (!checkVoteButtonConflict) {
                   this.setState({ voteButton: { color: 'orange', text: 'conflict' } });
-		} else {
-                  this.setState({tsrcPRstatus: tsrcPRstatusComponent });
-	        }
-	      } else if (tsrcPRstatusComponent.mergeableCodeHost === true) {
-                  this.setState({ voteButton: { color: 'lightgreen', text: 'vote' } });
+                } else {
+                  this.setState({ tsrcPRstatus: tsrcPRstatusComponent });
+                }
+              } else if (tsrcPRstatusComponent.mergeableCodeHost === true) {
+                this.setState({ voteButton: { color: 'lightgreen', text: 'vote' } });
               } else {
-		console.log('made it')
-		if (!checkVoteButtonProblem) {
+                console.log('made it')
+                if (!checkVoteButtonProblem) {
                   this.setState({ voteButton: { color: 'gray', text: '?' } });
-		} else {
-                  this.setState({tsrcPRstatus: tsrcPRstatusComponent });
-	        }
-	      }
+                } else {
+                  this.setState({ tsrcPRstatus: tsrcPRstatusComponent });
+                }
+              }
             })();
           }, 5000);
         }
@@ -690,22 +713,22 @@ async function postGetPRforkStatus(owner, repo, issue_id, contributor_id) {
         issue_id = containerItems[i].getAttribute('id');
         //if (i < 2) {
         status = await postGetPullRequest(user, repo, issue_id, contributor_id, side, port);
-	// Update so knows what the state is inside.
-	tsrcPRstatus = status
+        // Update so knows what the state is inside.
+        tsrcPRstatus = status
         gitHubPRstatus = await getGitHubPullRequest(user, repo, issue_id)
 
         //console.log('status: ' + status)
         //displayOpenStatus = status.status === 200 &&  status.state === 'new' || status.status === 200 && status.state === 'open';
         domContainerTurboSrcButton = document.querySelector(`#turbo-src-btn-${issue_id}`);
         //if (displayOpenStatus) {
-        render(ce(TurboSrcButtonOpen, {issueID: issue_id, tsrcPRstatus: tsrcPRstatus }), domContainerTurboSrcButton); //} else {
+        render(ce(TurboSrcButtonOpen, { issueID: issue_id, tsrcPRstatus: tsrcPRstatus }), domContainerTurboSrcButton); //} else {
         // render(ce(TurboSrcButtonClosed), domContainerTurboSrcButton);
         //}
       }
 
       document.addEventListener(
         'click',
-        async function(event) {
+        async function (event) {
           //console.log('new event')
           //console.log(event.target.parentElement.id)
           const divHTML = event.target.parentElement;
@@ -722,11 +745,11 @@ async function postGetPRforkStatus(owner, repo, issue_id, contributor_id) {
             const domContainerVoteButton = document.querySelector('#yes_vote_button');
             const domContainerVoteButton1 = document.querySelector('#no_vote_button');
 
-	    //if (modalDisplay === 'show') {
-               modal.style.display = 'block';
-	    //} else {
+            //if (modalDisplay === 'show') {
+            modal.style.display = 'block';
+            //} else {
             //   modal.style.display = 'none';
-	    //}
+            //}
 
             voteTotals = await postGetPRvoteTotals(user, repo, issue_id, contributor_id, side);
 
@@ -749,7 +772,7 @@ async function postGetPRforkStatus(owner, repo, issue_id, contributor_id) {
         {
           'x-github-token': ''
         },
-        function(storedData) {
+        function (storedData) {
           if (storedData) {
             storageUtil.set(CommonEnum.TOKEN, storedData['x-github-token']);
           }
