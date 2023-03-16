@@ -40,24 +40,10 @@ const { postSetVote,
 
 //const port = "http://localhost:4000";
 //const port = "https://turbosrc-service.fly.dev"
-let CONFIG;
-let configLoadedPromise = new Promise(async (resolve) => {
-  const configUrlCheck = chrome.runtime.getURL('config.js');
-  console.log('Config URL:', configUrlCheck);
-
-  const response = await fetch(chrome.runtime.getURL('config.js'));
-  const content = await response.text();
-  const configScript = new Blob([content], { type: 'text/javascript' });
-  const configUrl = URL.createObjectURL(configScript);
-  const script = document.createElement('script');
-  script.src = configUrl;
-  script.onload = () => {
-    CONFIG = window.CONFIG;
-    URL.revokeObjectURL(configUrl);
-    resolve(CONFIG);
-  };
-  document.head.appendChild(script);
-});
+let CONFIG = require('../config.js')
+const port = CONFIG.port;
+console.log('Port:', port);
+console.log('CONFIG:', CONFIG);
 
 // Usage example:
 
@@ -138,11 +124,6 @@ async function postGetPRforkStatus(owner, repo, issue_id, contributor_id) {
   window.enhancedGithub = {
     config: {}
   };
-
-  await configLoadedPromise;
-  const port = CONFIG.port;
-  console.log('Port:', port);
-  console.log('CONFIG:', CONFIG);
 
   const getStorageData = key =>
     new Promise((resolve, reject) =>

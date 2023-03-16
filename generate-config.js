@@ -7,5 +7,6 @@ const configFilePath = path.join(__dirname, `config.${env}.json`);
 const config = require(configFilePath);
 
 // Generate a JavaScript file with the required variables
-const configJs = `const CONFIG = ${JSON.stringify(config)};`;
+const configJs = `const CONFIG = ${JSON.stringify(config)};
+module.exports = CONFIG;`;
 fs.writeFileSync(path.join(__dirname, 'config.js'), configJs);
