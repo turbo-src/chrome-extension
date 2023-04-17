@@ -5,7 +5,7 @@ import commonUtil from '../utils/commonUtil';
 import mathUtil from '../utils/mathUtil';
 import { Button } from 'react-bootstrap';
 
-export default function TwoUseEffectButtonOpen(props){
+export default function VoteStatusButton(props){
 
     const [user, setUser] = useState(props.user);
     const [repo, setRepo] = useState(props.repo);
@@ -13,20 +13,27 @@ export default function TwoUseEffectButtonOpen(props){
     const [contributorName, setContributorName] = useState(props.contributorName);
     const [contributorID, setContributorID] = useState(props.contributorID);
     const [background, setBackground] = useState('white');
-    const [voteButton, setVoteButton] = useState({ color: 'gray', text: '?' });
+    const [statusButton, setstatusButton] = useState({ color: 'gray', text: '?' });
     const [tsrcPRstatus, setTsrcPRstatus] = useState(props.tsrcPRstatus);
     const [voteYesTotalState, setVoteYesTotalState] = useState(0.0);
     const [voteNoTotalState, setVoteNoTotalState] = useState(0.0);
-    const [textMath, setTextMath] = useState(0);
+    const [voteTotals, setVoteTotals] = useState(0);
     const [side, setSide] = useState(props.side);
     const [clicked, setClicked] = useState(props.clicked);
-    
+    const buttonStyle = {
+      vote: ['lightgreen', 'vote'],
+      preOpen: ['green', voteTotals],
+      open: ['orchid', voteTotals],
+      conflict: ['orange', 'conflict'],
+      merge: ['darkorchid', 'merged'],
+      closed: ['red', 'closed']
+    };
     
     useEffect(() => {
         const fetchData = async () => {
         
       let tsrcPRstatusComponent = tsrcPRstatus;
-      let textMath = voteButton.textMath;
+      let textMath = statusButton.textMath;
       try {
         const voteYesTotal = await postGetPRvoteYesTotals(
           user,
@@ -49,7 +56,6 @@ export default function TwoUseEffectButtonOpen(props){
         }
         setVoteYesTotalState(voteYesTotal);
         setVoteNoTotalState(voteNoTotal);
-        setTextMath(textMath);
 
       } catch (error) {
         textMath = "";
@@ -57,9 +63,6 @@ export default function TwoUseEffectButtonOpen(props){
       console.log("tsrcPRstatusComponent: ", tsrcPRstatusComponent);
       
       setTsrcPRstatus(tsrcPRstatusComponent);
-     
-      
-
       
       const statusProblemComponent = tsrcPRstatusComponent === null || tsrcPRstatusComponent === undefined;
       if (statusProblemComponent) {
@@ -77,60 +80,64 @@ export default function TwoUseEffectButtonOpen(props){
         tsrcPRstatusComponent.status === 200 && tsrcPRstatusComponent.state === "close";
       const statusMergedComponent =
         tsrcPRstatusComponent.status === 200 && tsrcPRstatusComponent.state === "merge";
-      const checkVoteButtonPreOpen = commonUtil.isObjEqual(voteButton, { color: 'green', text: `${textMath}%` });
-      const checkVoteButtonOpen = commonUtil.isObjEqual(voteButton, { color: 'orchid', text: `${textMath}%` });
-      const checkVoteButtonClosed = commonUtil.isObjEqual(voteButton, { color: 'red', text: 'closed' });
-      const checkVoteButtonMerged = commonUtil.isObjEqual(voteButton, { color: 'darkorchid', text: 'merged' } );
-      const checkVoteButtonVote = commonUtil.isObjEqual(voteButton, { color: 'lightgreen', text: 'vote' } );
-      const checkVoteButtonConflict = commonUtil.isObjEqual(voteButton, { color: 'orange', text: 'conflict' } );
-      const checkVoteButtonProblem = commonUtil.isObjEqual(voteButton, { color: 'gray', text: '?' } );
+      const checkstatusButtonPreOpen = commonUtil.isObjEqual(statusButton, { color: 'green', text: `${textMath}%` });
+      const checkstatusButtonOpen = commonUtil.isObjEqual(statusButton, { color: 'orchid', text: `${textMath}%` });
+      const checkstatusButtonClosed = commonUtil.isObjEqual(statusButton, { color: 'red', text: 'closed' });
+      const checkstatusButtonMerged = commonUtil.isObjEqual(statusButton, { color: 'darkorchid', text: 'merged' } );
+      const checkstatusButtonVote = commonUtil.isObjEqual(statusButton, { color: 'lightgreen', text: 'vote' } );
+      const checkstatusButtonConflict = commonUtil.isObjEqual(statusButton, { color: 'orange', text: 'conflict' } );
+      const checkstatusButtonProblem = commonUtil.isObjEqual(statusButton, { color: 'gray', text: '?' } );
           if (statusPreOpenComponent) {
             
-              if (!checkVoteButtonPreOpen) {
-                setVoteButton({ color: 'green', text: `${textMath}%` });
+              if (!checkstatusButtonPreOpen) {
+                setVoteTotals(textMath);
+                console.log(voteTotals, "voteTotals");
+                console.log(textMath, "textMath");
+
+               setstatusButton({ color: 'green', text: `${textMath}%` });
               } else {  
                 setTsrcPRstatus(tsrcPRstatusComponent);
               }
           } else if (statusOpenComponent) {
           
-            if (!checkVoteButtonOpen) {
-              setVoteButton({color: 'orchid', text: `${textMath}%` });
+            if (!checkstatusButtonOpen) {
+              setVoteTotals(textMath);
+              console.log(voteTotals, "voteTotals");
+              console.log(textMath, "textMath");
+             setstatusButton({color: 'orchid', text: `${textMath}%` });
             } else {
               setTsrcPRstatus(tsrcPRstatusComponent);
             }
           } else if (statusClosedComponent) {
-            if (!checkVoteButtonClosed) {
-              setVoteButton({ color: 'red', text: 'closed' });
+            if (!checkstatusButtonClosed) {
+             setstatusButton({ color: 'red', text: 'closed' });
             } else {
               setTsrcPRstatus(tsrcPRstatusComponent);
             }
           } else if (statusMergedComponent) {
-            if (!checkVoteButtonMerged) {
-              console.log(voteButton.color + " " + voteButton.text + " " + "voteButton BEFORE");
+            if (!checkstatusButtonMerged) {
 
-              setVoteButton({ color: 'darkorchid', text: 'merged' });
-              console.log(voteButton.color + " " + voteButton.text + " " + "voteButton AFTER");
+             setstatusButton({ color: 'darkorchid', text: 'merged' });
             } else {
               setTsrcPRstatus(tsrcPRstatusComponent);
             }
           } else if (tsrcPRstatusComponent.mergeableCodeHost === true) {
-            //modalDisplay = 'show'
-            if (!checkVoteButtonVote) {
-              setVoteButton({ color: 'lightgreen', text: 'vote' });
+            if (!checkstatusButtonVote) {
+             setstatusButton({ color: 'lightgreen', text: 'vote' });
             } else {
               setTsrcPRstatus(tsrcPRstatusComponent);
             }
           }  else if (tsrcPRstatusComponent.mergeableCodeHost === false) {
-            if (!checkVoteButtonConflict) {
-              setVoteButton({color: 'orange', text: 'conflict' });
+            if (!checkstatusButtonConflict) {
+             setstatusButton({color: 'orange', text: 'conflict' });
             } else {
               setTsrcPRstatus(tsrcPRstatusComponent);
             }
           } else if (tsrcPRstatusComponent.mergeableCodeHost === true) {
-            setVoteButton({ color: 'lightgreen', text: 'vote' });
+           setstatusButton({ color: 'lightgreen', text: 'vote' });
             } else {
-              if (!checkVoteButtonProblem) {
-                setVoteButton({ color: 'gray', text: '?' });
+              if (!checkstatusButtonProblem) {
+               setstatusButton({ color: 'gray', text: '?' });
               } else {
                 setTsrcPRstatus(tsrcPRstatusComponent);
               }
@@ -144,7 +151,7 @@ export default function TwoUseEffectButtonOpen(props){
         const updateData = async () => {
             
       console.log("It's working!");
-      let textMath = voteButton.textMath;
+      let textMath = statusButton.textMath;
       let tsrcPRstatusComponent;
       try {
         tsrcPRstatusComponent = await postGetPullRequest(
@@ -175,7 +182,7 @@ export default function TwoUseEffectButtonOpen(props){
         }
         setVoteYesTotalState(voteYesTotal);
         setVoteNoTotalState(voteNoTotal);
-        setTextMath(textMath);
+        
         setTsrcPRstatus(tsrcPRstatusComponent);
         console.log("tsrcPRstatusComponent: ", tsrcPRstatus);
       } catch (error) {
@@ -197,63 +204,61 @@ export default function TwoUseEffectButtonOpen(props){
         tsrcPRstatusComponent.status === 200 && tsrcPRstatusComponent.state === "close";
       const statusMergedComponent =
         tsrcPRstatusComponent.status === 200 && tsrcPRstatusComponent.state === "merge";
-      const checkVoteButtonPreOpen = commonUtil.isObjEqual(voteButton, { color: 'green', text: `${textMath}%` });
-      const checkVoteButtonOpen = commonUtil.isObjEqual(voteButton, { color: 'orchid', text: `${textMath}%` });
-      const checkVoteButtonClosed = commonUtil.isObjEqual(voteButton, { color: 'red', text: 'closed' });
-      const checkVoteButtonMerged = commonUtil.isObjEqual(voteButton, { color: 'darkorchid', text: 'merged' } );
-      const checkVoteButtonVote = commonUtil.isObjEqual(voteButton, { color: 'lightgreen', text: 'vote' } );
-      const checkVoteButtonConflict = commonUtil.isObjEqual(voteButton, { color: 'orange', text: 'conflict' } );
-      const checkVoteButtonProblem = commonUtil.isObjEqual(voteButton, { color: 'gray', text: '?' } );
-      //modalDisplay = 'hide' // only show modal if open or on vote.
+      const checkstatusButtonPreOpen = commonUtil.isObjEqual(statusButton, { color: 'green', text: `${textMath}%` });
+      const checkstatusButtonOpen = commonUtil.isObjEqual(statusButton, { color: 'orchid', text: `${textMath}%` });
+      const checkstatusButtonClosed = commonUtil.isObjEqual(statusButton, { color: 'red', text: 'closed' });
+      const checkstatusButtonMerged = commonUtil.isObjEqual(statusButton, { color: 'darkorchid', text: 'merged' } );
+      const checkstatusButtonVote = commonUtil.isObjEqual(statusButton, { color: 'lightgreen', text: 'vote' } );
+      const checkstatusButtonConflict = commonUtil.isObjEqual(statusButton, { color: 'orange', text: 'conflict' } );
+      const checkstatusButtonProblem = commonUtil.isObjEqual(statusButton, { color: 'gray', text: '?' } );
           if (statusPreOpenComponent) {
-            //modalDisplay = 'show'
-          //if (statusOpenComponent && gitHubPRstatus.mergeable) {
-              if (!checkVoteButtonPreOpen) {
-                setVoteButton({ color: 'green', text: `${textMath}%` });
+            
+              if (!checkstatusButtonPreOpen) {
+                setVoteTotals(textMath);
+                console.log(textMath);  
+               setstatusButton({ color: 'green', text: `${textMath}%` });
               } else {  
                 setTsrcPRstatus(tsrcPRstatusComponent);
               }
           } else if (statusOpenComponent) {
-          //if (statusOpenComponent && gitHubPRstatus.mergeable) {
-          //modalDisplay = 'show'
-            if (!checkVoteButtonOpen) {
-              setVoteButton({color: 'orchid', text: `${textMath}%` });
+          
+            if (!checkstatusButtonOpen) {
+              setVoteTotals(textMath);
+              console.log(textMath);
+             setstatusButton({color: 'orchid', text: `${textMath}%` });
             } else {
               setTsrcPRstatus(tsrcPRstatusComponent);
             }
           } else if (statusClosedComponent) {
-            if (!checkVoteButtonClosed) {
-              setVoteButton({ color: 'red', text: 'closed' });
+            if (!checkstatusButtonClosed) {
+             setstatusButton({ color: 'red', text: 'closed' });
             } else {
               setTsrcPRstatus(tsrcPRstatusComponent);
             }
           } else if (statusMergedComponent) {
-            if (!checkVoteButtonMerged) {
-              console.log(voteButton.color + " " + voteButton.text + " " + "voteButton BEFORE");
+            if (!checkstatusButtonMerged) {
 
-              setVoteButton({ color: 'darkorchid', text: 'merged' });
-              console.log(voteButton.color + " " + voteButton.text + " " + "voteButton AFTER");
+             setstatusButton({ color: 'darkorchid', text: 'merged' });
             } else {
               setTsrcPRstatus(tsrcPRstatusComponent);
             }
           } else if (tsrcPRstatusComponent.mergeableCodeHost === true) {
-            //modalDisplay = 'show'
-            if (!checkVoteButtonVote) {
-              setVoteButton({ color: 'lightgreen', text: 'vote' });
+            if (!checkstatusButtonVote) {
+             setstatusButton({ color: 'lightgreen', text: 'vote' });
             } else {
               setTsrcPRstatus(tsrcPRstatusComponent);
             }
           }  else if (tsrcPRstatusComponent.mergeableCodeHost === false) {
-            if (!checkVoteButtonConflict) {
-              setVoteButton({color: 'orange', text: 'conflict' });
+            if (!checkstatusButtonConflict) {
+             setstatusButton({color: 'orange', text: 'conflict' });
             } else {
               setTsrcPRstatus(tsrcPRstatusComponent);
             }
           } else if (tsrcPRstatusComponent.mergeableCodeHost === true) {
-            setVoteButton({ color: 'lightgreen', text: 'vote' });
+           setstatusButton({ color: 'lightgreen', text: 'vote' });
             } else {
-              if (!checkVoteButtonProblem) {
-                setVoteButton({ color: 'gray', text: '?' });
+              if (!checkstatusButtonProblem) {
+               setstatusButton({ color: 'gray', text: '?' });
               } else {
                 setTsrcPRstatus(tsrcPRstatusComponent);
               }
@@ -272,10 +277,10 @@ export default function TwoUseEffectButtonOpen(props){
 
     return (
         <Button
-        style={{ color: 'white', background: voteButton.color }}
+        style={{ color: 'white', background: statusButton.color }}
         onClick={handleClick}
         >
-        {voteButton.text}
+        {statusButton.text}
         </Button>
     );
 };
