@@ -29,6 +29,8 @@ const createButtonHtml = require('./Components/createButtonHtml');
 import VoteStatusButton from './Components/VoteStatusButton';
 import RefreshButton from './Components/RefreshButton';
 import ModalVote from './Components/Modal/ModalVote';
+import VoteStatusButtonLoader from './Components/VoteStatusButtonLoader';
+
 const {socket} = require('./socketConfig')
 
 const { postSetVote,
@@ -220,11 +222,16 @@ async function get_authorized_contributor(contributor_id, repo_id) {
           }
 
       }
-
       document.addEventListener('click', function (event) {toggleModal(event)})
 
       const renderVoteButtons = async () => {
-        
+
+        for (var i = startIndex; i < containerItems.length; i++) {
+          issue_id = containerItems[i].getAttribute('id');
+          domContainerTurboSrcButton = document.querySelector(`#turbo-src-btn-${issue_id}`);
+          render(ce(VoteStatusButtonLoader), domContainerTurboSrcButton);
+        }
+
           for (var i = startIndex; i < containerItems.length; i++) {
             issue_id = containerItems[i].getAttribute('id');
             //if (i < 2) {

@@ -92,7 +92,7 @@ export default function VoteStatusButton(props){
 
     return (
         <Button
-        style={{ color: 'white', background: voteStatusButton.color }}
+        style={{ color: 'white', background: voteStatusButton.color, width: '80px' }}
         onClick={(e) => handleClick(e)}
         >
         {voteStatusButton.text}
