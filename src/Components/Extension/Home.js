@@ -209,6 +209,7 @@ export default function Home() {
     chrome.storage.local.set({ contributor_id: user.ethereumAddress });
     setTimeout(() => setLoading(false), 1500);
     console.log(pullRequests);
+    console.log(user, 'user', owner, 'owner', repo, 'repo');
   });
 
   const handlePullRequestClick = pullRequest => {
@@ -372,9 +373,11 @@ export default function Home() {
                   </CreateRepo>{' '}
                   you can add it to Turbosrc
                 </CreateNotice>
-                <RepoButton type="button" onClick={() => navigate('/onboard')}>
-                  <p>Continue</p> <ArrowPic src={ArrowRight} />
-                </RepoButton>
+                {owner === user.login && (
+                  <RepoButton type="button" onClick={() => navigate('/onboard')}>
+                    <p>Continue</p> <ArrowPic src={ArrowRight} />
+                  </RepoButton>
+                )}
               </CenteredWrapper>
             )}
           </div>
