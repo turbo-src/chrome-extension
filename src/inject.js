@@ -35,7 +35,8 @@ const { postSetVote,
         postGetPullRequest, // updated
         postGetPRvoteTotals,
         getGitHubPullRequest,
-        postGetVotes  
+        postGetVotes,
+        getTurboSrcIdFromRepoName,
       } = require('./requests')
 
 
@@ -45,7 +46,7 @@ const { postSetVote,
 //const port = "https://turbosrc-marialis.dev";
 const url = CONFIG.url
 
-    
+
 var isRepoTurboSrcToken = false;
 
 var modal;
@@ -127,8 +128,11 @@ async function get_authorized_contributor(contributor_id, repo_id) {
   chrome.storage.local.set({ owner: user });
   chrome.storage.local.set({ repo: repo });
 
+  //Get turboSrcID of repoName (right now repoID is repoName)
+  const turboSrcID = getTurboSrcIdFromRepoName(repo_id);
+
   //Check if repo is tokenized
-  const resIsRepoTurboSrcToken = await getRepoStatus(repo_id);
+  const resIsRepoTurboSrcToken = await getRepoStatus(turboSrcID, repo_id);
   const isRepoTurboSrcToken = resIsRepoTurboSrcToken.exists;
   //Function to get items from chrome storage set from Extension
   let getFromStorage = keys =>
@@ -162,7 +166,7 @@ async function get_authorized_contributor(contributor_id, repo_id) {
       for (var i = startIndex; i < containerItems.length; i++) {
         issue_id = containerItems[i].getAttribute('id');
         side = 'NA';
-        var btnHtml = createButtonHtml(i, issue_id, contributor_id, side); //these function args are not being used 
+        var btnHtml = createButtonHtml(i, issue_id, contributor_id, side); //these function args are not being used
         var modalHtml = createModal();
         if (i < 1) {
           html = btnHtml + modalHtml;
@@ -225,7 +229,7 @@ async function get_authorized_contributor(contributor_id, repo_id) {
       document.addEventListener('click', function (event) {toggleModal(event)})
 
       const renderVoteButtons = async () => {
-        
+
           for (var i = startIndex; i < containerItems.length; i++) {
             issue_id = containerItems[i].getAttribute('id');
             //if (i < 2) {
@@ -241,8 +245,8 @@ async function get_authorized_contributor(contributor_id, repo_id) {
             // render(ce(TurboSrcButtonClosed), domContainerTurboSrcButton);
             //}
           }
-          
-      } 
+
+      }
 
       renderVoteButtons();
       const handleRefresh = () => {
@@ -254,18 +258,18 @@ async function get_authorized_contributor(contributor_id, repo_id) {
           issue_id = issueID
           domContainerTurboSrcButton = document.querySelector(`#turbo-src-btn-${issue_id}`);
           render(ce(VoteStatusButton, {user: user, repo: repo, issueID: issue_id, contributorName: contributor_name, contributorID: contributor_id, tsrcPRstatus: tsrcPRstatus, side: side, clicked: clickedState.clicked, toggleModal: toggleModal, socketEvents: socketEvents }), domContainerTurboSrcButton);
-        } 
+        }
 
       const updateModalVotesTable = async (issueID) => {
           if(issueID === issue_id && modal.style.display === 'block') {
             const domContainerModal = document.getElementById('myModal');
             render(ce(ModalVote, {user: user, repo: repo, issueID: issue_id, contributorID: contributor_id, contributorName: contributor_name, voteTotals: voteTotals, githubUser: githubUser, voteRes: getVotesRes, getVotes: getVotes, toggleModal: toggleModal, socketEvents: socketEvents}), domContainerModal);
           }
-        } 
+        }
 
       socket.on('vote received', function(ownerFromServer, repoFromServer, issueIDFromServer) {
         if(user === ownerFromServer && repo === repoFromServer) {
-          /* To update the correct VoteStatusButton & VotesTable we need to both update the socketEvents variable 
+          /* To update the correct VoteStatusButton & VotesTable we need to both update the socketEvents variable
           and call the React render function for them. */
           socketEvents+=1
           updateVoteStatusButton(issueIDFromServer)
@@ -274,7 +278,7 @@ async function get_authorized_contributor(contributor_id, repo_id) {
       });
 
       !socket.id && render(React.createElement(RefreshButton, {refresh: handleRefresh}), document.getElementById('js-flash-container'));
-      
+
 
 
       //if (voted === true) {
