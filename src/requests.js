@@ -19,7 +19,6 @@ async function getTurboSrcIdFromRepoName(reponame) {
       query: `{ getTurboSrcIdFromRepoName(reponame: "${reponame}") }`
     })
     .set('accept', 'json')
-    .set('Authorization', `Bearer ${token}`);
 
   const json = JSON.parse(res.text);
   return json.data.getTurboSrcIdFromRepoName;
