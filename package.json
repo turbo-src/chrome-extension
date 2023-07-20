@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node server",
     "devLocal": "TSRC_EXT_NODE_ENV=devLocal node generate-config.js && NODE_ENV=development BABEL_ENV=development webpack --watch --mode=development",
+    "devLocalRouter": "TSRC_EXT_NODE_ENV=devOnlineRouter node generate-config.js && NODE_ENV=development BABEL_ENV=development webpack --watch --mode=development",
     "devOnline": "TSRC_EXT_NODE_ENV=devOnline node generate-config.js && NODE_ENV=development BABEL_ENV=development webpack --watch --mode=development",
     "prod": "ODE_ENV=production BABEL_ENV=production webpack --mode=production",
     "lint": "eslint '**/*.js' --fix",
