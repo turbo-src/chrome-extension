@@ -9,9 +9,7 @@ import ArrowRight from '../../../../icons/arrowright.png';
 import BackArrow from '../../../../icons/back.png';
 import SkeletonModal from './SkeletonExt.js';
 import SinglePullRequestView from '../SinglePullRequestView/SinglePullRequestView.js';
-import { set } from '../../../utils/storageUtil';
 const { socket } = require('../../../socketConfig');
-const { postGetVotes } = require('../../../requests');
 
 const VoteText = styled.span`
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -166,10 +164,6 @@ const CreateNotice = styled.span`
   line-height: 1.8;
 `;
 
-const BtnSpan = styled.span`
-  text-align: center;
-`;
-
 const Back = styled(PullRequestHeading)`
   font-weight: 500;
 `;
@@ -185,35 +179,34 @@ const BackButton = styled.span`
   cursor: pointer;
 `;
 
-const port = process.env.PORT || 'http://localhost:4000';
-
 export default function Home() {
   const user = useSelector(state => state.auth.user);
   const repo = useSelector(state => state.repo.name);
   const owner = useSelector(state => state.repo.owner.login);
   const oldVersion = false;
   const [pullRequests, setPullRequests] = useState([]);
-  const [tokenized, setTokenized] = useState(false);
+  const [onTurboSrc, setonTurboSrc] = useState(false);
   const [loading, setLoading] = useState(true);
   const [seeModal, setSeeModal] = useState(false);
-  const [pullRequestsLoaded, setPullRequestsLoaded] = useState(false);
-  const [selectedPullRequest, setSelectedPullRequest] = useState(null);
-  const [selectedPullRequestID, setSelectedPullRequestID] = useState('');
-  const [selectedPullRequestVotesArray, setSelectedPullRequestVotesArray] = useState([]);
-  const [selectedPullRequestState, setSelectedPullRequestState] = useState('');
-  const [selectedPullRequestYesPercent, setSelectedPullRequestYesPercent] = useState(0);
-  const [selectedPullRequestNoPercent, setSelectedPullRequestNoPercent] = useState(0);
-  const [selectedPullRequestBaseBranch, setSelectedPullRequestBaseBranch] = useState('');
-  const [selectedPullRequestForkBranch, setSelectedPullRequestForkBranch] = useState('');
-  const [selectedPullRequestCreatedAt, setSelectedPullRequestCreatedAt] = useState('');
-  const [selectedPullRequestVotePower, setSelectedPullRequestVotePower] = useState(0);
-  const [selectedPullRequestVoted, setSelectedPullRequestVoted] = useState(false);
-  const [selectedPullRequestTitle, setSelectedPullRequestTitle] = useState('');
-  const [selectedPullRequestChosenSide, setSelectedPullRequestChosenSide] = useState('');
-  const [selectedPullRequestDefaultHash, setSelectedPullRequestDefaultHash] = useState('');
-  const [selectedPullRequestChildDefaultHash, setSelectedPullRequestChildDefaultHash] = useState('');
-  const [selectedPullRequestIssueID, setSelectedPullRequestIssueID] = useState('');
-  const [selectedPullRequestTotalVotes, setSelectedPullRequestTotalVotes] = useState('');
+  const [selectedPullRequest, setSelectedPullRequest] = useState({
+    repo_id: null,
+    votes: [],
+    state: null,
+    baseBranch: null,
+    forkBranch: null,
+    yesPercent: null,
+    noPercent: null,
+    createdAt: null,
+    votePower: null,
+    voted: null,
+    title: null,
+    chosenSide: null,
+    defaultHash: null,
+    childDefaultHash: null,
+    issue_id: null,
+    totalVotes: null,
+});
+
   const navigate = useNavigate();
   let name = user?.name;
   let username = user?.login;
@@ -231,32 +224,33 @@ export default function Home() {
   });
 
   const handlePullRequestClick = pullRequest => {
-    setSelectedPullRequest(pullRequest);
-    setSelectedPullRequestID(pullRequest.repo_id);
-    setSelectedPullRequestVotesArray(pullRequest.voteData.votes);
-    setSelectedPullRequestState(pullRequest.state);
-    setSelectedPullRequestBaseBranch(pullRequest.baseBranch);
-    setSelectedPullRequestForkBranch(pullRequest.forkBranch);
-    setSelectedPullRequestYesPercent((pullRequest.voteData.voteTotals.yesPercent));
-    setSelectedPullRequestNoPercent(pullRequest.voteData.voteTotals.noPercent);
-    setSelectedPullRequestCreatedAt(pullRequest.voteData.contributor.createdAt);
-    setSelectedPullRequestVotePower(pullRequest.voteData.contributor.votePower);
-    setSelectedPullRequestVoted(pullRequest.voteData.voted);
-    setSelectedPullRequestTitle(pullRequest.title);
-    setSelectedPullRequestChosenSide(pullRequest.voteData.contributor.side);
-    setSelectedPullRequestDefaultHash(pullRequest.defaultHash);
-    setSelectedPullRequestChildDefaultHash(pullRequest.childDefaultHash);
-    setSelectedPullRequestIssueID(pullRequest.issue_id);
-    setSeeModal(true);
-    setSelectedPullRequestVoted(pullRequest.voteData.contributor.voted);
-    setSelectedPullRequestTotalVotes(pullRequest.voteData.voteTotals.totalVotes);
+    setSelectedPullRequest({
+      ...selectedPullRequest,
+      repo_id: pullRequest.repo_id,
+      votes: pullRequest.voteData.votes,
+      state: pullRequest.state,
+      baseBranch: pullRequest.baseBranch,
+      forkBranch: pullRequest.forkBranch,
+      yesPercent: pullRequest.voteData.voteTotals.yesPercent,
+      noPercent: pullRequest.voteData.voteTotals.noPercent,
+      createdAt: pullRequest.voteData.contributor.createdAt,
+      votePower: pullRequest.voteData.contributor.votePower,
+      voted: pullRequest.voteData.voted,
+      title: pullRequest.title,
+      chosenSide: pullRequest.voteData.contributor.side,
+      defaultHash: pullRequest.defaultHash,
+      childDefaultHash: pullRequest.childDefaultHash,
+      issue_id: pullRequest.issue_id,
+      totalVotes: pullRequest.voteData.voteTotals.totalVotes
+    });
+  setSeeModal(true);
   };
 
   const getRepoDataHandler = async () => {
     try {
       const response = await postGetRepoData(`${owner}/${repo}`, user.ethereumAddress).then(res => {
         if (res != null || res != undefined) {
-          setTokenized(true);
+          setonTurboSrc(true);
         }
         setPullRequests(res.pullRequests);
         let tokens = useCommas(res.contributor.votePower);
@@ -271,7 +265,7 @@ export default function Home() {
     setTimeout(() => {
       getRepoDataHandler();
     }, 500);
-    setPullRequestsLoaded(false);
+    //setPullRequestsLoaded(false);
   }, [owner, repo]);
 
   socket.on('vote received', function(ownerFromServer, repoFromServer, issueIDFromServer) {
@@ -280,7 +274,6 @@ export default function Home() {
     }
   });
 
-  let getVotes = async () => await postGetVotes(repo_id, issue_id, contributor_id);
   if (oldVersion){
     return (
       <TurbosrcNotice>Your version of Turbosrc is out of date and needs to be updated to continue.</TurbosrcNotice>
@@ -291,7 +284,6 @@ export default function Home() {
     );
   }
   
-  
   switch (seeModal) {
     case true:
       return (
@@ -301,29 +293,14 @@ export default function Home() {
             <Back>Back to all</Back>
           </BackButton>
           <SinglePullRequestView
-            pullRequests={selectedPullRequest}
-            repo_id={selectedPullRequestID}
-            title={selectedPullRequestTitle}
-            votesArray={selectedPullRequestVotesArray}
-            state={selectedPullRequestState}
-            baseBranch={selectedPullRequestBaseBranch}
-            forkBranch={selectedPullRequestForkBranch}
-            yesPercent={selectedPullRequestYesPercent}
-            noPercent={selectedPullRequestNoPercent}
-            createdAt={selectedPullRequestCreatedAt}
-            votePower={selectedPullRequestVotePower}
-            alreadyVoted={selectedPullRequestVoted}
-            chosenSide={selectedPullRequestChosenSide}
-            user={user}
-            repo={repo}
-            githubToken={user.token}
-            defaultHash={selectedPullRequestDefaultHash}
-            childDefaultHash={selectedPullRequestChildDefaultHash}
-            contributorID={user.ethereumAddress}
-            owner={owner}
-            issueID={selectedPullRequestIssueID}
-            totalVotes={selectedPullRequestTotalVotes}
+              selectedPullRequest={selectedPullRequest}
+              user={user}
+              repo={repo}
+              githubToken={user.token}
+              owner={owner}
+              contributorID={user.ethereumAddress}
           />
+
         </>
       );
     case false:
@@ -346,12 +323,12 @@ export default function Home() {
                     </GithubLink>
                   </BoldText>
                 </OwnerRepo>
-                {tokenized ? (
+                {onTurboSrc ? (
                   <VotePower>{tokenAmount === 0 ? '0 votepower' : `${tokenAmount} votepower`}</VotePower>
                 ) : null}
               </TopBar>
             </section>
-            {tokenized && (
+            {onTurboSrc && (
               <DataHeading>
                 <PullRequestHeading>Status</PullRequestHeading>
                 <PullRequestHeading>Pull Request</PullRequestHeading>
@@ -359,7 +336,7 @@ export default function Home() {
                 <PullRequestHeading>No</PullRequestHeading>
               </DataHeading>
             )}
-            {tokenized && (
+            {onTurboSrc && (
               <Data>
                 {pullRequests.map((pr, index) => (
                   <div onClick={() => handlePullRequestClick(pr)}>
@@ -379,7 +356,7 @@ export default function Home() {
                 ))}
               </Data>
             )}
-            {tokenized ? null : loading ? (
+            {onTurboSrc ? null : loading ? (
               <SkeletonModal />
             ) : (
               <CenteredWrapper>
@@ -390,11 +367,9 @@ export default function Home() {
                   </CreateRepo>{' '}
                   you can add it to Turbosrc
                 </CreateNotice>
-                
                   <RepoButton type="button" disabled={owner === user.login ? false : true} onClick={() => navigate('/onboard')}>
                     <p>Continue</p> <ArrowPic src={ArrowRight} />
                   </RepoButton>
-                
               </CenteredWrapper>
             )}
           </div>

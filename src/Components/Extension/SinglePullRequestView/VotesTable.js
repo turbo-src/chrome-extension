@@ -25,11 +25,11 @@ const VoteTableSection = styled.div`
 `; 
 
 
-export default function VotesTable({allVotes}){
+export default function VotesTable({votes}){
     
     return(
         <VoteTableSection>
-            {allVotes.map((vote, index) => (
+            {votes.map((vote, index) => (
                 <Row 
                 id={vote.contributor_id} 
                 votepower={vote.votePower}

@@ -24,7 +24,13 @@ const Results = styled.div`
   height: 60px;
   `;
 
-const SinglePullRequestView = ({ pullRequests, repo_id, title, votesArray, state, baseBranch, forkBranch, yesPercent, noPercent, createdAt, votePower, alreadyVoted, chosenSide, user, repo, githubToken, defaultHash, childDefaultHash, contributorID, owner, issueID, totalVotes }) => {
+  const SinglePullRequestView = ({ selectedPullRequest, user, repo, githubToken, owner, contributorID }) => {
+    const {
+      repo_id, title, forkBranch, votePower, baseBranch, 
+      alreadyVoted, chosenSide, createdAt, issueID, defaultHash,
+      childDefaultHash, yesPercent, noPercent, votes
+    } = selectedPullRequest;
+    
   const quorum = 0.5;
   const voteableStates = new Set(['vote', 'pre-open', 'open']);
   const notVoteableStates = new Set(['conflict', 'merge', 'close']);
@@ -40,31 +46,31 @@ const SinglePullRequestView = ({ pullRequests, repo_id, title, votesArray, state
   return (
     <Content>
 
-      <VoteTotal
-        repo={repo_id}
-        title={title}
-        forkBranch={forkBranch}
-        votePower={votePower}
-        baseBranch={baseBranch}
-        id="vote-total-main"
-      >
+        <VoteTotal
+          repo={repo_id}
+          title={title}
+          forkBranch={forkBranch}
+          votePower={votePower}
+          baseBranch={baseBranch}
+          id="vote-total-main"
+        >
         <h2>Vote Total</h2>
       </VoteTotal>
 
       <VoteText disabled={disabled} voted={alreadyVoted} chosenSide={chosenSide} userVotedAt={createdAt} />
 
       <VoteButtonGroup
-        disabled={disabled}
-        voted={alreadyVoted}
-        chosenSide={chosenSide}
-        user={user}
-        repo={repo}
-        issueID={issueID}
-        contributorID={contributorID}
-        githubToken={githubToken}
-        defaultHash={defaultHash}
-        childDefaultHash={childDefaultHash}
-        owner={owner}
+          disabled={disabled}
+          voted={alreadyVoted}
+          chosenSide={chosenSide}
+          user={user}
+          repo={repo}
+          issueID={issueID}
+          contributorID={contributorID}
+          githubToken={githubToken}
+          defaultHash={defaultHash}
+          childDefaultHash={childDefaultHash}
+          owner={owner}
       />
       <Results>
       <ProgressBar
@@ -73,7 +79,7 @@ const SinglePullRequestView = ({ pullRequests, repo_id, title, votesArray, state
         quorum={quorum}
       />
     </Results>
-      <VotesTable allVotes={votesArray} />
+      <VotesTable votes={votes} />
   </Content>
   );
 };
