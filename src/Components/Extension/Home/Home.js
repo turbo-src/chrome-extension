@@ -188,61 +188,21 @@ export default function Home() {
   const [onTurboSrc, setonTurboSrc] = useState(false);
   const [loading, setLoading] = useState(true);
   const [seeModal, setSeeModal] = useState(false);
-  const [selectedPullRequest, setSelectedPullRequest] = useState({
-    repo_id: null,
-    votes: [],
-    state: null,
-    baseBranch: null,
-    forkBranch: null,
-    yesPercent: null,
-    noPercent: null,
-    createdAt: null,
-    votePower: null,
-    voted: null,
-    title: null,
-    chosenSide: null,
-    defaultHash: null,
-    childDefaultHash: null,
-    issue_id: null,
-    totalVotes: null,
-});
-
+  const [selectedPullRequest, setSelectedPullRequest] = useState({});
   const navigate = useNavigate();
-  let name = user?.name;
-  let username = user?.login;
+  let [votepowerAmount, setVotepowerAmount] = useState('');
 
-  let [tokenAmount, setTokenAmount] = useState('');
-
-  let avatar = user?.avatar_url || null;
 
   useEffect(() => {
     //Set current logged in contributor/id to chrome storage for inject to verify user for voting
     chrome.storage.local.set({ contributor_name: user.login });
     chrome.storage.local.set({ contributor_id: user.ethereumAddress });
     setTimeout(() => setLoading(false), 1500);
-    console.log('user', user, 'repo', repo, 'owner', owner);
   });
 
   const handlePullRequestClick = pullRequest => {
-    setSelectedPullRequest({
-      ...selectedPullRequest,
-      repo_id: pullRequest.repo_id,
-      votes: pullRequest.voteData.votes,
-      state: pullRequest.state,
-      baseBranch: pullRequest.baseBranch,
-      forkBranch: pullRequest.forkBranch,
-      yesPercent: pullRequest.voteData.voteTotals.yesPercent,
-      noPercent: pullRequest.voteData.voteTotals.noPercent,
-      createdAt: pullRequest.voteData.contributor.createdAt,
-      votePower: pullRequest.voteData.contributor.votePower,
-      voted: pullRequest.voteData.voted,
-      title: pullRequest.title,
-      chosenSide: pullRequest.voteData.contributor.side,
-      defaultHash: pullRequest.defaultHash,
-      childDefaultHash: pullRequest.childDefaultHash,
-      issue_id: pullRequest.issue_id,
-      totalVotes: pullRequest.voteData.voteTotals.totalVotes
-    });
+    console.log(pullRequest, "pullRequest in home.js");
+    setSelectedPullRequest({...pullRequest});
   setSeeModal(true);
   };
 
@@ -253,8 +213,8 @@ export default function Home() {
           setonTurboSrc(true);
         }
         setPullRequests(res.pullRequests);
-        let tokens = useCommas(res.contributor.votePower);
-        setTokenAmount(tokens);
+        let votePower = useCommas(res.contributor.votePower);
+        setVotepowerAmount(votePower);
       });
     } catch (error) {
       console.error('Error fetching repo data:', error);
@@ -265,7 +225,6 @@ export default function Home() {
     setTimeout(() => {
       getRepoDataHandler();
     }, 500);
-    //setPullRequestsLoaded(false);
   }, [owner, repo]);
 
   socket.on('vote received', function(ownerFromServer, repoFromServer, issueIDFromServer) {
@@ -324,7 +283,7 @@ export default function Home() {
                   </BoldText>
                 </OwnerRepo>
                 {onTurboSrc ? (
-                  <VotePower>{tokenAmount === 0 ? '0 votepower' : `${tokenAmount} votepower`}</VotePower>
+                  <VotePower>{votepowerAmount === 0 ? '0 votepower' : `${votepowerAmount} votepower`}</VotePower>
                 ) : null}
               </TopBar>
             </section>

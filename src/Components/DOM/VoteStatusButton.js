@@ -29,7 +29,7 @@ export default function VoteStatusButton(props){
     
     const fetchVoteStatus = async () => {
       let textMath = voteStatusButton.textMath;
-      let tsrcPRStatusComponent
+      let tsrcPRStatusComponent;
       try {
           tsrcPRStatusComponent = await postGetPullRequest(
           user,
@@ -61,6 +61,7 @@ export default function VoteStatusButton(props){
         }
         setVoteYesTotalState(voteYesTotal);
         setVoteNoTotalState(voteNoTotal);
+        console.log(tsrcPRStatusComponent, "tsrcPRStatusComponent");
         setTsrcPRStatus(tsrcPRStatusComponent);
       } catch (error) {
         console.log('fetchVoteStatus error:', error)
@@ -80,6 +81,7 @@ export default function VoteStatusButton(props){
         if(!tsrcPRStatus.mergeableCodeHost) {
           tsrcPRStatus.state = 'conflict';
         }
+        console.log(tsrcPRStatus, "tsrcPRStatus");
         const buttonColor = buttonStyle[tsrcPRStatus.state][0]
         const buttonText = buttonStyle[tsrcPRStatus.state][1]
         setVoteStatusButton({color: buttonColor, text: buttonText});

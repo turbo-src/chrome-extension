@@ -33,11 +33,10 @@ function formatDate(inputDate) {
 function VoteText({
     disabled,
   voted,
-  chosenSide,
+  side,
   userVotedAt
 })  {
     const [textType, setTextType] = useState('');
-
     useEffect(() => {
         if (!voted) {
             setTextType('Decision');
@@ -45,17 +44,17 @@ function VoteText({
         if (!voted && disabled) {
             setTextType('None');
         }
-        if (voted && chosenSide === 'yes') {
+        if (voted && side === 'yes') {
             setTextType('Yes');
         }
-        if (voted && chosenSide === 'no') {
+        if (voted && side === 'no') {
             setTextType('No');
         }
 
-        console.log("this is the text type", voted, chosenSide, disabled);
+        console.log("this is the text type", voted, side, disabled);
 
 
-    }, [voted, chosenSide, disabled]);
+    }, [voted, side, disabled]);
 
     switch (textType) {
         case 'Decision':
