@@ -21,7 +21,7 @@ async function getTurboSrcIdFromRepoName(reponame) {
     .set('accept', 'json')
 
   const json = JSON.parse(res.text);
-  return json.data.getTurboSrcIdFromRepoName;
+  return json.data.turboSrcID; // return turboSrcID directly from data
 }
 
 async function postCreateUser(owner, repo, contributor_id, contributor_name, contributor_signature, token) {
