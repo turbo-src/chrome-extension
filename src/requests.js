@@ -319,7 +319,11 @@ async function postGetPRforkStatus(owner, repo, issue_id, contributor_id) {
 
 async function postGetPullRequest(owner, repo, defaultHash, contributor_id, side) {
   const repoName = `${owner}/${repo}`;
-  const turboSrcID = await getTurboSrcIDFromRepoName(repoName)
+  var turboSrcID = await getTurboSrcIDFromRepoName(repoName)
+  if (turboSrcID == null || turboSrcID === "null") {
+    turboSrcID = await getTurboSrcIDFromRepoName("reibase/marialis")
+  }
+  console.log('extension getPullRequest called ', turboSrcID, typeof turboSrcID);
   const res = await superagent
     .post(`${url}`)
     .send({
