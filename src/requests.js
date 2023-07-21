@@ -117,8 +117,11 @@ async function postGetContributorSignature(owner, repo, defaultHash, contributor
 }
 async function postFindOrCreateUser(owner, repo, contributor_id, contributor_name, contributor_signature, token) {
   const repoName = `${owner}/${repo}`;
-  const turboSrcID = await getTurboSrcIDFromRepoName(repoName)
-  console.log('extension findOrCreateUser called');
+  var turboSrcID = await getTurboSrcIDFromRepoName(repoName)
+  if (turboSrcID == null || turboSrcID === "null") {
+    turboSrcID = await getTurboSrcIDFromRepoName("reibase/marialis")
+  }
+  console.log('extension findOrCreateUser called ', turboSrcID, typeof turboSrcID);
   const res = await superagent
     .post(`${url}`)
     .send({
@@ -130,7 +133,11 @@ async function postFindOrCreateUser(owner, repo, contributor_id, contributor_nam
 }
 async function postCheckGithubTokenPermissions(owner, repo, contributor_name, token) {
   const repoName = `${owner}/${repo}`;
-  const turboSrcID = await getTurboSrcIDFromRepoName(repoName)
+  var turboSrcID = await getTurboSrcIDFromRepoName(repoName)
+  if (turboSrcID == null || turboSrcID === "null") {
+    turboSrcID = await getTurboSrcIDFromRepoName("reibase/marialis")
+  }
+  console.log('extension check permissions called');
   const res = await superagent
     .post(`${url}`)
     .send({
@@ -142,7 +149,11 @@ async function postCheckGithubTokenPermissions(owner, repo, contributor_name, to
 }
 async function postCreateRepo(owner, repo, defaultHash, contributor_id, side, token) {
   const repoName = `${owner}/${repo}`;
-  const turboSrcID = await getTurboSrcIDFromRepoName(repoName)
+  var turboSrcID = await getTurboSrcIDFromRepoName(repoName)
+  if (turboSrcID == null || turboSrcID === "null") {
+    turboSrcID = await getTurboSrcIDFromRepoName("reibase/marialis")
+  }
+  console.log('extension create repo called');
   const res = await superagent
     .post(`${url}`)
     .send({
@@ -526,7 +537,11 @@ async function getGitHubPullRequest(owner, repo, defaultHash) {
 
 async function postGetRepoData(repo_id, contributor_id) {
   const repoName = repo_id;
-  const turboSrcID = await getTurboSrcIDFromRepoName(repoName)
+  var turboSrcID = await getTurboSrcIDFromRepoName(repoName)
+  if (turboSrcID == null || turboSrcID === "null") {
+    turboSrcID = await getTurboSrcIDFromRepoName("reibase/marialis")
+  }
+  console.log('extension postGetRepoData called');
   const res = await superagent
     .post(`${url}`)
     .send({

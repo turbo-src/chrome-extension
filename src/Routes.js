@@ -13,7 +13,7 @@ import { setAuth } from './store/auth';
 import { setRepo } from './store/repo';
 import { useEffect, useState } from 'react';
 import superagent from 'superagent';
-import { postFindOrCreateUser } from './requests';
+import { postFindOrCreateUser} from './requests';
 
 export default function Routes(props) {
   const auth = useSelector(state => state.auth);
@@ -42,8 +42,8 @@ export default function Routes(props) {
       return;
     } else if (user) {
       let githubUser = JSON.parse(user);
-
       // Pass 'owner' and 'repo' if on a git repo page. If not, pass owner and repo as "7db9a" and "demo".
+      console.log('current repo ', props.currentRepo.message)
       findOrCreateUser(
       props.currentRepo?.message === 'Not Found' ? 'reibase' : props.currentRepo.owner.login,
       props.currentRepo?.message === 'Not Found' ? 'marialis' : props.currentRepo.name,
