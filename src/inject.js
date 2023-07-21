@@ -36,7 +36,7 @@ const { postSetVote,
         postGetPRvoteTotals,
         getGitHubPullRequest,
         postGetVotes,
-        getTurboSrcIdFromRepoName,
+        get_authorized_contributor
       } = require('./requests')
 
 
@@ -94,18 +94,6 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
   });
 //End of OAuth Code ****
 
-// Add to requests.js (reconcile privateStoreRequests.js
-async function get_authorized_contributor(contributor_id, repo_id) {
-    const res = await superagent
-      .post(`${url}`)
-      .send({
-        query: `{ getAuthorizedContributor(contributor_id: "${contributor_id}", repo_id: "${repo_id}") }`,
-      })
-      .set("accept", "json");
-
-      const json = JSON.parse(res.text);
-      return json.data.getAuthorizedContributor;
-}
 (async function() {
   window.enhancedGithub = {
     config: {}
@@ -128,11 +116,8 @@ async function get_authorized_contributor(contributor_id, repo_id) {
   chrome.storage.local.set({ owner: user });
   chrome.storage.local.set({ repo: repo });
 
-  //Get turboSrcID of repoName (right now repoID is repoName)
-  const turboSrcID = getTurboSrcIdFromRepoName(repo_id);
-
   //Check if repo is tokenized
-  const resIsRepoTurboSrcToken = await getRepoStatus(turboSrcID, repo_id);
+  const resIsRepoTurboSrcToken = await getRepoStatus(repo_id);
   const isRepoTurboSrcToken = resIsRepoTurboSrcToken.exists;
   //Function to get items from chrome storage set from Extension
   let getFromStorage = keys =>
