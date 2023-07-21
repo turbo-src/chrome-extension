@@ -44,7 +44,14 @@ export default function Routes(props) {
       let githubUser = JSON.parse(user);
 
       // Pass 'owner' and 'repo' if on a git repo page. If not, pass owner and repo as "7db9a" and "demo".
-      findOrCreateUser('', '', 'none', githubUser.login, 'none', githubUser.token)
+      findOrCreateUser(
+      props.currentRepo?.message === 'Not Found' ? '7db9a' : props.currentRepo.owner.login, 
+      props.currentRepo?.message === 'Not Found' ? 'demo' : props.currentRepo.name,
+      'none',
+      githubUser.login,
+      'none',
+      githubUser.token
+      )
       .then(res => {
         githubUser.ethereumAddress = res.contributor_id,
         githubUser.ethereumKey = res.contributor_signature});
