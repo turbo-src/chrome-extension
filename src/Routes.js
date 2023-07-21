@@ -22,7 +22,7 @@ export default function Routes(props) {
   useEffect(()=>{
     dispatch(setRepo(props.currentRepo))
     },[])
-    
+
   //Same values:
   //ethereumAddress === contributor_id
   //ethereumKey === contributor_signature
@@ -45,8 +45,8 @@ export default function Routes(props) {
 
       // Pass 'owner' and 'repo' if on a git repo page. If not, pass owner and repo as "7db9a" and "demo".
       findOrCreateUser(
-      props.currentRepo?.message === 'Not Found' ? '7db9a' : props.currentRepo.owner.login, 
-      props.currentRepo?.message === 'Not Found' ? 'demo' : props.currentRepo.name,
+      props.currentRepo?.message === 'Not Found' ? 'reibase' : props.currentRepo.owner.login,
+      props.currentRepo?.message === 'Not Found' ? 'marialis' : props.currentRepo.name,
       'none',
       githubUser.login,
       'none',
@@ -59,7 +59,7 @@ export default function Routes(props) {
       dispatch(setAuth(githubUser));
     }
   }, [user]);
- 
+
   return auth.isLoggedIn ? (
     <BrowserRouter>
       <div className="container">
