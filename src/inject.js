@@ -35,7 +35,8 @@ const { postSetVote,
         postGetPullRequest, // updated
         postGetPRvoteTotals,
         getGitHubPullRequest,
-        postGetVotes  
+        postGetVotes,
+        get_authorized_contributor
       } = require('./requests')
 
 
@@ -93,18 +94,6 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
   });
 //End of OAuth Code ****
 
-// Add to requests.js (reconcile privateStoreRequests.js
-async function get_authorized_contributor(contributor_id, repo_id) {
-    const res = await superagent
-      .post(`${url}`)
-      .send({
-        query: `{ getAuthorizedContributor(contributor_id: "${contributor_id}", repo_id: "${repo_id}") }`,
-      })
-      .set("accept", "json");
-
-      const json = JSON.parse(res.text);
-      return json.data.getAuthorizedContributor;
-}
 (async function() {
   window.enhancedGithub = {
     config: {}
