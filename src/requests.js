@@ -281,7 +281,7 @@ async function getRepoStatus(repo_id) {
 async function get_authorized_contributor(contributor_id, repo_id) {
   const repoName = repo_id;
   const turboSrcID = await getTurboSrcIDFromRepoName(repoName)
-  return await superagent
+  const res = await superagent
     .post(`${url}`)
     .send({
       query: `{ getAuthorizedContributor(turboSrcID: "${turboSrcID}", contributor_id: "${contributor_id}", repo_id: "${repo_id}") }`
@@ -325,6 +325,7 @@ async function postGetPullRequest(owner, repo, defaultHash, contributor_id, side
     turboSrcID = await getTurboSrcIDFromRepoName("reibase/marialis")
   }
   console.log('extension getPullRequest called ', turboSrcID, typeof turboSrcID);
+  console.log(owner, repo,defaultHash, contributor_id, side )
   const res = await superagent
     .post(`${url}`)
     .send({
@@ -524,13 +525,15 @@ async function postFork(owner, repo, org) {
     });
 }
 
-async function getGitHubPullRequest(owner, repo, defaultHash) {
+async function getGitHubPullRequest(owner, repo, defaultHash, contributor_id) {
   const repoName = `${owner}/${repo}`;
   const turboSrcID = await getTurboSrcIDFromRepoName(repoName)
+  console.log('get github pr called', defaultHash,
+   contributor_id)
   const res = await superagent
     .post(`${url}`)
     .send({
-      query: `{ getGitHubPullRequest(turboSrcID: "${turboSrcID}", owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}") { status, mergeable, mergeCommitSha, state, baseBranch } }`
+      query: `{ getGitHubPullRequest(turboSrcID: "${turboSrcID}", owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}") { status, mergeable, mergeCommitSha, state, baseBranch } }`
     })
     .set('accept', 'json');
   //.end((err, res) => {

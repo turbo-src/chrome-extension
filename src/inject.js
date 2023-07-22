@@ -46,7 +46,7 @@ const { postSetVote,
 //const port = "https://turbosrc-marialis.dev";
 const url = CONFIG.url
 
-    
+
 var isRepoTurboSrcToken = false;
 
 var modal;
@@ -109,8 +109,8 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
   repo_id = `${path.user}/${path.repo}`;
   repo = path.repo;
   user = path.user;
-  var tsrcPRstatus = await postGetPullRequest(user, repo, issue_id, contributor_id, side);
-  var gitHubPRstatus = await getGitHubPullRequest(user, repo, issue_id)
+  var tsrcPRstatus
+  var gitHubPRstatus
 
   //Set Github Repo and User from browser window for chrome extension
   chrome.storage.local.set({ owner: user });
@@ -129,8 +129,19 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
   const githubUser = await getFromStorage('githubUser').then(res=>JSON.parse(res))
 
   const isAuthorizedContributor = await get_authorized_contributor(contributor_id, repo_id);
+  console.log(`isAuthorizedContributor type: ${typeof isAuthorizedContributor}`);
+  console.log(`isAuthorizedContributor value:`, isAuthorizedContributor);
+  console.log(`isAuthorizedContributor object:`, isAuthorizedContributor);
+
+
   const readyStateCheckInterval = setInterval(async function() {
-    if ((document.readyState === 'complete') & (isRepoTurboSrcToken === true) & (isAuthorizedContributor === true)) {
+  //console.log("Checking document.readyState and other conditions...");
+  //console.log(`Current document.readyState: ${document.readyState}`);
+  //console.log(`Current isRepoTurboSrcToken: ${isRepoTurboSrcToken}`);
+  //console.log(`Current isAuthorizedContributor: ${isAuthorizedContributor}`);
+  //console.log("Checking document.readyState and other conditions...");
+  if ((document.readyState === 'complete') & (isRepoTurboSrcToken === true) & (isAuthorizedContributor === true)) {
+      console.log("Conditions met! Proceeding...");
       // When the user clicks the button, open the modal
       const ce = React.createElement;
       var sideText;
@@ -150,8 +161,9 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
       var html;
       for (var i = startIndex; i < containerItems.length; i++) {
         issue_id = containerItems[i].getAttribute('id');
+        console.log('get issue id: ', issue_id)
         side = 'NA';
-        var btnHtml = createButtonHtml(i, issue_id, contributor_id, side); //these function args are not being used 
+        var btnHtml = createButtonHtml(i, issue_id, contributor_id, side); //these function args are not being used
         var modalHtml = createModal();
         if (i < 1) {
           html = btnHtml + modalHtml;
@@ -191,6 +203,7 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
       let socketEvents = 0
 
       const toggleModal = async (event) => {
+       console.log("toggleModal initiated");
        if(event.target.id === 'myModal' || event.target.id === 'closeModal') {
           modal.style.display = 'none';
           unmountComponentAtNode(document.getElementById('myModal'))
@@ -208,62 +221,66 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
           getVotesRes = await getVotes();
           render(ce(ModalVote, {user: user, repo: repo, issueID: issue_id, contributorID: contributor_id, contributorName: contributor_name, voteTotals: voteTotals, githubUser: githubUser, voteRes: getVotesRes, getVotes: getVotes, toggleModal: toggleModal, socketEvents: socketEvents}), domContainerModal);
           }
+          console.log("toggleModal executed");
 
       }
 
-      document.addEventListener('click', function (event) {toggleModal(event)})
+      document.addEventListener('click', function (event) {
+        console.log("Click event detected.");
+        toggleModal(event)
+      });
 
       const renderVoteButtons = async () => {
-        
-          for (var i = startIndex; i < containerItems.length; i++) {
-            issue_id = containerItems[i].getAttribute('id');
-            //if (i < 2) {
-            status = await postGetPullRequest(user, repo, issue_id, contributor_id, side);
-      // Update so knows what the state is inside.
-      let testVoteTotals = await postGetPRvoteTotals(user, repo, issue_id, contributor_id, side);
-      tsrcPRstatus = status;
-              gitHubPRstatus = await getGitHubPullRequest(user, repo, issue_id);
-            //displayOpenStatus = status.status === 200 &&  status.state === 'new' || status.status === 200 && status.state === 'open';
-            domContainerTurboSrcButton = document.querySelector(`#turbo-src-btn-${issue_id}`);
-            //if (displayOpenStatus) {
-            render(ce(VoteStatusButton, {socketEvents: socketEvents, user: user, repo: repo, issueID: issue_id, contributorName: contributor_name, contributorID: contributor_id, tsrcPRstatus: tsrcPRstatus, side: side, clicked: clickedState.clicked, toggleModal: toggleModal }), domContainerTurboSrcButton); //} else {
-            // render(ce(TurboSrcButtonClosed), domContainerTurboSrcButton);
-            //}
-          }
-          
-      } 
-
+        for (var i = startIndex; i < containerItems.length; i++) {
+          issue_id = containerItems[i].getAttribute('id');
+          status = await postGetPullRequest(user, repo, issue_id, contributor_id, side);
+          let testVoteTotals = await postGetPRvoteTotals(user, repo, issue_id, contributor_id, side);
+          tsrcPRstatus = status;
+          console.log('Before getGitHubPullRequest() function is called.');
+          gitHubPRstatus = await getGitHubPullRequest(user, repo, issue_id, contributor_id);
+          console.log('After getGitHubPullRequest() function is called. The result is:', gitHubPRstatus);
+          domContainerTurboSrcButton = document.querySelector(`#turbo-src-btn-${issue_id}`);
+          render(ce(VoteStatusButton, {socketEvents: socketEvents, user: user, repo: repo, issueID: issue_id, contributorName: contributor_name, contributorID: contributor_id, tsrcPRstatus: tsrcPRstatus, side: side, clicked: clickedState.clicked, toggleModal: toggleModal }), domContainerTurboSrcButton);
+        }
+      }
+      console.log("Calling renderVoteButtons()...");
       renderVoteButtons();
+      console.log("renderVoteButtons() called.");
       const handleRefresh = () => {
         clickedState.clicked = !clickedState.clicked;
+        console.log("Inside handleRefresh() function.");
         renderVoteButtons();
+        console.log("handleRefresh() execution complete.");
       }
 
       const updateVoteStatusButton = async (issueID) => {
           issue_id = issueID
           domContainerTurboSrcButton = document.querySelector(`#turbo-src-btn-${issue_id}`);
           render(ce(VoteStatusButton, {user: user, repo: repo, issueID: issue_id, contributorName: contributor_name, contributorID: contributor_id, tsrcPRstatus: tsrcPRstatus, side: side, clicked: clickedState.clicked, toggleModal: toggleModal, socketEvents: socketEvents }), domContainerTurboSrcButton);
-        } 
+        }
 
       const updateModalVotesTable = async (issueID) => {
           if(issueID === issue_id && modal.style.display === 'block') {
             const domContainerModal = document.getElementById('myModal');
             render(ce(ModalVote, {user: user, repo: repo, issueID: issue_id, contributorID: contributor_id, contributorName: contributor_name, voteTotals: voteTotals, githubUser: githubUser, voteRes: getVotesRes, getVotes: getVotes, toggleModal: toggleModal, socketEvents: socketEvents}), domContainerModal);
           }
-        } 
+        }
 
       socket.on('vote received', function(ownerFromServer, repoFromServer, issueIDFromServer) {
         if(user === ownerFromServer && repo === repoFromServer) {
-          /* To update the correct VoteStatusButton & VotesTable we need to both update the socketEvents variable 
+          /* To update the correct VoteStatusButton & VotesTable we need to both update the socketEvents variable
           and call the React render function for them. */
           socketEvents+=1
-          updateVoteStatusButton(issueIDFromServer)
-          updateModalVotesTable(issueIDFromServer)
+          console.log("vote received event detected.");
+          updateVoteStatusButton(issueIDFromServer);
+          updateModalVotesTable(issueIDFromServer);
         }
       });
 
+      console.log("Setting up initial render...");
       !socket.id && render(React.createElement(RefreshButton, {refresh: handleRefresh}), document.getElementById('js-flash-container'));
-      
+      console.log("Initial render done.");
+
 
 
       //if (voted === true) {
