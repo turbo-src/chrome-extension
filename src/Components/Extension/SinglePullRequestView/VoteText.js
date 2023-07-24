@@ -50,10 +50,6 @@ function VoteText({
         if (voted && side === 'no') {
             setTextType('No');
         }
-
-        console.log("this is the text type", voted, side, disabled);
-
-
     }, [voted, side, disabled]);
 
     switch (textType) {

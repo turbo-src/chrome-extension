@@ -11,9 +11,8 @@ const useRepoData = (owner, repo, ethereumAddress) => {
             const fetchRepoData = async () => {
             try {
                 const response = await postGetRepoData(`${owner}/${repo}`, ethereumAddress);
-                console.log("this is the response", response);  
                 if (response != null || response != undefined) {
-                setOnTurboSrc(true);
+                    setOnTurboSrc(true);
                 }
                 setPullRequests(response.pullRequests);
                 let votePower = useCommas(response.contributor.votePower);
