@@ -141,7 +141,6 @@ export default function Home() {
 
   const handlePullRequestClick = pullRequest => {
     setSelectedPullRequest({ ...pullRequest });
-    console.log(selectedPullRequest, "selected pull req")
     setSeeModal(true);
   };
 
