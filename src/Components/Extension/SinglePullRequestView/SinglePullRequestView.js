@@ -40,6 +40,7 @@ const Results = styled.div`
         setDisabled(true);
       }
     }, [state]);
+    console.log(votePower, "vote power");
 
       return (
           <Content>

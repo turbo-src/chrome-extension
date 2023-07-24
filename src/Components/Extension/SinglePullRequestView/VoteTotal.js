@@ -100,7 +100,6 @@ function addCommas(num) {
 
 function VoteTotal(props) {
   const {repo, title, baseBranch, forkBranch, votePower} = props;
-
   return (
     <Heading>
         <TopModalTitle>

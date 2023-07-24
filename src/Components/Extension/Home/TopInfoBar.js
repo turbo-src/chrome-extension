@@ -61,7 +61,7 @@ const VotePower = styled.span`
   letter-spacing: 0.2px;
 `;
 
-export default function TopInfoBar({owner, repo, votepowerAmount, onTurboSrc}){
+export default function TopInfoBar({owner, repo, votePowerAmount, onTurboSrc}){
 
     return (
         <TopBar>
@@ -79,7 +79,7 @@ export default function TopInfoBar({owner, repo, votepowerAmount, onTurboSrc}){
             </BoldText>
             </OwnerRepo>
             {onTurboSrc ? (
-            <VotePower>{votepowerAmount === 0 ? '0 votepower' : `${votepowerAmount} votepower`}</VotePower>
+            <VotePower>{votePowerAmount === 0 ? '0 votepower' : `${votePowerAmount} votepower`}</VotePower>
             ) : null}
         </TopBar>
     )

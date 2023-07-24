@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { postGetRepoData } from '../../../requests';
-import useCommas from '../../../hooks/useCommas';
 import styled from 'styled-components';
 import PullRequestRow from './PullRequestRow.js';
 import ArrowRight from '../../../../icons/arrowright.png';
@@ -10,6 +8,8 @@ import BackArrow from '../../../../icons/back.png';
 import SkeletonModal from './SkeletonExt.js';
 import SinglePullRequestView from '../SinglePullRequestView/SinglePullRequestView.js';
 import TopInfoBar from './TopInfoBar';
+import useRepoData from '../../../hooks/useRepoData';
+
 const { socket } = require('../../../socketConfig');
 
 const ArrowPic = styled.img`
@@ -90,12 +90,11 @@ const RepoButton = styled.button`
   align-items: center;
   gap: 5px;
 
-  &:disabled{
+  &:disabled {
     background-color: darkgrey;
     cursor: auto;
   }
 `;
-
 
 const CreateNotice = styled.span`
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -128,13 +127,10 @@ export default function Home() {
   const repo = useSelector(state => state.repo.name);
   const owner = useSelector(state => state.repo.owner.login);
   const oldVersion = false;
-  const [pullRequests, setPullRequests] = useState([]);
-  const [onTurboSrc, setonTurboSrc] = useState(false);
   const [loading, setLoading] = useState(true);
   const [seeModal, setSeeModal] = useState(false);
   const [selectedPullRequest, setSelectedPullRequest] = useState({});
   const navigate = useNavigate();
-  let [votepowerAmount, setVotepowerAmount] = useState('');
 
   useEffect(() => {
     //Set current logged in contributor/id to chrome storage for inject to verify user for voting
@@ -144,47 +140,26 @@ export default function Home() {
   });
 
   const handlePullRequestClick = pullRequest => {
-    setSelectedPullRequest({...pullRequest});
+    setSelectedPullRequest({ ...pullRequest });
+    console.log(selectedPullRequest, "selected pull req")
     setSeeModal(true);
   };
 
-  const getRepoDataHandler = async () => {
-    try {
-      const response = await postGetRepoData(`${owner}/${repo}`, user.ethereumAddress).then(res => {
-        if (res != null || res != undefined) {
-          setonTurboSrc(true);
-        }
-        setPullRequests(res.pullRequests);
-        let votePower = useCommas(res.contributor.votePower);
-        setVotepowerAmount(votePower);
-      });
-    } catch (error) {
-      console.error('Error fetching repo data:', error);
-    }
-  };
-
-  useEffect(() => {
-    setTimeout(() => {
-      getRepoDataHandler();
-    }, 500);
-  }, [owner, repo]);
+  const { onTurboSrc, pullRequests, votePowerAmount } = useRepoData(owner, repo, user.ethereumAddress);
 
   socket.on('vote received', function(ownerFromServer, repoFromServer, issueIDFromServer) {
     if (owner === ownerFromServer && repo === repoFromServer) {
-      getRepoDataHandler();
+      const { onTurboSrc, pullRequests, votePowerAmount } = useRepoData(owner, repo, ethereumAddress);
     }
-  });
+  }); 
 
-  if (oldVersion){
+  if (oldVersion) {
     return (
       <TurbosrcNotice>Your version of Turbosrc is out of date and needs to be updated to continue.</TurbosrcNotice>
     );
   } else if (owner === 'none' && repo === 'none') {
-    return (
-      <TurbosrcNotice>Please visit a Github repo page in your browser to use Turbosrc.</TurbosrcNotice>
-    );
+    return <TurbosrcNotice>Please visit a Github repo page in your browser to use Turbosrc.</TurbosrcNotice>;
   }
-  
   switch (seeModal) {
     case true:
       return (
@@ -194,64 +169,68 @@ export default function Home() {
             <Back>Back to all</Back>
           </BackButton>
           <SinglePullRequestView
-              selectedPullRequest={selectedPullRequest}
-              user={user}
-              repo={repo}
-              githubToken={user.token}
-              owner={owner}
-              contributorID={user.ethereumAddress}
+            selectedPullRequest={selectedPullRequest}
+            user={user}
+            repo={repo}
+            githubToken={user.token}
+            owner={owner}
+            contributorID={user.ethereumAddress}
           />
 
         </>
       );
     case false:
       return (
-      <Content>
-        <TopInfoBar owner={owner} repo={repo} votepowerAmount={votepowerAmount} onTurboSrc={onTurboSrc} />
-        {onTurboSrc && (
-          <>
-            <DataHeading>
-              <PullRequestHeading>Status</PullRequestHeading>
-              <PullRequestHeading>Pull Request</PullRequestHeading>
-              <PullRequestHeading>Yes</PullRequestHeading>
-              <PullRequestHeading>No</PullRequestHeading>
-            </DataHeading>
-            <Data>
-              {pullRequests.map((pr, index) => (
-                <div onClick={() => handlePullRequestClick(pr)}>
-                  <PullRequestRow
-                    issue_id={pr.issue_id}
-                    title={pr.title}
-                    state={pr.state}
-                    yes={pr.voteData.voteTotals.yesPercent}
-                    no={pr.voteData.voteTotals.noPercent}
-                    forkBranch={pr.forkBranch}
-                    key={pr.forkBranch}
-                    index={index}
-                    role="button" // Add role="button" to make it clickable
-                    tabIndex={0}
-                  />
-                </div>
-              ))}
-            </Data>
-          </>
-        )}
-        {onTurboSrc ? null : loading ? (
-          <SkeletonModal />
-        ) : (
-          <CenteredWrapper>
-            <CreateNotice>
-              If you are the maintainer of{' '}
-              <CreateRepo>
-                {owner}/{repo}
-              </CreateRepo>{' '}
-              you can add it to Turbosrc
-            </CreateNotice>
-              <RepoButton type="button" disabled={owner === user.login ? false : true} onClick={() => navigate('/onboard')}>
+        <Content>
+          <TopInfoBar owner={owner} repo={repo} votePowerAmount={votePowerAmount} onTurboSrc={onTurboSrc} />
+          {onTurboSrc && (
+            <>
+              <DataHeading>
+                <PullRequestHeading>Status</PullRequestHeading>
+                <PullRequestHeading>Pull Request</PullRequestHeading>
+                <PullRequestHeading>Yes</PullRequestHeading>
+                <PullRequestHeading>No</PullRequestHeading>
+              </DataHeading>
+              <Data>
+                {pullRequests.map((pr, index) => (
+                  <div onClick={() => handlePullRequestClick(pr)}>
+                    <PullRequestRow
+                      issue_id={pr.issue_id}
+                      title={pr.title}
+                      state={pr.state}
+                      yes={pr.voteData.voteTotals.yesPercent}
+                      no={pr.voteData.voteTotals.noPercent}
+                      forkBranch={pr.forkBranch}
+                      key={pr.forkBranch}
+                      index={index}
+                      role="button" // Add role="button" to make it clickable
+                      tabIndex={0}
+                    />
+                  </div>
+                ))}
+              </Data>
+            </>
+          )}
+          {onTurboSrc ? null : loading ? (
+            <SkeletonModal />
+          ) : (
+            <CenteredWrapper>
+              <CreateNotice>
+                If you are the maintainer of{' '}
+                <CreateRepo>
+                  {owner}/{repo}
+                </CreateRepo>{' '}
+                you can add it to Turbosrc
+              </CreateNotice>
+              <RepoButton
+                type="button"
+                disabled={owner === user.login ? false : true}
+                onClick={() => navigate('/onboard')}
+              >
                 <p>Continue</p> <ArrowPic src={ArrowRight} />
               </RepoButton>
-          </CenteredWrapper>
-        )}
+            </CenteredWrapper>
+          )}
         </Content>
       );
     default:
