@@ -57,7 +57,6 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
   repo_id = `${path.user}/${path.repo}`;
   repo = path.repo;
   user = path.user;
-  var gitHubPRstatus = await getGitHubPullRequest(user, repo, issue_id);
   //Set Github Repo and User from browser window for chrome extension
   chrome.storage.local.set({ owner: user });
   chrome.storage.local.set({ repo: repo });
