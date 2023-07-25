@@ -69,7 +69,7 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
   // GitHub user profile object
   const githubUser = await getFromStorage('githubUser').then(res => JSON.parse(res));
 
-  // Backend: 
+  // Backend:
   // All relevant data for this repo can be found in this response:
   var repoData = await postGetRepoData(repo_id, contributor_id);
   // Is repo on turbosrc:
