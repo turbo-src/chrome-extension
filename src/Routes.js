@@ -13,7 +13,7 @@ import { setAuth } from './store/auth';
 import { setRepo } from './store/repo';
 import { useEffect, useState } from 'react';
 import superagent from 'superagent';
-import { postFindOrCreateUser } from './requests';
+import { postFindOrCreateUser} from './requests';
 
 export default function Routes(props) {
   const auth = useSelector(state => state.auth);
@@ -22,7 +22,7 @@ export default function Routes(props) {
   useEffect(()=>{
     dispatch(setRepo(props.currentRepo))
     },[])
-    
+
   //Same values:
   //ethereumAddress === contributor_id
   //ethereumKey === contributor_signature
@@ -42,8 +42,16 @@ export default function Routes(props) {
       return;
     } else if (user) {
       let githubUser = JSON.parse(user);
-
-      findOrCreateUser('', '', 'none', githubUser.login, 'none', githubUser.token)
+      // Pass 'owner' and 'repo' if on a git repo page. If not, pass owner and repo as "7db9a" and "demo".
+      console.log('current repo ', props.currentRepo.message)
+      findOrCreateUser(
+      props.currentRepo?.message === 'Not Found' ? 'reibase' : props.currentRepo.owner.login,
+      props.currentRepo?.message === 'Not Found' ? 'marialis' : props.currentRepo.name,
+      'none',
+      githubUser.login,
+      'none',
+      githubUser.token
+      )
       .then(res => {
         githubUser.ethereumAddress = res.contributor_id,
         githubUser.ethereumKey = res.contributor_signature});
@@ -51,7 +59,7 @@ export default function Routes(props) {
       dispatch(setAuth(githubUser));
     }
   }, [user]);
- 
+
   return auth.isLoggedIn ? (
     <BrowserRouter>
       <div className="container">
