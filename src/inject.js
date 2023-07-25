@@ -26,27 +26,27 @@ socket.on('disconnect', () => {
   console.log(socket.id); // undefined
 });
 
-//OAuth Code: ***
-//Github redirects to <turbosrc-auth url>/authenticated?code=...
-//Get Github code from url:
+// OAuth Code
+// Github redirects to <turbosrc-auth url>/authenticated?code=...
+// Get Github code from url:
 const newUrl = window.location.href.split('?code=');
 const reqBody = { code: newUrl[1] };
-//Clear code from browser url: (optional)
+// Clear code from browser url: (optional)
 window.history.pushState({}, null, newUrl[0]);
-//Send code from url which to Github API for an access token
-//The access token is then exchanged for the user's profile. Done in server/index.js.
+// Send code from url which to Github API for an access token
+// The access token is then exchanged for the user's profile. Done on the server of the turbosrc-auth app
 fetch('https://turbosrc-auth.fly.dev/authenticate', {
   method: 'POST',
   body: JSON.stringify(reqBody)
 })
-  //Response is Github profile - username, avatar url, repos etc.
+  // Response is Github profile - username, avatar url, repos etc.
   .then(response => response.json())
-  //Set Github user information to Chrome Storage for the turbo-src extension to get it on load:
+  // Set Github user information to Chrome Storage for the turbo-src extension to get it on load:
   .then(githubUser => chrome.storage.local.set({ githubUser: JSON.stringify(githubUser) }))
   .catch(error => {
     console.log(error);
   });
-//End of OAuth Code ****
+// End of OAuth Code
 
 (async function() {
   const path = commonUtil.getUsernameWithReponameFromGithubURL();
