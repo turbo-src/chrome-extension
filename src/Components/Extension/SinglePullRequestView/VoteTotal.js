@@ -46,7 +46,6 @@ const VoteTopicNormalText = styled.span`
   color: #6a6868;
 `;
 
-
 function VoteTotal(props) {
   const { owner, repo, title, baseBranch, forkBranch, votePower, onTurboSrc } = props;
   return (
