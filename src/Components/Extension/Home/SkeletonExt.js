@@ -45,7 +45,7 @@ const SkeletonGrid = styled.div`
   margin-top: -35px;  
   `;
 
-export default function SkeletonModal() {
+export default function SkeletonHome() {
 
     return (
         <SkeletonGrid>

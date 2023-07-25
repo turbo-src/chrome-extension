@@ -26,13 +26,13 @@ const OwnerText = styled(VoteText)`
   font-size: 18px;
   margin-bottom: 0px;
   white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width:120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
 `;
 
 const SlashText = styled(OwnerText)`
-  color: #6A6868;
+  color: #6a6868;
   margin-left: -5px;
   margin-right: -5px;
 `;
@@ -42,9 +42,9 @@ const BoldText = styled(VoteText)`
   font-size: 18px;
   margin-bottom: 0px;
   white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width:120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
 `;
 
 const GithubLink = styled.a`
@@ -61,26 +61,25 @@ const VotePower = styled.span`
   letter-spacing: 0.2px;
 `;
 
-export default function TopInfoBar({owner, repo, votePowerAmount, onTurboSrc}){
-
-    return (
-        <TopBar>
-            <OwnerRepo>
-            <OwnerText>
-                <GithubLink href={`https://github.com/${owner}`} target="_blank">
-                {owner}
-                </GithubLink>{' '}
-            </OwnerText>
-            <SlashText>/</SlashText>
-            <BoldText>
-                <GithubLink href={`https://github.com/${owner}/${repo}`} target="_blank">
-                {repo}
-                </GithubLink>
-            </BoldText>
-            </OwnerRepo>
-            {onTurboSrc ? (
-            <VotePower>{votePowerAmount === 0 ? '0 votepower' : `${votePowerAmount} votepower`}</VotePower>
-            ) : null}
-        </TopBar>
-    )
+export default function TopInfoBar({ owner, repo, votePowerAmount, onTurboSrc }) {
+  return (
+    <TopBar>
+      <OwnerRepo>
+        <OwnerText>
+          <GithubLink href={`https://github.com/${owner}`} target="_blank">
+            {owner}
+          </GithubLink>{' '}
+        </OwnerText>
+        <SlashText>/</SlashText>
+        <BoldText>
+          <GithubLink href={`https://github.com/${owner}/${repo}`} target="_blank">
+            {repo}
+          </GithubLink>
+        </BoldText>
+      </OwnerRepo>
+      {onTurboSrc ? (
+        <VotePower>{votePowerAmount === 0 ? '0 VotePower' : `${votePowerAmount} VotePower`}</VotePower>
+      ) : null}
+    </TopBar>
+  );
 }

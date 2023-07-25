@@ -5,10 +5,11 @@ import styled from 'styled-components';
 import PullRequestRow from './PullRequestRow.js';
 import ArrowRight from '../../../../icons/arrowright.png';
 import BackArrow from '../../../../icons/back.png';
-import SkeletonModal from './SkeletonExt.js';
+import SkeletonHome from './SkeletonExt.js';
 import SinglePullRequestView from '../SinglePullRequestView/SinglePullRequestView.js';
 import TopInfoBar from './TopInfoBar';
 import useRepoData from '../../../hooks/useRepoData';
+import useCommas from '../../../hooks/useCommas';
 
 const { socket } = require('../../../socketConfig');
 
@@ -127,8 +128,7 @@ export default function Home() {
   const repo = useSelector(state => state.repo.name);
   const owner = useSelector(state => state.repo.owner.login);
   const oldVersion = false;
-  const [loading, setLoading] = useState(true);
-  const [seeModal, setSeeModal] = useState(false);
+  const [seeSinglePR, setSeeSinglePR] = useState(false);
   const [selectedPullRequest, setSelectedPullRequest] = useState({});
   const navigate = useNavigate();
 
@@ -136,21 +136,20 @@ export default function Home() {
     //Set current logged in contributor/id to chrome storage for inject to verify user for voting
     chrome.storage.local.set({ contributor_name: user.login });
     chrome.storage.local.set({ contributor_id: user.ethereumAddress });
-    setTimeout(() => setLoading(false), 1500);
   });
 
   const handlePullRequestClick = pullRequest => {
     setSelectedPullRequest({ ...pullRequest });
-    setSeeModal(true);
+    setSeeSinglePR(true);
   };
 
-  const { onTurboSrc, pullRequests, votePowerAmount } = useRepoData(owner, repo, user.ethereumAddress);
+  let { onTurboSrc, pullRequests, votePowerAmount, loading } = useRepoData(owner, repo, user.ethereumAddress);
 
   socket.on('vote received', function(ownerFromServer, repoFromServer, issueIDFromServer) {
     if (owner === ownerFromServer && repo === repoFromServer) {
-      const { onTurboSrc, pullRequests, votePowerAmount } = useRepoData(owner, repo, ethereumAddress);
+      let { onTurboSrc, pullRequests, votePowerAmount } = useRepoData(owner, repo, ethereumAddress);
     }
-  }); 
+  });
 
   if (oldVersion) {
     return (
@@ -159,11 +158,11 @@ export default function Home() {
   } else if (owner === 'none' && repo === 'none') {
     return <TurbosrcNotice>Please visit a Github repo page in your browser to use Turbosrc.</TurbosrcNotice>;
   }
-  switch (seeModal) {
+  switch (seeSinglePR) {
     case true:
       return (
         <>
-          <BackButton onClick={() => setSeeModal(false)}>
+          <BackButton onClick={() => setSeeSinglePR(false)}>
             <img src={BackArrow} alt="back arrow" />
             <Back>Back to all</Back>
           </BackButton>
@@ -174,15 +173,15 @@ export default function Home() {
             githubToken={user.token}
             owner={owner}
             contributorID={user.ethereumAddress}
+            onTurboSrc={onTurboSrc}
           />
-
         </>
       );
     case false:
       return (
         <Content>
-          <TopInfoBar owner={owner} repo={repo} votePowerAmount={votePowerAmount} onTurboSrc={onTurboSrc} />
-          {onTurboSrc && (
+          <TopInfoBar owner={owner} repo={repo} votePowerAmount={useCommas(votePowerAmount)} onTurboSrc={onTurboSrc} />
+          {onTurboSrc ? (
             <>
               <DataHeading>
                 <PullRequestHeading>Status</PullRequestHeading>
@@ -209,9 +208,8 @@ export default function Home() {
                 ))}
               </Data>
             </>
-          )}
-          {onTurboSrc ? null : loading ? (
-            <SkeletonModal />
+          ) : loading ? (
+            <SkeletonHome />
           ) : (
             <CenteredWrapper>
               <CreateNotice>
