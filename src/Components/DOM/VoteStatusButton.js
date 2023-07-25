@@ -44,7 +44,6 @@ export default function VoteStatusButton(props) {
       setVoteYesTotalState(voteYesTotal);
       setVoteNoTotalState(voteNoTotal);
       setTsrcPRStatus(tsrcPRStatusComponent);
-      console.log('tsrc pr status component', issueID, tsrcPRStatusComponent);
     } catch (error) {
       console.log('fetchVoteStatus error:', error);
       textMath = '';
