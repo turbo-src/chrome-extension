@@ -17,10 +17,10 @@ const useRepoData = (owner, repo, ethereumAddress) => {
         setPullRequests(response.pullRequests);
         let votePower = response.contributor.votePower;
         setVotePowerAmount(votePower);
-        setLoading(false);
       } catch (error) {
         console.error('Error fetching repo data:', error);
       }
+      setLoading(false);
     };
     fetchRepoData();
   }, [owner, repo, ethereumAddress]);

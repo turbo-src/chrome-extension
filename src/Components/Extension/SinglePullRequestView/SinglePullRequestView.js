@@ -9,7 +9,7 @@ import ProgressBar from './ProgressBar';
 const Content = styled.div`
   background-color: #fff;
   margin: auto;
-  padding: 0 9px 20px 9px;
+  padding: 7px 0.5rem 0.5rem 0.5rem;
   height: 420px;
   width: 400px;
   text-align: center;

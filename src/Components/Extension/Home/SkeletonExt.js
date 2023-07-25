@@ -57,7 +57,6 @@ export default function SkeletonHome() {
                     <Skeleton animation="wave" variant="text" width={385} height={40} />
                     <Skeleton animation="wave" variant="text" width={385} height={40} />
                     <Skeleton animation="wave" variant="text" width={385} height={40} />
-             
                 </TopLineSkeleton>
             </div>
         </SkeletonGrid>

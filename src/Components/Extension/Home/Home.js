@@ -114,7 +114,7 @@ const Back = styled(PullRequestHeading)`
 
 const BackButton = styled.span`
   position: relative;
-  top: 85px;
+  top: 90px;
   left: 10px;
   margin-top: -20px;
   display: flex;
@@ -158,8 +158,16 @@ export default function Home() {
   } else if (owner === 'none' && repo === 'none') {
     return <TurbosrcNotice>Please visit a Github repo page in your browser to use Turbosrc.</TurbosrcNotice>;
   }
+
   switch (seeSinglePR) {
     case true:
+      if (loading) {
+        return (
+          <Content>
+            <SkeletonHome />
+          </Content>
+        );
+      }
       return (
         <>
           <BackButton onClick={() => setSeeSinglePR(false)}>
@@ -178,11 +186,24 @@ export default function Home() {
         </>
       );
     case false:
+      if (loading) {
+        return (
+          <Content>
+            <SkeletonHome />
+          </Content>
+        );
+      }
       return (
         <Content>
-          <TopInfoBar owner={owner} repo={repo} votePowerAmount={useCommas(votePowerAmount)} onTurboSrc={onTurboSrc} />
           {onTurboSrc ? (
             <>
+              <TopInfoBar
+                owner={owner}
+                repo={repo}
+                votePowerAmount={useCommas(votePowerAmount)}
+                onTurboSrc={onTurboSrc}
+              />
+
               <DataHeading>
                 <PullRequestHeading>Status</PullRequestHeading>
                 <PullRequestHeading>Pull Request</PullRequestHeading>
@@ -208,8 +229,6 @@ export default function Home() {
                 ))}
               </Data>
             </>
-          ) : loading ? (
-            <SkeletonHome />
           ) : (
             <CenteredWrapper>
               <CreateNotice>
