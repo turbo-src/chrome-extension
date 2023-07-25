@@ -7,7 +7,7 @@ import VoteStatusButton from './Components/DOM/VoteStatusButton';
 import ModalVote from './Components/Modal/ModalVote';
 const { socket } = require('./socketConfig');
 
-const { postGetRepoData, postGetVotes, getGitHubPullRequest } = require('./requests');
+const { postGetRepoData, postGetVotes } = require('./requests');
 
 var modal;
 var user;
