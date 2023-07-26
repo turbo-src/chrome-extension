@@ -8,7 +8,7 @@ const BtnGroupVote = styled.div`
   height: 80px;
   justify-content: space-evenly;
   align-items: center;
-  flex-direction: row; 
+  flex-direction: row;
   margin-left: 10px;
 
   &:after {
@@ -17,11 +17,24 @@ const BtnGroupVote = styled.div`
     display: table;
   }
   &:not(:last-child) {
-    border-right: none; 
+    border-right: none;
   }
 `;
 
-export default function VoteButtonGroup({disabled, setDisabled, voted, chosenSide, user, repo, issueID, contributorID, githubToken, defaultHash, childDefaultHash, owner}) {
+export default function VoteButtonGroup({
+  disabled,
+  setDisabled,
+  voted,
+  side,
+  user,
+  repo,
+  issueID,
+  contributorID,
+  githubToken,
+  defaultHash,
+  childDefaultHash,
+  owner
+}) {
   return (
     <BtnGroupVote>
       <VoteButton
@@ -29,7 +42,7 @@ export default function VoteButtonGroup({disabled, setDisabled, voted, chosenSid
         setDisabled={setDisabled}
         voted={voted}
         side={'yes'}
-        chosenSide={chosenSide}
+        chosenSide={side}
         user={user}
         repo={repo}
         issueID={issueID}
@@ -44,7 +57,7 @@ export default function VoteButtonGroup({disabled, setDisabled, voted, chosenSid
         setDisabled={setDisabled}
         voted={voted}
         side={'no'}
-        chosenSide={chosenSide}
+        chosenSide={side}
         user={user}
         repo={repo}
         issueID={issueID}

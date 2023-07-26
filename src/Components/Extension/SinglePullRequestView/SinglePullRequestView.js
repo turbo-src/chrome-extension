@@ -7,12 +7,12 @@ import VoteText from './VoteText';
 import ProgressBar from './ProgressBar';
 
 const Content = styled.div`
-background-color: #fff;
-margin: auto;
-padding: 0 9px 20px 9px;
-height: 420px;
-width: 400px;
-text-align: center;
+  background-color: #fff;
+  margin: auto;
+  padding: 7px 0.5rem 0.5rem 0.5rem;
+  height: 420px;
+  width: 400px;
+  text-align: center;
 `;
 
 const Results = styled.div`
@@ -22,9 +22,22 @@ const Results = styled.div`
   flex-direction: column;
   width: 100%;
   height: 60px;
-  `;
+`;
 
-const SinglePullRequestView = ({ pullRequests, repo_id, title, votesArray, state, baseBranch, forkBranch, yesPercent, noPercent, createdAt, votePower, alreadyVoted, chosenSide, user, repo, githubToken, defaultHash, childDefaultHash, contributorID, owner, issueID, totalVotes }) => {
+const SinglePullRequestView = ({ selectedPullRequest, user, repo, githubToken, owner, onTurboSrc }) => {
+  const {
+    voteData,
+    baseBranch,
+    forkBranch,
+    title,
+    issueID,
+    defaultHash,
+    childDefaultHash,
+    state
+  } = selectedPullRequest;
+  const { votes, contributor, voteTotals } = voteData;
+  const { createdAt, votePower, side, voted } = contributor;
+  const { yesPercent, noPercent } = voteTotals;
   const quorum = 0.5;
   const voteableStates = new Set(['vote', 'pre-open', 'open']);
   const notVoteableStates = new Set(['conflict', 'merge', 'close']);
@@ -39,42 +52,40 @@ const SinglePullRequestView = ({ pullRequests, repo_id, title, votesArray, state
 
   return (
     <Content>
-
       <VoteTotal
-        repo={repo_id}
+        repo={repo}
         title={title}
         forkBranch={forkBranch}
         votePower={votePower}
         baseBranch={baseBranch}
+        onTurboSrc={onTurboSrc}
+        owner={owner}
         id="vote-total-main"
       >
         <h2>Vote Total</h2>
       </VoteTotal>
 
-      <VoteText disabled={disabled} voted={alreadyVoted} chosenSide={chosenSide} userVotedAt={createdAt} />
+      <VoteText disabled={disabled} voted={voted} side={side} userVotedAt={createdAt} />
 
       <VoteButtonGroup
         disabled={disabled}
-        voted={alreadyVoted}
-        chosenSide={chosenSide}
+        voted={voted}
+        side={side}
         user={user}
         repo={repo}
         issueID={issueID}
-        contributorID={contributorID}
+        contributorID={contributor.contributor_id}
         githubToken={githubToken}
         defaultHash={defaultHash}
         childDefaultHash={childDefaultHash}
         owner={owner}
       />
+
       <Results>
-      <ProgressBar
-        yesPercent={yesPercent}
-        noPercent={noPercent}
-        quorum={quorum}
-      />
-    </Results>
-      <VotesTable allVotes={votesArray} />
-  </Content>
+        <ProgressBar yesPercent={yesPercent} noPercent={noPercent} quorum={quorum} />
+      </Results>
+      <VotesTable votes={votes} />
+    </Content>
   );
 };
 

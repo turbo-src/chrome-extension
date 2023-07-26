@@ -29,7 +29,7 @@ export default function VoteStatusButton(props){
     
     const fetchVoteStatus = async () => {
       let textMath = voteStatusButton.textMath;
-      let tsrcPRStatusComponent
+      let tsrcPRStatusComponent;
       try {
           tsrcPRStatusComponent = await postGetPullRequest(
           user,
@@ -63,7 +63,6 @@ export default function VoteStatusButton(props){
         setVoteNoTotalState(voteNoTotal);
         setTsrcPRStatus(tsrcPRStatusComponent);
       } catch (error) {
-        console.log('fetchVoteStatus error:', error)
         textMath = "";
       }
         };
