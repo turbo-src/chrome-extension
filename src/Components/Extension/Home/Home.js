@@ -186,8 +186,6 @@ const BackButton = styled.span`
   cursor: pointer;
 `;
 
-const port = process.env.PORT || 'http://localhost:4000';
-
 export default function Home() {
   const user = useSelector(state => state.auth.user);
   const repo = useSelector(state => state.repo.name);
