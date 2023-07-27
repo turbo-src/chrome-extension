@@ -3,9 +3,8 @@ const CONFIG = require('./config.js');
 
 const url = CONFIG.url;
 
-// get url
 console.log('socket mode url:', url)
-if (url === "http://localhost:4000/graphql" || url === "http://localhost:4006/graphql") {
+if (url.includes("localhost")) {
   console.log('initialize socket')
   socket = io("http://localhost:4007/", {
     withCredentials: true,
@@ -16,9 +15,8 @@ if (url === "http://localhost:4000/graphql" || url === "http://localhost:4006/gr
   console.log('socket created')
 } else {
   console.log('initialize socket - online')
-
-  console.log('socket url:', url + ":4007")
-  socket = io(url + ":4007", {
+  console.log('socket url:', url + "/socket.io")
+  socket = io(url + "/socket.io", {
     withCredentials: true,
     extraHeaders: {
       "my-custom-header": "abcd"
