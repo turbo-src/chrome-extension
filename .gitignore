@@ -7,5 +7,4 @@ node_modules/
 coverage
 .vscode
 
-config.devOnline.json
 src/config.js
