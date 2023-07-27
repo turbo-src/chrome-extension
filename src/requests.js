@@ -6,7 +6,7 @@ const CONFIG = require('./config.js');
 //const port = "https://turbosrc-service.fly.dev"
 //const port = "https://turbosrc-marialis.dev";
 
-const url = CONFIG.url;
+var url = CONFIG.url;
 //turboSrcID = CONFIG.turboSrcID
 //const url = "http://localhost:4006/graphql"
 //turboSrcID = "0x892a7abaf9f30db81e9b98f97cb3d64caccc6c27"
@@ -18,6 +18,8 @@ let turboSrcID
 // offline, no router configuration).
 if (url === "http://localhost:4000/graphql") {
   turboSrcID = "0x9e81be64b30a850e038cb5a85241f58528010016"
+} else if (url === "https://turbosrc-marialis.dev") {
+  url = url + "/graphql"
 }
 
 console.log('requests turboSrcID:', turboSrcID)
