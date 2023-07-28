@@ -6,7 +6,7 @@ module.exports = defineConfig({
   e2e: {
     setupNodeEvents(on, config) {
       on('before:browser:launch', (browser = {}, launchOptions) => {
-        launchOptions.extensions.push('/Users/jeffreywood/Projects/turbosrc/chrome-extension/dist')
+        launchOptions.extensions.push(Cypress.env('extensionPath'))
 
         return launchOptions
       })
