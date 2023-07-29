@@ -8,10 +8,16 @@ let socket;
 if (url.includes("localhost")) {
   console.log('initialize socket')
   socket = io("http://localhost:4007/", {
-    withCredentials: true,
-    extraHeaders: {
-      "my-custom-header": "abcd"
-    }
+    path: '/socket.io',
+    transportOptions: {
+      polling: {
+        extraHeaders: {
+          'my-custom-header': 'abcd'
+        }
+      }
+    },
+    transports: ['websocket'], // <---- Add this line
+    secure: false,  // ensure secure connection
   });
   console.log('socket created')
 } else {
