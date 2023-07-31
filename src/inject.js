@@ -85,7 +85,7 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
     const containerItems = document.querySelectorAll('.js-issue-row');
     let startIndex = 0;
     const repoPath = commonUtil.getUsernameWithReponameFromGithubURL();
-
+    console.log('not getting containerItems in Cypress window:', containerItems);
     // Only do below DOM logic if we are on the pull requests page
     if (window.location.pathname !== `/${repoPath.user}/${repoPath.repo}/pulls`) {
       return;

@@ -37,7 +37,7 @@ Ensure that you have the latest version of Google Chrome installed on your syste
 
 1. Navigate to your `config.js` file.
 
-2. Edit the `CONFIG` object to add in a `path` property and the path to your Chrome extension to test. Here's an example:
+<!-- 2. Edit the `CONFIG` object to add in a `path` property and the path to your Chrome extension to test. Here's an example:
 
     ```javascript
     const CONFIG = {
@@ -46,7 +46,7 @@ Ensure that you have the latest version of Google Chrome installed on your syste
     };
     ```
 
-Replace `/Path/to/chrome-extension` with the actual path to your Chrome extension.
+Replace `/Path/to/chrome-extension` with the actual path to your Chrome extension. -->
 
 ### Step 3: Run the Local Test Server
 
