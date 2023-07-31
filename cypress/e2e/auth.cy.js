@@ -14,7 +14,7 @@ describe('Auth', () => {
     //   .contains('Authorize reibase')
     //   .click();
 
-    cy.visit(`https://github.com/jex441/demo/pulls`);
+    cy.visit(`https://github.com/ramirc5/demo/pulls`);
 
     cy.request({
       method: 'POST',
