@@ -557,11 +557,11 @@ async function getGitHubPullRequest(owner, repo, defaultHash, contributor_id) {
 
 async function postGetRepoData(repo_id, contributor_id) {
   const repoName = repo_id;
-  var turboSrcID = await getTurboSrcIDFromRepoName(repoName)
-  if (turboSrcID == null || turboSrcID === "null") {
-    turboSrcID = await getTurboSrcIDFromRepoName("reibase/marialis")
-  }
-  console.log('extension postGetRepoData called');
+  // var turboSrcID = await getTurboSrcIDFromRepoName(repoName)
+  // if (turboSrcID == null || turboSrcID === "null") {
+  //   turboSrcID = await getTurboSrcIDFromRepoName("reibase/marialis")
+  // }
+  console.log(turboSrcID, repo_id, contributor_id);
   const res = await superagent
     .post(`${url}`)
     .send({
@@ -618,6 +618,7 @@ async function postGetRepoData(repo_id, contributor_id) {
     })
     .set('accept', 'json');
   const json = JSON.parse(res.text);
+  console.log(json.data.getRepoData);
   return json.data.getRepoData;
 }
 async function postGetVotes(repo, defaultHash, contributor_id) {
