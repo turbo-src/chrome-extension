@@ -51,9 +51,9 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
 (async function() {
   // Current repo page and current user information:
   const path = commonUtil.getUsernameWithReponameFromGithubURL();
-  repo_id = `${path.user}/${path.repo}`;
-  repo = path.repo;
-  user = path.user;
+  repo = process.env.NODE_ENV === 'test' ? localStorage.getItem('repo') : path.repo;
+  user = process.env.NODE_ENV === 'test' ? localStorage.getItem('owner') : path.user;
+  repo_id = `${user}/${repo}`;
   // Set Github Repo and User from browser window for chrome extension to get
   chrome.storage.local.set({ owner: user });
   chrome.storage.local.set({ repo: repo });
@@ -79,7 +79,6 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
   const onTurboSrc = repoData?.status === 200 ? true : false;
   // Is current contributor is authorized for this repo:
   const isAuthorizedContributor = repoData?.contributor.contributor;
-
   if ((document.readyState === 'complete') & (onTurboSrc === true) & (isAuthorizedContributor === true)) {
     const ce = React.createElement;
     // Pull request row DOM nodes
@@ -230,7 +229,7 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
     };
 
     // Socket listener for above actions. Every time a user votes our socket will check if it's for the current repo and update
-     socket.on('vote received', function(ownerFromServer, repoFromServer, issueIDFromServer) {
+    socket.on('vote received', function(ownerFromServer, repoFromServer, issueIDFromServer) {
       if (user === ownerFromServer && repo === repoFromServer) {
         /* To update the correct VoteStatusButton & VotesTable we need to both update the socketEvents variable 
           and call the React render function for them. */
