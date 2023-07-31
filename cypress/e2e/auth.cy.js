@@ -14,7 +14,7 @@ describe('Auth', () => {
     //   .contains('Authorize reibase')
     //   .click();
 
-    cy.visit(`https://github.com/${Cypress.env('gitHubUsername')}/demo/pulls`);
+    cy.visit(`https://github.com/${Cypress.env('gitHubUsername')}/${Cypress.env('gitHubRepo')}/pulls`);
 
     cy.request({
       method: 'POST',
@@ -52,7 +52,7 @@ describe('Auth', () => {
       );
     });
 
-    cy.visit(`https://github.com/jex441/demo/pulls`);
+    cy.visit(`https://github.com/${Cypress.env('gitHubUsername')}/${Cypress.env('gitHubRepo')}/pulls`);
 
     cy.request({
       method: 'POST',
@@ -64,7 +64,7 @@ describe('Auth', () => {
             createRepo(
               turboSrcID: "${Cypress.env('turboSrcID')}",
               owner: "${Cypress.env('gitHubUsername')}",
-              repo: "demo",
+              repo: ${Cypress.env('gitHubRepo')},
               defaultHash: "",
               contributor_id: "${Cypress.env('contributorID')}",
               side: "",
