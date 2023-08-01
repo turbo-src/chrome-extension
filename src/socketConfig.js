@@ -8,7 +8,7 @@ let socket;
 if (url.includes("localhost")) {
   console.log('initialize socket')
   socket = io("http://localhost:4007/", {
-    path: '/socket.io',
+    path: '/vote-client/socket.io',
     transportOptions: {
       polling: {
         extraHeaders: {
@@ -22,9 +22,9 @@ if (url.includes("localhost")) {
   console.log('socket created')
 } else {
   console.log('initialize socket - online')
-  console.log('socket url:', url + "/socket.io")
+  console.log('socket url:', url + "vote-client/socket.io")
   socket = io(url, {
-    path: '/socket.io',
+    path: '/vote-client/socket.io',
     transportOptions: {
       polling: {
         extraHeaders: {
