@@ -200,7 +200,7 @@ export default function StartTransfer({
 
     if (e.target.value.length > 1) {
       setChecking(true);
-      await postGetContributorID('', '', '', e.target.value)
+      await postGetContributorID(owner, repo, '', e.target.value)
         .then(res => setTransfer({ ...transfer, recipientName: e.target.value, recipientId: res }))
         .catch(error => console.log('error', error));
     }
