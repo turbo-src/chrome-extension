@@ -79,17 +79,24 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
   const onTurboSrc = repoData?.status === 200 ? true : false;
   // Is current contributor is authorized for this repo:
   const isAuthorizedContributor = repoData?.contributor.contributor;
-  if ((document.readyState === 'complete') & (onTurboSrc === true) & (isAuthorizedContributor === true)) {
+
+  const DOM = process.env.NODE_ENV === 'test' ? document.getElementById("Your project: 'Test Project'") : document;
+  //Pull request row DOM nodes
+  let containerItems;
+  
+  DOM.onload = function() {
+    containerItems =
+      process.env.NODE_ENV === 'test'
+        ? DOM.contentDocument.querySelectorAll('.js-issue-row')
+        : DOM.querySelectorAll('.js-issue-row');
     const ce = React.createElement;
     // Pull request row DOM nodes
-    const containerItems = document.querySelectorAll('.js-issue-row');
     let startIndex = 0;
     const repoPath = commonUtil.getUsernameWithReponameFromGithubURL();
-    console.log('not getting containerItems in Cypress window:', containerItems);
     // Only do below DOM logic if we are on the pull requests page
-    if (window.location.pathname !== `/${repoPath.user}/${repoPath.repo}/pulls`) {
-      return;
-    }
+    // if (window.location.pathname !== `/${repoPath.user}/${repoPath.repo}/pulls`) {
+    //   return;
+    // }
 
     // Map div element with id turbo-src-btn-<issue_id> to its relevant DOM node
     var html;
@@ -108,7 +115,8 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
     // Now that we have our PR data and DOM elements, we can render React components where needed and
     // update them when our socket tells us to
     // Declare variables we need:
-    modal = document.getElementById('myModal');
+    modal =
+      process.env.NODE_ENV === 'test' ? DOM.contentDocument.getElementById('myModal') : DOM.getElementById('myModal');
     var domContainerTurboSrcButton;
     let socketEvents = 0;
     let getVotesRes;
@@ -121,7 +129,11 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
     const toggleModal = async event => {
       if (event.target.id === 'myModal' || event.target.id === 'closeModal') {
         modal.style.display = 'none';
-        unmountComponentAtNode(document.getElementById('myModal'));
+        unmountComponentAtNode(
+          process.env.NODE_ENV === 'test'
+            ? DOM.contentDocument.getElementById('myModal')
+            : DOM.getElementById('myModal')
+        );
       }
 
       // Get issue ID from click
@@ -134,7 +146,10 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
         const idNameSplit = idName.split('-');
         issue_id = idNameSplit[3];
         modal.style.display = 'block';
-        const domContainerModal = document.getElementById('myModal');
+        const domContainerModal =
+          process.env.NODE_ENV === 'test'
+            ? DOM.contentDocument.getElementById('myModal')
+            : DOM.getElementById('myModal');
         getVotesRes = await getVotes();
         render(
           ce(ModalVote, {
@@ -163,7 +178,10 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
     // Update modal (if open) if its associated PR has been voted upon
     const updateModalVotesTable = async issueID => {
       if (issueID === issue_id && modal.style.display === 'block') {
-        const domContainerModal = document.getElementById('myModal');
+        const domContainerModal =
+          process.env.NODE_ENV === 'test'
+            ? DOM.contentDocument.getElementById('myModal')
+            : DOM.getElementById('myModal');
         render(
           ce(ModalVote, {
             user: user,
@@ -188,7 +206,10 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
     const renderVoteButtons = async () => {
       for (var i = startIndex; i < containerItems.length; i++) {
         issue_id = containerItems[i].getAttribute('id');
-        domContainerTurboSrcButton = document.querySelector(`#turbo-src-btn-${issue_id}`);
+        domContainerTurboSrcButton =
+          process.env.NODE_ENV === 'test'
+            ? DOM.contentDocument.querySelector(`#turbo-src-btn-${issue_id}`)
+            : document.querySelector(`#turbo-src-btn-${issue_id}`);
         render(
           ce(VoteStatusButton, {
             socketEvents: socketEvents,
@@ -238,5 +259,5 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
         updateModalVotesTable(issueIDFromServer);
       }
     });
-  }
+  };
 })();

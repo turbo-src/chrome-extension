@@ -10,6 +10,7 @@ describe('Auth', () => {
     });
     cy.get('[type="submit"]').click();
 
+    // If GitHub prompts to accept terms:
     // cy.get('[type="submit"]')
     //   .contains('Authorize reibase')
     //   .click();
@@ -53,7 +54,6 @@ describe('Auth', () => {
     });
 
     cy.visit(`https://github.com/${Cypress.env('gitHubUsername')}/${Cypress.env('gitHubRepo')}/pulls`);
-
     cy.request({
       method: 'POST',
       url: 'http://localhost:4000/graphql',
@@ -64,7 +64,7 @@ describe('Auth', () => {
             createRepo(
               turboSrcID: "${Cypress.env('turboSrcID')}",
               owner: "${Cypress.env('gitHubUsername')}",
-              repo: ${Cypress.env('gitHubRepo')},
+              repo: "${Cypress.env('gitHubRepo')}",
               defaultHash: "",
               contributor_id: "${Cypress.env('contributorID')}",
               side: "",
@@ -73,9 +73,48 @@ describe('Auth', () => {
           }
           `
       }
+    }).then(response => {
+      console.log(response);
     });
-    cy.reload();
-    //Not working
-    // cy.saveLocalStorage();
+
+    cy.request({
+      method: 'POST',
+      url: 'http://localhost:4000/graphql',
+      body: {
+        operationName: 'getRepoData',
+        query: `
+          query getRepoData {
+            getRepoData(
+              turboSrcID: "${Cypress.env('turboSrcID')}",
+              repo_id: "${Cypress.env('gitHubUsername')}/${Cypress.env('gitHubRepo')}",
+              contributor_id: "${Cypress.env('contributorID')}"
+            ) {
+            status, 
+            repo_id,
+            owner,
+            contributor_id
+            }
+          }
+          `
+      }
+    }).then(response => {
+      console.log(Cypress.env('turboSrcID'));
+      console.log(Cypress.env('contributorID'), 'contributorID');
+      console.log(Cypress.env('gitHubRepo'), 'gitHubRepo');
+
+      console.log(response.body, 'response.body.data.getRepoData');
+      expect(response.body.data.getRepoData).to.have.property('owner');
+    });
+
+    cy.get('#turbo-src-btn-issue_6').should('be.visible');
+    cy.get('#turbo-src-btn-issue_5').should('be.visible');
+    cy.get('#turbo-src-btn-issue_4').should('be.visible');
+    cy.get('#turbo-src-btn-issue_3').should('be.visible');
+    cy.get('#turbo-src-btn-issue_2').should('be.visible');
+    cy.get('#turbo-src-btn-issue_1').should('be.visible');
+
+    cy.get('#turbo-src-btn-issue_1')
+      .contains('vote')
+      .click();
   });
 });
