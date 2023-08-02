@@ -1,7 +1,5 @@
-describe('Auth', () => {
-  it('successfully authenticates user', () => {
-    // cy.restoreLocalStorage();
-
+describe('Dom', () => {
+  it('successfully authenticates user, creates the user, creates a repo, and renders the vote buttons', () => {
     cy.visit(`https://github.com/login/oauth/authorize?scope=user:email&client_id=b0d124a1789132a87678`);
 
     cy.get('input#login_field').type(Cypress.env('gitHubUsername'));
@@ -165,7 +163,7 @@ describe('Auth', () => {
     }).then(response => {
       //If response is null it is often because there is an issue with the contributor id
       console.log(response);
-      expect(response.body.data.createRepo, '201')
+      expect(response.body.data.createRepo, '201');
     });
 
     cy.request({
