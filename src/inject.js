@@ -83,17 +83,18 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
   const DOM = process.env.NODE_ENV === 'test' ? document.getElementById("Your project: 'Test Project'") : document;
   //Pull request row DOM nodes
   let containerItems;
-  
+
   DOM.onload = function() {
+    // Pull request row DOM nodes
     containerItems =
       process.env.NODE_ENV === 'test'
         ? DOM.contentDocument.querySelectorAll('.js-issue-row')
         : DOM.querySelectorAll('.js-issue-row');
     const ce = React.createElement;
-    // Pull request row DOM nodes
     let startIndex = 0;
     const repoPath = commonUtil.getUsernameWithReponameFromGithubURL();
-    // Only do below DOM logic if we are on the pull requests page
+
+    // Only do below DOM logic if we are on the pull requests page, add case for test node env***
     // if (window.location.pathname !== `/${repoPath.user}/${repoPath.repo}/pulls`) {
     //   return;
     // }
