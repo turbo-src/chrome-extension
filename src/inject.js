@@ -85,6 +85,14 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
   let containerItems;
 
   DOM.onload = function() {
+    // Only do below DOM logic if project is on turbosrc and we are a contributor
+    if (!onTurboSrc || !isAuthorizedContributor) {
+      return;
+    }
+    // Only do below DOM logic if we are on the pull requests page
+    if (process.env.NODE_ENV !== 'test' && window.location.pathname !== `/${repoPath.user}/${repoPath.repo}/pulls`) {
+      return;
+    }
     // Pull request row DOM nodes
     containerItems =
       process.env.NODE_ENV === 'test'
@@ -93,11 +101,6 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
     const ce = React.createElement;
     let startIndex = 0;
     const repoPath = commonUtil.getUsernameWithReponameFromGithubURL();
-
-    // Only do below DOM logic if we are on the pull requests page, add case for test node env***
-    // if (window.location.pathname !== `/${repoPath.user}/${repoPath.repo}/pulls`) {
-    //   return;
-    // }
 
     // Map div element with id turbo-src-btn-<issue_id> to its relevant DOM node
     var html;
