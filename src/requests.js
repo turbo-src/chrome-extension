@@ -11,19 +11,42 @@ var url = CONFIG.url;
 //const url = "http://localhost:4006/graphql"
 //turboSrcID = "0x892a7abaf9f30db81e9b98f97cb3d64caccc6c27"
 
-let turboSrcID
+let turboSrcIDfromInstance
 
 // Running locally without devLocalRouter or devOnline,
 // The hash is the reibaseID (possibly superflous in
 // offline, no router configuration).
-if (url === "http://localhost:4000/graphql") {
-  turboSrcID = "0x9e81be64b30a850e038cb5a85241f58528010016"
-} else if (url === "https://turbosrc-marialis.dev") {
-  url = url + "/graphql"
+
+(async function() {
+  if (url === "https://turbosrc-marialis.dev") {
+    url = url + "/graphql";
+  }
+
+  console.log("get turboSrcIDfromInstance")
+  turboSrcIDfromInstance = await getTurboSrcIDfromInstance();
+  console.log('requests turboSrcIDfromInstance:', turboSrcIDfromInstance);
+})();
+
+async function getTurboSrcIDfromInstance() {
+  try {
+    const res = await superagent
+      .post(`${url}`)
+      .send({
+        query: `{ getTurboSrcIDFromRepoInstance }`
+      })
+      .set('accept', 'json')
+
+    const json = JSON.parse(res.text);
+    if (!json.data) {
+      console.error('Received no data. Response:', json);
+      return null;
+    }
+    return json.data.turboSrcID; // return turboSrcID directly from data
+  } catch (error) {
+    console.error('An error occurred while fetching the turboSrcIDfromInstance:', error);
+    return null;
+  }
 }
-
-console.log('requests turboSrcID:', turboSrcID)
-
 async function getTurboSrcIDFromRepoName(reponame) {
   if (url === "http://localhost:4000/graphql") {
   } else {
@@ -41,7 +64,7 @@ async function getTurboSrcIDFromRepoName(reponame) {
 
 async function postCreateUser(owner, repo, contributor_id, contributor_name, contributor_signature, token) {
   const repoName = `${owner}/${repo}`;
-  turboSrcID = await getTurboSrcIDFromRepoName(repoName)
+  const turboSrcID = await getTurboSrcIDFromRepoName(repoName)
   const res = await superagent
     .post(`${url}`)
     .send({
@@ -55,7 +78,7 @@ async function postCreateUser(owner, repo, contributor_id, contributor_name, con
 
 async function postGetContributorName(owner, repo, defaultHash, contributor_id) {
   const repoName = `${owner}/${repo}`;
-  turboSrcID = await getTurboSrcIDFromRepoName(repoName)
+  const turboSrcID = await getTurboSrcIDFromRepoName(repoName)
   const res = await superagent
     .post(`${url}`)
     .send(
@@ -81,7 +104,7 @@ async function postGetContributorName(owner, repo, defaultHash, contributor_id) 
 
 async function postGetContributorID(owner, repo, defaultHash, contributor_name) {
   const repoName = `${owner}/${repo}`;
-  turboSrcID = await getTurboSrcIDFromRepoName(repoName)
+  const turboSrcID = await getTurboSrcIDFromRepoName(repoName)
   const res = await superagent
     .post(`${url}`)
     .send(
@@ -107,7 +130,7 @@ async function postGetContributorID(owner, repo, defaultHash, contributor_name) 
 
 async function postGetContributorSignature(owner, repo, defaultHash, contributor_id) {
   const repoName = `${owner}/${repo}`;
-  turboSrcID = await getTurboSrcIDFromRepoName(repoName)
+  const turboSrcID = await getTurboSrcIDFromRepoName(repoName)
   const res = await superagent
     .post(`${url}`)
     .send(
@@ -134,7 +157,7 @@ async function postFindOrCreateUser(owner, repo, contributor_id, contributor_nam
   const repoName = `${owner}/${repo}`;
   var turboSrcID = await getTurboSrcIDFromRepoName(repoName)
   if (turboSrcID == null || turboSrcID === "null") {
-    turboSrcID = await getTurboSrcIDFromRepoName("reibase/marialis")
+    turboSrcID = turboSrcIDfromInstance
   }
   console.log('extension findOrCreateUser called ', turboSrcID, typeof turboSrcID);
   const res = await superagent
@@ -150,7 +173,7 @@ async function postCheckGithubTokenPermissions(owner, repo, contributor_name, to
   const repoName = `${owner}/${repo}`;
   var turboSrcID = await getTurboSrcIDFromRepoName(repoName)
   if (turboSrcID == null || turboSrcID === "null") {
-    turboSrcID = await getTurboSrcIDFromRepoName("reibase/marialis")
+    turboSrcID = turboSrcIDfromInstance
   }
   console.log('extension check permissions called');
   const res = await superagent
@@ -166,7 +189,7 @@ async function postCreateRepo(owner, repo, defaultHash, contributor_id, side, to
   const repoName = `${owner}/${repo}`;
   var turboSrcID = await getTurboSrcIDFromRepoName(repoName)
   if (turboSrcID == null || turboSrcID === "null") {
-    turboSrcID = await getTurboSrcIDFromRepoName("reibase/marialis")
+    turboSrcID = turboSrcIDfromInstance
   }
   console.log('extension create repo called');
   const res = await superagent
@@ -182,7 +205,7 @@ async function postCreateRepo(owner, repo, defaultHash, contributor_id, side, to
 
 async function postGetVotePowerAmount(owner, repo, defaultHash, contributor_id, side, token) {
   const repoName = `${owner}/${repo}`;
-  turboSrcID = await getTurboSrcIDFromRepoName(repoName)
+  const turboSrcID = await getTurboSrcIDFromRepoName(repoName)
   const res = await superagent
     .post(`${url}`)
     .send(
@@ -208,7 +231,7 @@ async function postGetVotePowerAmount(owner, repo, defaultHash, contributor_id, 
 
 async function postTransferTokens(owner, repo, from, to, amount, token) {
   const repoName = `${owner}/${repo}`;
-  turboSrcID = await getTurboSrcIDFromRepoName(repoName)
+  const turboSrcID = await getTurboSrcIDFromRepoName(repoName)
   const res = await superagent
     .post(`${url}`)
     .send(
@@ -232,7 +255,7 @@ async function postTransferTokens(owner, repo, from, to, amount, token) {
 
 async function postNewPullRequest(owner, repo, defaultHash, contributor_id, side) {
   const repoName = `${owner}/${repo}`;
-  turboSrcID = await getTurboSrcIDFromRepoName(repoName)
+  const turboSrcID = await getTurboSrcIDFromRepoName(repoName)
   superagent
     .post(`${url}`)
     .send(
@@ -254,7 +277,7 @@ async function postNewPullRequest(owner, repo, defaultHash, contributor_id, side
 
 async function postSetVote(owner, repo, defaultHash, childDefaultHash, mergeable, contributor_id, side, token) {
   const repoName = `${owner}/${repo}`;
-  turboSrcID = await getTurboSrcIDFromRepoName(repoName)
+  const turboSrcID = await getTurboSrcIDFromRepoName(repoName)
   const res = await superagent
     .post(`${url}`)
     .send(
@@ -278,7 +301,7 @@ async function postSetVote(owner, repo, defaultHash, childDefaultHash, mergeable
 
 async function getRepoStatus(repo_id) {
   const repoName = repo_id;
-  turboSrcID = await getTurboSrcIDFromRepoName(repoName)
+  const turboSrcID = await getTurboSrcIDFromRepoName(repoName)
   const res = await superagent
     .post(`${url}`)
     .send({
@@ -294,7 +317,7 @@ async function getRepoStatus(repo_id) {
 
 async function get_authorized_contributor(contributor_id, repo_id) {
   const repoName = repo_id;
-  turboSrcID = await getTurboSrcIDFromRepoName(repoName)
+  const turboSrcID = await getTurboSrcIDFromRepoName(repoName)
   const res = await superagent
     .post(`${url}`)
     .send({
@@ -307,7 +330,7 @@ async function get_authorized_contributor(contributor_id, repo_id) {
 
 async function postPullFork(owner, repo, issue_id, contributor_id) {
   const repoName = `${owner}/${repo}`;
-  turboSrcID = await getTurboSrcIDFromRepoName(repoName)
+  const turboSrcID = await getTurboSrcIDFromRepoName(repoName)
   return await superagent
     .post('http://localhost:4001/graphql')
     .send({
@@ -318,7 +341,7 @@ async function postPullFork(owner, repo, issue_id, contributor_id) {
 
 async function postGetPRforkStatus(owner, repo, issue_id, contributor_id) {
   const repoName = `${owner}/${repo}`;
-  turboSrcID = await getTurboSrcIDFromRepoName(repoName)
+  const turboSrcID = await getTurboSrcIDFromRepoName(repoName)
   const res = await superagent
     .post(`${url}`)
     .send({
@@ -336,7 +359,7 @@ async function postGetPullRequest(owner, repo, defaultHash, contributor_id, side
   const repoName = `${owner}/${repo}`;
   var turboSrcID = await getTurboSrcIDFromRepoName(repoName)
   if (turboSrcID == null || turboSrcID === "null") {
-    turboSrcID = await getTurboSrcIDFromRepoName("reibase/marialis")
+    turboSrcID = turboSrcIDfromInstance
   }
   console.log('extension getPullRequest called ', turboSrcID, typeof turboSrcID);
   console.log(owner, repo,defaultHash, contributor_id, side )
@@ -355,7 +378,7 @@ async function postGetPullRequest(owner, repo, defaultHash, contributor_id, side
 
 async function postGetPRpercentVotedQuorum(owner, repo, defaultHash, contributor_id, side) {
   const repoName = `${owner}/${repo}`;
-  turboSrcID = await getTurboSrcIDFromRepoName(repoName)
+  const turboSrcID = await getTurboSrcIDFromRepoName(repoName)
   const res = await superagent
     .post(`${url}`)
     .send(
@@ -380,7 +403,7 @@ async function postGetPRpercentVotedQuorum(owner, repo, defaultHash, contributor
 
 async function postGetPRvoteTotals(owner, repo, defaultHash, contributor_id, side) {
   const repoName = `${owner}/${repo}`;
-  turboSrcID = await getTurboSrcIDFromRepoName(repoName)
+  const turboSrcID = await getTurboSrcIDFromRepoName(repoName)
   const res = await superagent
     .post(`${url}`)
     .send(
@@ -405,7 +428,7 @@ async function postGetPRvoteTotals(owner, repo, defaultHash, contributor_id, sid
 
 async function postGetPRvoteYesTotals(owner, repo, defaultHash, contributor_id, side) {
   const repoName = `${owner}/${repo}`;
-  turboSrcID = await getTurboSrcIDFromRepoName(repoName)
+  const turboSrcID = await getTurboSrcIDFromRepoName(repoName)
   const res = await superagent
     .post(`${url}`)
     .send(
@@ -430,7 +453,7 @@ async function postGetPRvoteYesTotals(owner, repo, defaultHash, contributor_id, 
 
 async function postGetPRvoteNoTotals(owner, repo, defaultHash, contributor_id, side) {
   const repoName = `${owner}/${repo}`;
-  turboSrcID = await getTurboSrcIDFromRepoName(repoName)
+  const turboSrcID = await getTurboSrcIDFromRepoName(repoName)
   const res = await superagent
     .post(`${url}`)
     .send(
@@ -455,7 +478,7 @@ async function postGetPRvoteNoTotals(owner, repo, defaultHash, contributor_id, s
 
 async function postClosePullRequest(owner, repo, defaultHash, contributor_id, side) {
   const repoName = `${owner}/${repo}`;
-  turboSrcID = await getTurboSrcIDFromRepoName(repoName)
+  const turboSrcID = await getTurboSrcIDFromRepoName(repoName)
   superagent
     .post(`${url}`)
     .send(
@@ -477,7 +500,7 @@ async function postClosePullRequest(owner, repo, defaultHash, contributor_id, si
 
 async function postMergePullRequest(owner, repo, defaultHash, contributor_id, side) {
   const repoName = `${owner}/${repo}`;
-  turboSrcID = await getTurboSrcIDFromRepoName(repoName)
+  const turboSrcID = await getTurboSrcIDFromRepoName(repoName)
   superagent
     .post(`${url}`)
     .send(
@@ -499,7 +522,7 @@ async function postMergePullRequest(owner, repo, defaultHash, contributor_id, si
 
 async function postCreatePullRequest(owner, repo, fork_branch, issue_id, title) {
   const repoName = `${owner}/${repo}`;
-  turboSrcID = await getTurboSrcIDFromRepoName(repoName)
+  const turboSrcID = await getTurboSrcIDFromRepoName(repoName)
   superagent
     .post(`${url}`)
     .send(
@@ -521,7 +544,7 @@ async function postCreatePullRequest(owner, repo, fork_branch, issue_id, title) 
 
 async function postFork(owner, repo, org) {
   const repoName = `${owner}/${repo}`;
-  turboSrcID = await getTurboSrcIDFromRepoName(repoName)
+  const turboSrcID = await getTurboSrcIDFromRepoName(repoName)
   superagent
     .post(`${url}`)
     .send(
@@ -541,7 +564,7 @@ async function postFork(owner, repo, org) {
 
 async function getGitHubPullRequest(owner, repo, defaultHash, contributor_id) {
   const repoName = `${owner}/${repo}`;
-  turboSrcID = await getTurboSrcIDFromRepoName(repoName)
+  const turboSrcID = await getTurboSrcIDFromRepoName(repoName)
   console.log('get github pr called', defaultHash,
    contributor_id)
   const res = await superagent
@@ -558,10 +581,10 @@ async function getGitHubPullRequest(owner, repo, defaultHash, contributor_id) {
 }
 
 async function postGetRepoData(repo_id, contributor_id) {
-  const repoName = repo_id;
+  const repoName = repo_id
   var turboSrcID = await getTurboSrcIDFromRepoName(repoName)
   if (turboSrcID == null || turboSrcID === "null") {
-    turboSrcID = await getTurboSrcIDFromRepoName("reibase/marialis")
+    turboSrcID = turboSrcIDfromInstance
   }
   console.log('extension postGetRepoData called');
   const res = await superagent
@@ -624,7 +647,7 @@ async function postGetRepoData(repo_id, contributor_id) {
 }
 async function postGetVotes(repo, defaultHash, contributor_id) {
   const repoName = repo;
-  turboSrcID = await getTurboSrcIDFromRepoName(repoName)
+  const turboSrcID = await getTurboSrcIDFromRepoName(repoName)
   const res = await superagent
     .post(`${url}`)
     .send({
