@@ -32,7 +32,7 @@ async function getTurboSrcIDfromInstance() {
     const res = await superagent
       .post(`${url}`)
       .send({
-        query: `{ getTurboSrcIDFromRepoInstance }`
+        query: `{ getTurboSrcIDfromInstance }`
       })
       .set('accept', 'json')
 
@@ -41,14 +41,17 @@ async function getTurboSrcIDfromInstance() {
       console.error('Received no data. Response:', json);
       return null;
     }
-    return json.data.turboSrcID; // return turboSrcID directly from data
+    return json.data.getTurboSrcIDfromInstance; // return turboSrcID directly from data
   } catch (error) {
     console.error('An error occurred while fetching the turboSrcIDfromInstance:', error);
     return null;
   }
 }
 async function getTurboSrcIDFromRepoName(reponame) {
+  console.log("getTurboSrcIDFromRepoName reponame", reponame)
   if (url === "http://localhost:4000/graphql") {
+    console.log("local\ngetTurboSrcIDFromRepoName turboSrcID", turboSrcIDfromInstance)
+    return turboSrcIDfromInstance
   } else {
     const res = await superagent
       .post(`${url}`)
@@ -58,7 +61,9 @@ async function getTurboSrcIDFromRepoName(reponame) {
       .set('accept', 'json')
 
     const json = JSON.parse(res.text);
-    return json.data.turboSrcID; // return turboSrcID directly from data
+    const turboSrcID = json.data.turboSrcID
+    console.log("Egress\ngetTurboSrcIDFromRepoName turboSrcID", turboSrcID)
+    return turboSrcID; // return turboSrcID directly from data
   }
 }
 
