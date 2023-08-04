@@ -36,3 +36,24 @@ Cypress.Commands.add("saveLocalStorage", () => {
       localStorage.setItem(key, LOCAL_STORAGE_MEMORY[key]);
     });
   });
+
+  // In cypress/support/commands.js
+
+Cypress.Commands.add('login', () => {
+  cy.visit(`https://github.com/login/oauth/authorize?scope=user:email&client_id=b0d124a1789132a87678`);
+  cy.get('input#login_field').type(Cypress.env('gitHubUsername'));
+  cy.get('input#password').type(Cypress.env('gitHubPassword'), {
+    log: false
+  });
+  cy.get('[type="submit"]').click();
+  cy.visit(`https://github.com/${Cypress.env('gitHubUsername')}/${Cypress.env('gitHubRepo')}/pulls`);
+})
+
+// In your spec file
+
+it('does something on a secured page', function () {
+  //const { username, password } = this.currentUser
+  cy.login()
+
+  // ...rest of test
+})
