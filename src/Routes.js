@@ -13,7 +13,7 @@ import { setAuth } from './store/auth';
 import { setRepo } from './store/repo';
 import { useEffect, useState } from 'react';
 import superagent from 'superagent';
-import { postFindOrCreateUser} from './requests';
+import { postFindOrCreateUser, postFindOrCreateUserSpecificInstance, getTurboSrcIDFromRepoName, getTurboSrcIDfromInstance} from './requests';
 
 export default function Routes(props) {
   const auth = useSelector(state => state.auth);
@@ -34,31 +34,41 @@ export default function Routes(props) {
     chrome.storage.local.get(['githubUser'], data => setUser(data.githubUser));
   });
 
-  useEffect(() => {
-    const findOrCreateUser = async function(owner, repo, contributor_id, contributor_name, contributor_signature, token) {
-      return await postFindOrCreateUser(owner, repo, contributor_id, contributor_name, contributor_signature, token).then(res => res)
+useEffect(() => {
+  const findOrCreateUser = async function(owner, repo, contributor_id, contributor_name, contributor_signature, token) {
+    let turboSrcID = await getTurboSrcIDFromRepoName(owner + "/" + repo);
+    let reibaseTurboSrcID = await getTurboSrcIDfromInstance();
+
+    if (turboSrcID !== reibaseTurboSrcID) {
+      console.log("turboSrcID doesn't match reibaseTurboSrcID", turboSrcID + "\n" + reibaseTurboSrcID);
+      return await postFindOrCreateUserSpecificInstance(turboSrcID, repo, owner, contributor_id, contributor_name, contributor_signature, token).then(res => res);
+    } else {
+      console.log("turboSrcID matches reibaseTurboSrcID", turboSrcID + "\n" + reibaseTurboSrcID);
+      return await postFindOrCreateUser(owner, repo, contributor_id, contributor_name, contributor_signature, token).then(res => res);
     }
-    if (auth.isLoggedIn && auth.user.ethereumAddress !== 'none' && auth.user.ethereumKey !== 'none') {
-      return;
-    } else if (user) {
-      let githubUser = JSON.parse(user);
-      // Pass 'owner' and 'repo' if on a git repo page. If not, pass owner and repo as "7db9a" and "demo".
-      console.log('current repo ', props.currentRepo.message)
-      findOrCreateUser(
+  }
+
+  if (auth.isLoggedIn && auth.user.ethereumAddress !== 'none' && auth.user.ethereumKey !== 'none') {
+    return;
+  } else if (user) {
+    let githubUser = JSON.parse(user);
+    // Pass 'owner' and 'repo' if on a git repo page. If not, pass owner and repo as "7db9a" and "demo".
+    console.log('current repo ', props.currentRepo.message);
+    findOrCreateUser(
       props.currentRepo?.message === 'Not Found' ? 'reibase' : props.currentRepo.owner.login,
       props.currentRepo?.message === 'Not Found' ? 'marialis' : props.currentRepo.name,
       'none',
       githubUser.login,
       'none',
       githubUser.token
-      )
-      .then(res => {
-        githubUser.ethereumAddress = res.contributor_id,
-        githubUser.ethereumKey = res.contributor_signature});
-
+    )
+    .then(res => {
+      githubUser.ethereumAddress = res.contributor_id,
+      githubUser.ethereumKey = res.contributor_signature;
       dispatch(setAuth(githubUser));
-    }
-  }, [user]);
+    })
+  }
+}, [user]);
 
   return auth.isLoggedIn ? (
     <BrowserRouter>

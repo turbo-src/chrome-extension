@@ -174,6 +174,18 @@ async function postFindOrCreateUser(owner, repo, contributor_id, contributor_nam
   const json = JSON.parse(res.text);
   return json.data.findOrCreateUser;
 }
+async function postFindOrCreateUserSpecificInstance(turboSrcID, owner, repo, contributor_id, contributor_name, contributor_signature, token) {
+  const repoName = `${owner}/${repo}`;
+  console.log('extension findOrCreateUser called ', turboSrcID, typeof turboSrcID);
+  const res = await superagent
+    .post(`${url}`)
+    .send({
+      query: `{ findOrCreateUser(turboSrcID: "${turboSrcID}", owner: "${owner}", repo: "${repo}", contributor_id: "${contributor_id}", contributor_name: "${contributor_name}", contributor_signature: "${contributor_signature}", token: "${token}") {contributor_name, contributor_id, contributor_signature, token}}`
+    })
+    .set('accept', 'json');
+  const json = JSON.parse(res.text);
+  return json.data.findOrCreateUser;
+}
 async function postCheckGithubTokenPermissions(owner, repo, contributor_name, token) {
   const repoName = `${owner}/${repo}`;
   var turboSrcID = await getTurboSrcIDFromRepoName(repoName)
@@ -704,5 +716,7 @@ export {
   postFork,
   getGitHubPullRequest,
   postGetRepoData,
-  postGetVotes
+  postGetVotes,
+  getTurboSrcIDfromInstance,
+  postFindOrCreateUserSpecificInstance
 };
