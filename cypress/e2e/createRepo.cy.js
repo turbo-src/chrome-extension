@@ -1,27 +1,9 @@
 describe('Create Repo', () => {
     it('should create a repo', () => {
-      cy.request({
-        method: 'POST',
-        url: 'http://localhost:4000/graphql',
-        body: {
-          operationName: 'createRepo',
-          query: `
-            query createRepo {
-              createRepo(
-                  turboSrcID: "${Cypress.env('turboSrcID')}",
-                  owner: "${Cypress.env('gitHubUsername')}",
-                  repo: "${Cypress.env('gitHubRepo')}",
-                  defaultHash: "",
-                  contributor_id: "${Cypress.env('contributorID')}",
-                  side: "",
-                  token: "${Cypress.env('gitHubToken')}"
-              ) 
-            }
-            `
-        }
-      }).then(response => {
-        // Your assertions and further actions here
-        expect(response.body.data.createRepo, '201');        
-      });
+      // See cypress/support/commands.js
+      // Functions which do not have front end logic are there
+      // dom.cy.js runs them and checks the front end
+      // If you have not created the repo, run this test before dom.cy.js
+      cy.createRepo()
     });
   });
