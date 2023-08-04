@@ -223,8 +223,8 @@ export default function Home() {
 
   useEffect(() => {
     //Set current logged in contributor/id to chrome storage for inject to verify user for voting
-    chrome.storage.local.set({ contributor_name: user.login });
-    chrome.storage.local.set({ contributor_id: user.ethereumAddress });
+    process.env.NODE_ENV !== 'test' && chrome.storage.local.set({ contributor_name: user.login });
+    process.env.NODE_ENV !== 'test' && chrome.storage.local.set({ contributor_id: user.ethereumAddress });
     setTimeout(() => setLoading(false), 1500);
     console.log('user', user, 'repo', repo, 'owner', owner);
   });
@@ -250,7 +250,7 @@ export default function Home() {
     setSelectedPullRequestVoted(pullRequest.voteData.contributor.voted);
     setSelectedPullRequestTotalVotes(pullRequest.voteData.voteTotals.totalVotes);
   };
-
+console.log('home component')
   const getRepoDataHandler = async () => {
     try {
       const response = await postGetRepoData(`${owner}/${repo}`, user.ethereumAddress).then(res => {

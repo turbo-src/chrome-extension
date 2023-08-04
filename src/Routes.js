@@ -31,7 +31,7 @@ export default function Routes(props) {
     if (auth.isLoggedIn) {
       return;
     }
-    chrome.storage.local.get(['githubUser'], data => setUser(data.githubUser));
+    process.env.NODE_ENV === 'test' ? setUser(JSON.stringify({login: 'jex441'})) : chrome.storage.local.get(['githubUser'], data => setUser(data.githubUser));
   });
 
   useEffect(() => {
