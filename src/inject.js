@@ -53,6 +53,7 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
   const path = commonUtil.getUsernameWithReponameFromGithubURL();
   repo = process.env.NODE_ENV === 'test' ? localStorage.getItem('repo') : path.repo;
   user = process.env.NODE_ENV === 'test' ? localStorage.getItem('owner') : path.user;
+
   repo_id = `${user}/${repo}`;
   // Set Github Repo and User from browser window for chrome extension to get
   chrome.storage.local.set({ owner: user });
@@ -74,6 +75,7 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
   const githubUser = await getFromStorage('githubUser').then(res => JSON.parse(res));
   // Backend:
   // All relevant data for this repo can be found in this response:
+  console.log(repo_id, contributor_id)
   var repoData = await postGetRepoData(repo_id, contributor_id);
   // Is repo on turbosrc:
   const onTurboSrc = repoData?.status === 200 ? true : false;

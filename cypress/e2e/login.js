@@ -9,10 +9,14 @@ describe('Login Process', () => {
       cy.get('[type="submit"]').click();
   
       // If GitHub prompts to accept terms:
-      // cy.get('[type="submit"]')
-      //   .contains('Authorize reibase')
-      //   .click();
+      cy.get('[type="submit"]')
+        .contains('Authorize reibase')
+        .click();
   
-      cy.visit(`https://github.com/${Cypress.env('gitHubUsername')}/${Cypress.env('gitHubRepo')}/pulls`);
+      cy.getCookie('logged_in').should('have.property', 'value', 'yes')
+
+      cy.get('p').should(($p) => {
+        expect($p).to.contain('Success! You may close this window.')
+      })
     });
   });

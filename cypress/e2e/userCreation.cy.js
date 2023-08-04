@@ -1,6 +1,5 @@
 describe('User Creation', () => {
     it('should create user', () => {
-        cy.visit(`https://github.com/${Cypress.env('gitHubUsername')}/${Cypress.env('gitHubRepo')}/pulls`);
 
       cy.request({
         method: 'POST',
@@ -23,20 +22,12 @@ describe('User Creation', () => {
           `
         }
       }).then(response => {
-          cy.log('response', response.body.data.findOrCreateUser.contributor_id);
           expect(response.body.data.findOrCreateUser).to.have.property('contributor_name', Cypress.env('gitHubUsername'));
           // Set contributor id and name for inject.js to refer to
           window.localStorage.setItem('contributor_name', response.body.data.findOrCreateUser.contributor_name);
           window.localStorage.setItem('contributor_id', response.body.data.findOrCreateUser.contributor_id);
           // Set contributor id for the next tests
           Cypress.env('contributorID', response.body.data.findOrCreateUser.contributor_id);
-          // Set owner and repo for future use and for inject.js to refer to
-          cy.get(':nth-child(1) > .AppHeader-context-item > .AppHeader-context-item-label').then(owner =>
-            window.localStorage.setItem('owner', owner[0].innerText)
-          );
-          cy.get(':nth-child(2) > .AppHeader-context-item > .AppHeader-context-item-label').then(repo =>
-            window.localStorage.setItem('repo', repo[0].innerText)
-          );
       });
     });
   });
