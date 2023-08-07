@@ -169,8 +169,12 @@ async function postFindOrCreateUser(owner, repo, contributor_id, contributor_nam
   // If so, we route to their instance via turboSrcID.
   const myTurboSrcID = CONFIG.myTurboSrcID;
   const instanceOwner = CONFIG.myGithubName;
+  console.log('Checking if an instance and repo owner')
   if (myTurboSrcID && owner == instanceOwner) {
     turboSrcID = myTurboSrcID;
+    console.log('is a instance and repo owner')
+    console.log('myTurboSrcID', myTurboSrcID)
+    console.log('owner', owner + "==" + instanceOwner)
   }
 
   console.log('extension findOrCreateUser called ', turboSrcID, typeof turboSrcID);
@@ -210,8 +214,12 @@ async function postCreateRepo(owner, repo, defaultHash, contributor_id, side, to
   // If so, we route to their instance via turboSrcID.
   const myTurboSrcID = CONFIG.myTurboSrcID;
   const instanceOwner = CONFIG.myGithubName;
+  console.log('Checking if an instance and repo owner')
   if (myTurboSrcID && owner == instanceOwner) {
     turboSrcID = myTurboSrcID;
+    console.log('is a instance and repo owner')
+    console.log('myTurboSrcID', myTurboSrcID)
+    console.log('owner', owner + "==" + instanceOwner)
   }
 
   console.log('extension create repo called');
