@@ -33,30 +33,23 @@ Ensure that you have the latest version of Google Chrome installed on your syste
 
 > Note: Ensure all replaced items are formatted as strings.
 
-### Step 2: Update the config.js File
-
-1. Navigate to your `config.js` file.
-
-<!-- 2. Edit the `CONFIG` object to add in a `path` property and the path to your Chrome extension to test. Here's an example:
-
-    ```javascript
-    const CONFIG = {
-        "url":"http://localhost:4000/graphql", 
-        "path":"/Path/to/chrome-extension"
-    };
-    ```
-
-Replace `/Path/to/chrome-extension` with the actual path to your Chrome extension. -->
-
-### Step 3: Run the Local Test Server
-
+### Step 3: Bundle the extension
 Open the terminal, navigate to the `chrome-extension` directory in your project, and execute the following command:
 
 ```bash
 yarn devLocalTest
 ```
 
-### Step 4: Run Cypress
+### Step 4: Run the Local Test Server *
+In a new terminal window run
+
+```
+npm start
+```
+* only for testing the web extension, not needed to test the DOM/inject/GitHub integration
+
+
+### Step 5: Run Cypress
 
 In a new terminal window, run the following command:
 
@@ -66,6 +59,9 @@ npx cypress open
 
 This will open the Cypress application.
 
+## NB You will need to run steps 3, 4, and 5 to see changes you've made to your code between running tests. You can not just rerun the test after making a change, but will need to rebundle, restart server, and to stop and start Cypress each time
+
 ## Conclusion
 
 You have successfully set up Cypress testing for your project. Your environment is now ready for executing test cases.
+
