@@ -72,7 +72,7 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
   contributor_id =
     process.env.NODE_ENV === 'test' ? localStorage.getItem('contributor_id') : await getFromStorage('contributor_id');
   // GitHub user profile object
-  const githubUser = await getFromStorage('githubUser').then(res => JSON.parse(res));
+  const githubUser = process.env.NODE_ENV !== 'test' && await getFromStorage('githubUser').then(res => JSON.parse(res));
   // Backend:
   // All relevant data for this repo can be found in this response:
   console.log(repo_id, contributor_id)
