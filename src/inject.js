@@ -72,10 +72,10 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
   contributor_id =
     process.env.NODE_ENV === 'test' ? localStorage.getItem('contributor_id') : await getFromStorage('contributor_id');
   // GitHub user profile object
-  const githubUser = process.env.NODE_ENV !== 'test' && await getFromStorage('githubUser').then(res => JSON.parse(res));
+  const githubUser =
+    process.env.NODE_ENV !== 'test' && (await getFromStorage('githubUser').then(res => JSON.parse(res)));
   // Backend:
   // All relevant data for this repo can be found in this response:
-  console.log(repo_id, contributor_id)
   var repoData = await postGetRepoData(repo_id, contributor_id);
   // Is repo on turbosrc:
   const onTurboSrc = repoData?.status === 200 ? true : false;
@@ -85,15 +85,16 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
   const DOM = process.env.NODE_ENV === 'test' ? document.getElementById("Your project: 'Test Project'") : document;
   //Pull request row DOM nodes
   let containerItems;
-
   DOM.onload = function() {
     // Only do below DOM logic if project is on turbosrc and we are a contributor
     if (!onTurboSrc || !isAuthorizedContributor) {
       return;
     }
-    // Only do below DOM logic if we are on the pull requests page
-    if (process.env.NODE_ENV !== 'test' && window.location.pathname !== `/${repoPath.user}/${repoPath.repo}/pulls`) {
-      return;
+    // // Only do below DOM logic if we are on the pull requests page
+    if (process.env.NODE_ENV !== 'test') {
+      if (window.location.pathname !== `/${repoPath.user}/${repoPath.repo}/pulls`) {
+        return;
+      }
     }
     // Pull request row DOM nodes
     containerItems =
