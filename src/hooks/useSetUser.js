@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { postFindOrCreateUser } from '../requests';
 let cypress = {};
 try {
-  cypress = require('../cypress.env.json');
+  cypress = require('../../cypress.env.json');
 } catch (error) {
   console.warn("No cypress.env.json file in root directory. To run tests, follow the readme in /cypress");
 }
