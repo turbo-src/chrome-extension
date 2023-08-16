@@ -2,7 +2,12 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 import App from './App.js';
 const e = React.createElement;
-const cypress = require('../cypress.env.json');
+let cypress = {};
+try {
+  cypress = require('../cypress.env.json');
+} catch (error) {
+  console.warn("No cypress.env.json file in root directory. To run tests, follow the readme in /cypress");
+}
 
 document.addEventListener('DOMContentLoaded', function() {
   const domContainer = document.querySelector('#rootcontainer');

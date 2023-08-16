@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react';
 import { postFindOrCreateUser } from '../requests';
-import cypress from '../../cypress.env.json';
+let cypress = {};
+try {
+  cypress = require('../cypress.env.json');
+} catch (error) {
+  console.warn("No cypress.env.json file in root directory. To run tests, follow the readme in /cypress");
+}
 
 export default function useSetUser() {
   // In production we have access to the chrome.storage API so we use it to store a user object in inject.js, then get it here.

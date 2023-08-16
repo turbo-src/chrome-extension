@@ -8,7 +8,12 @@ import ModalVote from './Components/Modal/ModalVote';
 const { socket } = require('./socketConfig');
 const store = require('./store/store');
 const { postGetRepoData, postGetVotes, postFindOrCreateUser } = require('./requests');
-const cypress = require('../cypress.env.json');
+let cypress = {};
+try {
+  cypress = require('../cypress.env.json');
+} catch (error) {
+  console.warn("No cypress.env.json file in root directory. To run tests, follow the readme in /cypress");
+}
 
 var modal;
 var user;
