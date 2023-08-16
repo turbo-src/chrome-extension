@@ -52,7 +52,7 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
     return githubUser;
   })
   .then(githubUser => {
-    return postFindOrCreateUser('', '', 'none', githubUser.login, 'none', githubUser.token);
+    return postFindOrCreateUser(user || 'reibase', repo || 'marialis', 'none', githubUser.login, 'none', githubUser.token);
   })
   .then(currentUser => {
     contributor_id = currentUser.contributor_id;

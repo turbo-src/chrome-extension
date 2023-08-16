@@ -31,6 +31,10 @@ code {
   list-style-type: none;
 }
 
+body {
+  background-color: #E5E5E5;
+}
+
 div a {
   width: 100%;
   color: var(--secondary);
@@ -41,6 +45,7 @@ div a {
   height: 35rem;
   width: 25rem;
   overflow: hidden;
+  background-color: #fff;
 }
 
 .header {
@@ -79,7 +84,6 @@ div a {
 .nav {
   position: fixed;
   display: flex;
-  bottom: 0;
   left: 0;
   right: 0;
   height: 4rem;
@@ -89,6 +93,7 @@ div a {
   border-top: 1px solid #CCC;
   padding-top: .5rem;
   background-color: #FFF;
+  max-width: 25rem;
 }
 
 .navIcon {
