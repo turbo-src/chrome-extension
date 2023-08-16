@@ -11,53 +11,24 @@ import Home from './Components/Extension/Home/Home';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAuth } from './store/auth';
 import { setRepo } from './store/repo';
-import { useEffect, useState } from 'react';
-import superagent from 'superagent';
-import { postFindOrCreateUser} from './requests';
+import { useEffect } from 'react';
+import useSetUser from './hooks/useSetUser';
 
-export default function Routes(props) {
+export default function Routes({ currentRepo }) {
   const auth = useSelector(state => state.auth);
   const dispatch = useDispatch();
+  const { user } = useSetUser();
 
-  useEffect(()=>{
-    dispatch(setRepo(props.currentRepo))
-    },[])
+  useEffect(() => {
+    dispatch(setRepo(currentRepo));
+  }, []);
 
-  //Same values:
-  //ethereumAddress === contributor_id
-  //ethereumKey === contributor_signature
-  let [user, setUser] = useState('');
   useEffect(() => {
     if (auth.isLoggedIn) {
       return;
     }
-    process.env.NODE_ENV === 'test' ? setUser(JSON.stringify({login: 'jex441'})) : chrome.storage.local.get(['githubUser'], data => setUser(data.githubUser));
-  });
-
-  useEffect(() => {
-    const findOrCreateUser = async function(owner, repo, contributor_id, contributor_name, contributor_signature, token) {
-      return await postFindOrCreateUser(owner, repo, contributor_id, contributor_name, contributor_signature, token).then(res => res)
-    }
-    if (auth.isLoggedIn && auth.user.ethereumAddress !== 'none' && auth.user.ethereumKey !== 'none') {
-      return;
-    } else if (user) {
-      let githubUser = JSON.parse(user);
-      // Pass 'owner' and 'repo' if on a git repo page. If not, pass owner and repo as "7db9a" and "demo".
-      console.log('current repo ', props.currentRepo.message)
-      findOrCreateUser(
-      props.currentRepo?.message === 'Not Found' ? 'reibase' : props.currentRepo.owner.login,
-      props.currentRepo?.message === 'Not Found' ? 'marialis' : props.currentRepo.name,
-      'none',
-      githubUser.login,
-      'none',
-      githubUser.token
-      )
-      .then(res => {
-        githubUser.ethereumAddress = res.contributor_id,
-        githubUser.ethereumKey = res.contributor_signature});
-
-      dispatch(setAuth(githubUser));
-    }
+    // If the user object has an ID then it has been set and retrieved from chrome.storage succesfully, so log in the user:
+    user?.contributor_id && dispatch(setAuth(user));
   }, [user]);
 
   return auth.isLoggedIn ? (

@@ -12,6 +12,10 @@ describe('DOM', () => {
     // so visiting the GitHub page of a created repo should show the vote status buttons
     cy.findOrCreateUser();
 
+    // In case the repo has not been created, create it:
+    // This test passes if the res is 201 (created) or 403 (already created)
+    cy.createRepo()
+
     cy.visit(`https://github.com/${Cypress.env('gitHubUsername')}/${Cypress.env('gitHubRepo')}/pulls`);
 
     // Check to see if vote status buttons all loaded

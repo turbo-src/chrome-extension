@@ -222,9 +222,6 @@ export default function Home() {
   let avatar = user?.avatar_url || null;
 
   useEffect(() => {
-    //Set current logged in contributor/id to chrome storage for inject to verify user for voting
-    process.env.NODE_ENV !== 'test' && chrome.storage.local.set({ contributor_name: user.login });
-    process.env.NODE_ENV !== 'test' && chrome.storage.local.set({ contributor_id: user.ethereumAddress });
     setTimeout(() => setLoading(false), 1500);
     console.log('user', user, 'repo', repo, 'owner', owner);
   });

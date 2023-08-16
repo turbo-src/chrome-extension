@@ -6,8 +6,9 @@ const createButtonHtml = require('./Components/DOM/createButtonHtml');
 import VoteStatusButton from './Components/DOM/VoteStatusButton';
 import ModalVote from './Components/Modal/ModalVote';
 const { socket } = require('./socketConfig');
-
-const { postGetRepoData, postGetVotes } = require('./requests');
+const store = require('./store/store');
+const { postGetRepoData, postGetVotes, postFindOrCreateUser } = require('./requests');
+const cypress = require('../cypress.env.json');
 
 var modal;
 var user;
@@ -17,6 +18,9 @@ var issue_id;
 var contributor_id;
 var contributor_name;
 var voteTotals;
+var githubUserObject;
+//Pull request row DOM nodes:
+let containerItems;
 
 socket.on('connect', () => {
   console.log(socket.id); // x8WIv7-mJelg7on_ALbx
@@ -42,38 +46,45 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
   // Response is Github profile - username, avatar url, repos etc.
   .then(response => response.json())
   // Set Github user information to Chrome Storage for the turbo-src extension to get it on load:
-  .then(githubUser => chrome.storage.local.set({ githubUser: JSON.stringify(githubUser) }))
+  .then(githubUser => {
+    user = githubUser.login;
+    githubUserObject = githubUser;
+    return githubUser;
+  })
+  .then(githubUser => {
+    return postFindOrCreateUser('', '', 'none', githubUser.login, 'none', githubUser.token);
+  })
+  .then(currentUser => {
+    contributor_id = currentUser.contributor_id;
+    currentUser.ethereumAddress = contributor_id;
+    currentUser.ethereumKey = currentUser.contributor_signature;
+    let turbosrcUser = { ...currentUser, ...githubUserObject };
+    chrome.storage.local.set({ turbosrcUser: JSON.stringify(turbosrcUser) });
+  })
   .catch(error => {
     console.log(error);
   });
 // End of OAuth Code
 
+// Function to get items from chrome storage set from extension
+let getFromStorage = keys =>
+  new Promise((resolve, reject) => chrome.storage.local.get([keys], result => resolve(result[keys])));
+
 (async function() {
+  let turbosrcUserFromStorage = await getFromStorage('turbosrcUser');
+  let turbosrcUserObj = turbosrcUserFromStorage && JSON.parse(turbosrcUserFromStorage);
+  contributor_id = turbosrcUserObj?.contributor_id;
   // Current repo page and current user information:
-  const path = commonUtil.getUsernameWithReponameFromGithubURL();
-  repo = process.env.NODE_ENV === 'test' ? localStorage.getItem('repo') : path.repo;
-  user = process.env.NODE_ENV === 'test' ? localStorage.getItem('owner') : path.user;
+  if (process.env.NODE_ENV === 'test') {
+    user = cypress.gitHubUsername;
+    repo = cypress.gitHubRepo;
+  } else {
+    const path = commonUtil.getUsernameWithReponameFromGithubURL();
+    repo = path.repo;
+    user = path.user;
+  }
 
   repo_id = `${user}/${repo}`;
-  // Set Github Repo and User from browser window for chrome extension to get
-  chrome.storage.local.set({ owner: user });
-  chrome.storage.local.set({ repo: repo });
-
-  // Function to get items from chrome storage set from extension
-  let getFromStorage = keys =>
-    new Promise((resolve, reject) => chrome.storage.local.get([keys], result => resolve(result[keys])));
-  // Values are set in Extension App, Components/Home.js on render
-  // Current contributor name
-  contributor_name =
-    process.env.NODE_ENV === 'test'
-      ? localStorage.getItem('contributor_name')
-      : await getFromStorage('contributor_name');
-  // Current contributor id
-  contributor_id =
-    process.env.NODE_ENV === 'test' ? localStorage.getItem('contributor_id') : await getFromStorage('contributor_id');
-  // GitHub user profile object
-  const githubUser =
-    process.env.NODE_ENV !== 'test' && (await getFromStorage('githubUser').then(res => JSON.parse(res)));
   // Backend:
   // All relevant data for this repo can be found in this response:
   var repoData = await postGetRepoData(repo_id, contributor_id);
@@ -82,19 +93,25 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
   // Is current contributor is authorized for this repo:
   const isAuthorizedContributor = repoData?.contributor.contributor;
 
+  // Different DOM selectors depending on testing and dev/production contexts:
   const DOM = process.env.NODE_ENV === 'test' ? document.getElementById("Your project: 'Test Project'") : document;
-  //Pull request row DOM nodes
-  let containerItems;
-  DOM.onload = function() {
+
+  if (DOM.readyState === 'complete') {
+    injectDOM();
+  } else {
+    DOM.onload = function() {
+      injectDOM();
+    };
+  }
+
+  function injectDOM() {
     // Only do below DOM logic if project is on turbosrc and we are a contributor
     if (!onTurboSrc || !isAuthorizedContributor) {
       return;
     }
-    // // Only do below DOM logic if we are on the pull requests page
-    if (process.env.NODE_ENV !== 'test') {
-      if (window.location.pathname !== `/${repoPath.user}/${repoPath.repo}/pulls`) {
-        return;
-      }
+    // // // Only do below DOM logic if we are on the pull requests page
+    if (process.env.NODE_ENV !== 'test' && window.location.pathname !== `/${user}/${repo}/pulls`) {
+      return;
     }
     // Pull request row DOM nodes
     containerItems =
@@ -166,7 +183,7 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
             contributorID: contributor_id,
             contributorName: contributor_name,
             voteTotals: voteTotals,
-            githubUser: githubUser,
+            githubUser: githubUserObject,
             voteRes: getVotesRes,
             getVotes: getVotes,
             toggleModal: toggleModal,
@@ -197,7 +214,7 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
             contributorID: contributor_id,
             contributorName: contributor_name,
             voteTotals: voteTotals,
-            githubUser: githubUser,
+            githubUser: githubUserObject,
             voteRes: getVotesRes,
             getVotes: getVotes,
             toggleModal: toggleModal,
@@ -266,5 +283,5 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
         updateModalVotesTable(issueIDFromServer);
       }
     });
-  };
+  }
 })();

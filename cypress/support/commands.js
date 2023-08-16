@@ -118,7 +118,7 @@ Cypress.Commands.add('createRepo', () => {
     }
   }).then(response => {
     // Your assertions and further actions here
-    expect(response.body.data.createRepo, '201');
+    expect(Number(response.body.data.createRepo)).to.be.greaterThan(200);
   });
 });
 
