@@ -2,10 +2,6 @@
 
 This guide will assist you in setting up Cypress for testing your project. Please follow these instructions.
 
-## Pre-requisites
-
-Ensure that you have the latest version of Google Chrome installed on your system. This is essential for Cypress to function properly.
-
 ## Instructions
 
 ### Step 1: Create the Cypress Environment File
@@ -40,26 +36,7 @@ Open the terminal, navigate to the `chrome-extension` directory in your project,
 yarn devLocalTest
 ```
 
-### Step 4: Run the Local Test Server *
-In a new terminal window run
-
-```
-npm start
-```
-* only for testing the web extension, not needed to test the DOM/inject/GitHub integration
-
-
-### Step 5: Run Cypress
-
-In a new terminal window, run the following command:
-
-```bash
-npx cypress open
-```
-
-This will open the Cypress application.
-
-## NB You will need to run steps 3, 4, and 5 to see changes you've made to your code between running tests. You can not just rerun the test after making a change, but will need to rebundle, restart server, and to stop and start Cypress each time
+## NB You will need to run step 3 to see changes you've made to your code between running tests.
 
 ## Conclusion
 

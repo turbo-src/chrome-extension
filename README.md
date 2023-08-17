@@ -16,6 +16,13 @@ Build everything.
 
 `yarn devLocal`
 
+Run E2E testing
+
+`yarn devLocalTest`
+
+### NB
+You will need a `cypress.env.json` file in the root directory to run the tests. See `cypress/readme.md`
+
 Build for online endpoint
 
 `yarn devOnline`
