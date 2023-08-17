@@ -35,6 +35,7 @@ Open the terminal, navigate to the `chrome-extension` directory in your project,
 ```bash
 yarn devLocalTest
 ```
+## NB If you encounter a two step log in process thru GitHub, please click Authorize in the testing window, and rerun the tests. GitHub on occaison has an additional prompt for authenticating and Cypress tests are not conditional by design.
 
 ## NB You will need to run step 3 to see changes you've made to your code between running tests.
 
