@@ -12,7 +12,7 @@ let cypress = {};
 try {
   cypress = require('../cypress.env.json');
 } catch (error) {
-  console.warn("No cypress.env.json file in root directory. To run tests, follow the readme in /cypress");
+  console.warn('No cypress.env.json file in root directory. To run tests, follow the readme in /cypress');
 }
 
 var modal;
@@ -57,7 +57,14 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
     return githubUser;
   })
   .then(githubUser => {
-    return postFindOrCreateUser(user || 'reibase', repo || 'marialis', 'none', githubUser.login, 'none', githubUser.token);
+    return postFindOrCreateUser(
+      user || 'reibase',
+      repo || 'marialis',
+      'none',
+      githubUser.login,
+      'none',
+      githubUser.token
+    );
   })
   .then(currentUser => {
     contributor_id = currentUser.contributor_id;
@@ -98,7 +105,7 @@ let getFromStorage = keys =>
   // Is current contributor is authorized for this repo:
   const isAuthorizedContributor = repoData?.contributor.contributor;
 
-  // Different DOM selectors depending on testing and dev/production contexts:
+  // Alternate DOM selectors for test and dev/production environments:
   const DOM = process.env.NODE_ENV === 'test' ? document.getElementById("Your project: 'Test Project'") : document;
 
   if (DOM.readyState === 'complete') {
@@ -114,7 +121,7 @@ let getFromStorage = keys =>
     if (!onTurboSrc || !isAuthorizedContributor) {
       return;
     }
-    // // // Only do below DOM logic if we are on the pull requests page
+    // Only do below DOM logic if we are on the pull requests page
     if (process.env.NODE_ENV !== 'test' && window.location.pathname !== `/${user}/${repo}/pulls`) {
       return;
     }
@@ -125,7 +132,6 @@ let getFromStorage = keys =>
         : DOM.querySelectorAll('.js-issue-row');
     const ce = React.createElement;
     let startIndex = 0;
-    const repoPath = commonUtil.getUsernameWithReponameFromGithubURL();
 
     // Map div element with id turbo-src-btn-<issue_id> to its relevant DOM node
     var html;
