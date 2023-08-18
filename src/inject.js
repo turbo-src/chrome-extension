@@ -117,9 +117,9 @@ let getFromStorage = keys =>
   // Alternate DOM selectors for test and dev/production environments:
   const DOM = process.env.NODE_ENV === 'test' ? document.getElementById("Your project: 'Test Project'") : document;
 
-  console.log('process.env.NODE_ENV:', process.env.NODE_ENV, 'should be "test" when yarnDevLocalTest and "development" when yarnDevLocal')
-  console.log('DOM:', DOM, 'DOM should be an iframe in test mode and undefined in development mode')
-  console.log('contributor_id:', contributor_id, 'should be a valid id in either mode')
+  console.log('process.env.NODE_ENV is currently:', `"${process.env.NODE_ENV}".`, '<= This should be "test" when you run yarnDevLocalTest and "development" when yarnDevLocal')
+  console.log('DOM is currently:', `"${DOM}."`, '<= This should be an iframe in test mode and undefined in development mode')
+  console.log('contributor_id is currently:', `"${contributor_id}."`, '<= This should be a valid id in either mode')
 
   if (process.env.NODE_ENV !== 'test' && document.readyState === 'complete') {
     injectDOM();
