@@ -144,12 +144,11 @@ let getFromStorage = keys =>
   if (process.env.NODE_ENV !== 'test' && document.readyState === 'complete') {
     injectDOM();
   }
-  if (DOM) {
-    DOM.onload = function() {
+  if (cypressIframeDOM) {
+    cypressIframeDOM.onload = function() {
       injectDOM();
     };
   }
-
   function injectDOM() {
     // Only do below DOM logic if project is on turbosrc and we are a contributor
     if (!onTurboSrc || !isAuthorizedContributor) {
