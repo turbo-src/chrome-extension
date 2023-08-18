@@ -17,8 +17,8 @@ export default function useSetUser() {
       setUser({
         ...data,
         login: data.contributor_name,
-        ethereumKey: data.contributor_id,
-        ethereumAddress: data.contributor_signature
+        ethereumKey: data.contributor_signature,
+        ethereumAddress: data.contributor_id
       })
     );
   };

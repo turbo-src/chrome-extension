@@ -90,6 +90,15 @@ let getFromStorage = keys =>
   if (process.env.NODE_ENV === 'test') {
     user = cypress.gitHubUsername;
     repo = cypress.gitHubRepo;
+    let curUser = await postFindOrCreateUser(
+      user || 'reibase',
+      repo || 'marialis',
+      'none',
+      cypress.gitHubUsername,
+      'none',
+      cypress.gitHubToken
+    );
+    contributor_id = curUser.contributor_id;
   } else {
     const path = commonUtil.getUsernameWithReponameFromGithubURL();
     repo = path.repo;
@@ -108,9 +117,10 @@ let getFromStorage = keys =>
   // Alternate DOM selectors for test and dev/production environments:
   const DOM = process.env.NODE_ENV === 'test' ? document.getElementById("Your project: 'Test Project'") : document;
 
-  if (DOM.readyState === 'complete') {
+  if (process.env.NODE_ENV !== 'test' && document.readyState === 'complete') {
     injectDOM();
-  } else {
+  }
+  if (DOM) {
     DOM.onload = function() {
       injectDOM();
     };
@@ -122,14 +132,14 @@ let getFromStorage = keys =>
       return;
     }
     // Only do below DOM logic if we are on the pull requests page
-    if (process.env.NODE_ENV !== 'test' && window.location.pathname !== `/${user}/${repo}/pulls`) {
-      return;
-    }
+    // if (process.env.NODE_ENV !== 'test' && window.location.pathname !== `/${user}/${repo}/pulls`) {
+    //   return;
+    // }
     // Pull request row DOM nodes
     containerItems =
       process.env.NODE_ENV === 'test'
         ? DOM.contentDocument.querySelectorAll('.js-issue-row')
-        : DOM.querySelectorAll('.js-issue-row');
+        : document.querySelectorAll('.js-issue-row');
     const ce = React.createElement;
     let startIndex = 0;
 
@@ -151,7 +161,7 @@ let getFromStorage = keys =>
     // update them when our socket tells us to
     // Declare variables we need:
     modal =
-      process.env.NODE_ENV === 'test' ? DOM.contentDocument.getElementById('myModal') : DOM.getElementById('myModal');
+      process.env.NODE_ENV === 'test' ? DOM.contentDocument.getElementById('myModal') : document.getElementById('myModal');
     var domContainerTurboSrcButton;
     let socketEvents = 0;
     let getVotesRes;
@@ -167,7 +177,7 @@ let getFromStorage = keys =>
         unmountComponentAtNode(
           process.env.NODE_ENV === 'test'
             ? DOM.contentDocument.getElementById('myModal')
-            : DOM.getElementById('myModal')
+            : document.getElementById('myModal')
         );
       }
 
@@ -184,7 +194,7 @@ let getFromStorage = keys =>
         const domContainerModal =
           process.env.NODE_ENV === 'test'
             ? DOM.contentDocument.getElementById('myModal')
-            : DOM.getElementById('myModal');
+            : document.getElementById('myModal');
         getVotesRes = await getVotes();
         render(
           ce(ModalVote, {
@@ -216,7 +226,7 @@ let getFromStorage = keys =>
         const domContainerModal =
           process.env.NODE_ENV === 'test'
             ? DOM.contentDocument.getElementById('myModal')
-            : DOM.getElementById('myModal');
+            : document.getElementById('myModal');
         render(
           ce(ModalVote, {
             user: user,
