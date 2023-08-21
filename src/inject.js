@@ -123,7 +123,7 @@ let getFromStorage = keys =>
 
   if (process.env.NODE_ENV === 'test' && !testingDOM) {
     console.error(
-      'Node environment is "test" but the testing preview iframe was not found. If you want to run the tests, run yarnDevLocalTest again to open the Cypress testing environment. Run yarnDevLocal if you want to be in the "development" Node environment and use the extension in a regular browser. If the issue persists, try rebundling the extension, removing it from the Chrome extension manager, loading it again, and logging out/in again from the Turbosrc web extension.'
+      'Node environment is "test" but the testing preview iframe was not found. If you want to run the tests, run yarnDevLocalTest again to open the Cypress testing environment. Run yarnDevLocal if you want to use the extension in a regular browser window. If the issue persists, try rebundling the extension, removing it from the Chrome extension manager, loading it again, and logging out/in again from the Turbosrc web extension.'
     );
   }
   if (!contributor_id) {
