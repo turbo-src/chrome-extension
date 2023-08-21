@@ -4,7 +4,7 @@ let cypress = {};
 try {
   cypress = require('../../cypress.env.json');
 } catch (error) {
-  console.warn("No cypress.env.json file in root directory. To run tests, follow the readme in /cypress");
+  console.warn('No cypress.env.json file in root directory. To run tests, follow the readme in /cypress');
 }
 
 export default function useSetUser() {
@@ -26,8 +26,7 @@ export default function useSetUser() {
   useEffect(() => {
     process.env.NODE_ENV === 'test'
       ? findOrCreateUser()
-      : chrome.storage.local.get(['turbosrcUser'], data => data.turbosrcUser && setUser(JSON.parse(data.turbosrcUser)));
+      : chrome.storage.local.get(['turbosrcUser'], data => setUser(JSON.parse(data.turbosrcUser)));
   }, []);
-
   return { user };
 }

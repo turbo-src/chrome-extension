@@ -31,6 +31,9 @@ export default function Routes({ currentRepo }) {
     user?.contributor_id && dispatch(setAuth(user));
   }, [user]);
 
+  if (process.env.NODE_ENV === 'test') {
+    console.warn('Node environment is "test". Are you sure it should not be "development"?');
+  }
   return auth.isLoggedIn ? (
     <BrowserRouter>
       <div className="container">

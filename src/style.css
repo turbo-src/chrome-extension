@@ -86,6 +86,7 @@ div a {
   display: flex;
   left: 0;
   right: 0;
+  bottom: 0;
   height: 4rem;
   color: var(--secondary);
   flex-direction: row;
