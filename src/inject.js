@@ -83,11 +83,9 @@ let getFromStorage = keys =>
   new Promise((resolve, reject) => chrome.storage.local.get([keys], result => resolve(result[keys])));
 
 (async function() {
-  let turbosrcUserFromStorage = await getFromStorage('turbosrcUser');
-  let turbosrcUserObj = turbosrcUserFromStorage && JSON.parse(turbosrcUserFromStorage);
-  contributor_id = turbosrcUserObj?.contributor_id;
   // Current repo page and current user information:
   if (process.env.NODE_ENV === 'test') {
+    // Stub data here if running tests because they do not access chrome.storage or the URL bar the same way as in production:
     user = cypress.gitHubUsername;
     repo = cypress.gitHubRepo;
     let curUser = await postFindOrCreateUser(
@@ -100,12 +98,18 @@ let getFromStorage = keys =>
     );
     contributor_id = curUser.contributor_id;
   } else {
+    // Get data from chrome.storage and the repo from the URL bar:
+    // Owner would be a better variable name than user here because it is the repo owner, not current user.
     const path = commonUtil.getUsernameWithReponameFromGithubURL();
     repo = path.repo;
     user = path.user;
+    let turbosrcUserFromStorage = await getFromStorage('turbosrcUser');
+    let turbosrcUserObj = turbosrcUserFromStorage && JSON.parse(turbosrcUserFromStorage);
+    contributor_id = turbosrcUserObj?.contributor_id;
   }
 
   repo_id = `${user}/${repo}`;
+
   // Backend:
   // All relevant data for this repo can be found in this response:
   var repoData = await postGetRepoData(repo_id, contributor_id);
@@ -114,38 +118,33 @@ let getFromStorage = keys =>
   // Is current contributor is authorized for this repo:
   const isAuthorizedContributor = repoData?.contributor.contributor;
 
-  // Alternate DOM selectors for test and dev/production environments:
-  const cypressIframeDOM = process.env.NODE_ENV === 'test' && document.getElementsByTagName('iframe')[0];
+  // Alternate DOM selector for test environment:
+  const testingDOM = process.env.NODE_ENV === 'test' ? document.getElementsByTagName('iframe')[0] : false;
 
-  console.log(
-    'process.env.NODE_ENV is currently:',
-    `"${process.env.NODE_ENV}".`,
-    '<= This should be "test" when you run yarnDevLocalTest and "development" when yarnDevLocal'
-  );
-  console.log(
-    'cypressIframeDOM is currently:',
-    `"${cypressIframeDOM}."`,
-    '<= This should be an iframe node element in "test" mode and "null", "undefined" or false in "development" mode'
-  );
-  console.log('contributor_id is currently:', `"${contributor_id}."`, '<= This should be a valid id in either mode.');
-
-  if (process.env.NODE_ENV === 'test') {
-    console.warn('Node environment is test. Are you sure it should not be "development"?');
-  }
-  if (process.env.NODE_ENV === 'test' && !cypressIframeDOM) {
-    console.warn(
-      'Node environment and cypressIframeDOM selectors are out of sync for development and test contexts. If you are switching between  test and development Node environments, try rebundling the extension, removing it from the Chrome extension manager, loading it again, and logging out/in again from the turbosrc web extension.'
+  if (process.env.NODE_ENV === 'test' && !testingDOM) {
+    console.error(
+      'Node environment is "test" but the testing preview iframe was not found. If you want to run the tests, run yarnDevLocalTest again to open the Cypress testing environment. Run yarnDevLocal if you want to be in the "development" Node environment and use the extension in a regular browser. If the issue persists, try rebundling the extension, removing it from the Chrome extension manager, loading it again, and logging out/in again from the Turbosrc web extension.'
     );
   }
   if (!contributor_id) {
-    console.warn('contributor_id is not set correctly.');
+    console.error(
+      'contributor_id is not set correctly. This happens sometimes when switching between "test" and "development" Node environments. Try logging out and logging back in to the Turbosrc web extension.'
+    );
   }
+
+  // Log key variables to debug:
+  const keyVariables = {
+    'process.env.NODE_ENV': process.env.NODE_ENV,
+    testingDOM: testingDOM,
+    contributor_id: contributor_id
+  };
+  console.log('Key variables:', keyVariables);
 
   if (process.env.NODE_ENV !== 'test' && document.readyState === 'complete') {
     injectDOM();
   }
-  if (cypressIframeDOM) {
-    cypressIframeDOM.onload = function() {
+  if (testingDOM) {
+    testingDOM.onload = function() {
       injectDOM();
     };
   }
@@ -161,7 +160,7 @@ let getFromStorage = keys =>
     // Pull request row DOM nodes
     containerItems =
       process.env.NODE_ENV === 'test'
-        ? cypressIframeDOM.contentDocument.querySelectorAll('.js-issue-row')
+        ? testingDOM.contentDocument.querySelectorAll('.js-issue-row')
         : document.querySelectorAll('.js-issue-row');
     const ce = React.createElement;
     let startIndex = 0;
@@ -185,7 +184,7 @@ let getFromStorage = keys =>
     // Declare variables we need:
     modal =
       process.env.NODE_ENV === 'test'
-        ? cypressIframeDOM.contentDocument.getElementById('myModal')
+        ? testingDOM.contentDocument.getElementById('myModal')
         : document.getElementById('myModal');
     var domContainerTurboSrcButton;
     let socketEvents = 0;
@@ -201,7 +200,7 @@ let getFromStorage = keys =>
         modal.style.display = 'none';
         unmountComponentAtNode(
           process.env.NODE_ENV === 'test'
-            ? cypressIframeDOM.contentDocument.getElementById('myModal')
+            ? testingDOM.contentDocument.getElementById('myModal')
             : document.getElementById('myModal')
         );
       }
@@ -218,7 +217,7 @@ let getFromStorage = keys =>
         modal.style.display = 'block';
         const domContainerModal =
           process.env.NODE_ENV === 'test'
-            ? cypressIframeDOM.contentDocument.getElementById('myModal')
+            ? testingDOM.contentDocument.getElementById('myModal')
             : document.getElementById('myModal');
         getVotesRes = await getVotes();
         render(
@@ -250,7 +249,7 @@ let getFromStorage = keys =>
       if (issueID === issue_id && modal.style.display === 'block') {
         const domContainerModal =
           process.env.NODE_ENV === 'test'
-            ? cypressIframeDOM.contentDocument.getElementById('myModal')
+            ? testingDOM.contentDocument.getElementById('myModal')
             : document.getElementById('myModal');
         render(
           ce(ModalVote, {
@@ -278,7 +277,7 @@ let getFromStorage = keys =>
         issue_id = containerItems[i].getAttribute('id');
         domContainerTurboSrcButton =
           process.env.NODE_ENV === 'test'
-            ? cypressIframeDOM.contentDocument.querySelector(`#turbo-src-btn-${issue_id}`)
+            ? testingDOM.contentDocument.querySelector(`#turbo-src-btn-${issue_id}`)
             : document.querySelector(`#turbo-src-btn-${issue_id}`);
         render(
           ce(VoteStatusButton, {
