@@ -24,6 +24,7 @@ ${license} License, Copyright turbo-src
 Dependencies used - ${deps}`;
 
 function addPlugins(argv) {
+  console.log('argv:', argv);
   const plugins = [];
   plugins.push(
     new Dotenv({
@@ -56,7 +57,11 @@ function addPlugins(argv) {
       { copyUnmodified: true }
     )
   );
-
+  plugins.push(
+    new webpack.DefinePlugin({
+      'process.env': { TEST: JSON.stringify(process.env.TEST || 'false') }
+    })
+  );
   if (argv.mode === 'production') {
     plugins.push(
       new ZipFilesPlugin({

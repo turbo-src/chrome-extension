@@ -84,7 +84,7 @@ let getFromStorage = keys =>
 
 (async function() {
   // Current repo page and current user information:
-  if (process.env.NODE_ENV === 'test') {
+  if (process.env.TEST === 'true') {
     // Stub data here if running tests because they do not access chrome.storage or the URL bar the same way as in production:
     user = cypress.gitHubUsername;
     repo = cypress.gitHubRepo;
@@ -119,9 +119,9 @@ let getFromStorage = keys =>
   const isAuthorizedContributor = repoData?.contributor.contributor;
 
   // Alternate DOM selector for test environment:
-  const testingDOM = process.env.NODE_ENV === 'test' ? document.getElementsByTagName('iframe')[0] : false;
+  const testingDOM = process.env.TEST === 'true' ? document.getElementsByTagName('iframe')[0] : false;
 
-  if (process.env.NODE_ENV === 'test' && !testingDOM) {
+  if (process.env.TEST === 'true' && !testingDOM) {
     console.error(
       'Node environment is "test" but the testing preview iframe was not found. If you want to run the tests, run yarnDevLocalTest again to open the Cypress testing environment. Run yarnDevLocal if you want to use the extension in a regular browser window. If the issue persists, try rebundling the extension, removing it from the Chrome extension manager, loading it again, and logging out/in again from the Turbosrc web extension.'
     );
@@ -134,13 +134,13 @@ let getFromStorage = keys =>
 
   // Log key variables to debug:
   const keyVariables = {
-    'process.env.NODE_ENV': process.env.NODE_ENV,
+    'process.env.TEST': process.env.TEST,
     testingDOM: testingDOM,
     contributor_id: contributor_id
   };
   console.log('Key variables:', keyVariables);
 
-  if (process.env.NODE_ENV !== 'test' && document.readyState === 'complete') {
+  if (process.env.TEST !== 'true' && document.readyState === 'complete') {
     injectDOM();
   }
   if (testingDOM) {
@@ -148,18 +148,19 @@ let getFromStorage = keys =>
       injectDOM();
     };
   }
+  console.log('window.location', window.location)
   function injectDOM() {
     // Only do below DOM logic if project is on turbosrc and we are a contributor
     if (!onTurboSrc || !isAuthorizedContributor) {
       return;
     }
     // Only do below DOM logic if we are on the pull requests page
-    // if (process.env.NODE_ENV !== 'test' && window.location.pathname !== `/${user}/${repo}/pulls`) {
+    // if (process.env.TEST !== 'true' && window.location.pathname !== `/${user}/${repo}/pulls`) {
     //   return;
     // }
     // Pull request row DOM nodes
     containerItems =
-      process.env.NODE_ENV === 'test'
+      process.env.TEST === 'true'
         ? testingDOM.contentDocument.querySelectorAll('.js-issue-row')
         : document.querySelectorAll('.js-issue-row');
     const ce = React.createElement;
@@ -183,7 +184,7 @@ let getFromStorage = keys =>
     // update them when our socket tells us to
     // Declare variables we need:
     modal =
-      process.env.NODE_ENV === 'test'
+      process.env.TEST === 'true'
         ? testingDOM.contentDocument.getElementById('myModal')
         : document.getElementById('myModal');
     var domContainerTurboSrcButton;
@@ -199,7 +200,7 @@ let getFromStorage = keys =>
       if (event.target.id === 'myModal' || event.target.id === 'closeModal') {
         modal.style.display = 'none';
         unmountComponentAtNode(
-          process.env.NODE_ENV === 'test'
+          process.env.TEST === 'true'
             ? testingDOM.contentDocument.getElementById('myModal')
             : document.getElementById('myModal')
         );
@@ -216,7 +217,7 @@ let getFromStorage = keys =>
         issue_id = idNameSplit[3];
         modal.style.display = 'block';
         const domContainerModal =
-          process.env.NODE_ENV === 'test'
+          process.env.TEST === 'true'
             ? testingDOM.contentDocument.getElementById('myModal')
             : document.getElementById('myModal');
         getVotesRes = await getVotes();
@@ -248,7 +249,7 @@ let getFromStorage = keys =>
     const updateModalVotesTable = async issueID => {
       if (issueID === issue_id && modal.style.display === 'block') {
         const domContainerModal =
-          process.env.NODE_ENV === 'test'
+          process.env.TEST === 'true'
             ? testingDOM.contentDocument.getElementById('myModal')
             : document.getElementById('myModal');
         render(
@@ -276,7 +277,7 @@ let getFromStorage = keys =>
       for (var i = startIndex; i < containerItems.length; i++) {
         issue_id = containerItems[i].getAttribute('id');
         domContainerTurboSrcButton =
-          process.env.NODE_ENV === 'test'
+          process.env.TEST === 'true'
             ? testingDOM.contentDocument.querySelector(`#turbo-src-btn-${issue_id}`)
             : document.querySelector(`#turbo-src-btn-${issue_id}`);
         render(
