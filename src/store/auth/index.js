@@ -28,7 +28,7 @@ export default function authReducer(state = initialState, action) {
       return newState;
     }
     case LOGOUT: {
-      process.env.NODE_ENV !== 'test' &&
+      process.env.TEST !== 'true' &&
         chrome.storage.local.remove(['turbosrcUser'], function() {
           var error = chrome.runtime.lastError;
           if (error) {
