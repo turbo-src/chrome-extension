@@ -84,7 +84,14 @@ you are already logged in, and refresh the page.
 ### The ext spec does not show the extension DOM:
 Hit run tests again button a couple of times in the Cypress spec window. Ensure nothing else is running on port 5001.
 
-# Use
-Be aware that while the Turbosrc web extension interfaces with code hosts, GitHub, to inject elements into the DOM, when running
-the tests, the DOM is not GitHub, but a Cypress.js test browser, with an iframe rendering the GitHub DOM. So when querying the DOM
-a helper function querySelectorAllFrames() is used instead of document.querySelectorAll, so that regardless of being in production, development, or a testing environment, the nodes you are trying to select and manipulate will be selected if they are in the document or in an iframe within the document.
+# The only two major differences between testing Turbosrc and using Turbosrc
+### 1. chrome.storage.local
+When running the Cypress tests our app does not have access to the Chrome APIs including chrome.storage.local. Chrome.storage.local is used to have a local storage that both the web extension and the browser have access to. It is used to share information about the current logged in user and their session.
+
+Because the Cypress testing environment does not have access to the chrome.storage API, if Turbosrc is running in the test environment, as deduced from checking the window.location.pathname, it will stub the user data by calling findOrCreateUser and  referencing the cypress.env.json file for the user's username and GitHub token. The variables needed in inject.js are set from the response of that function whereas in production/development they are stored/fetched from the chrome.storage.local.
+
+### 2. The DOM
+Be aware that while the Turbosrc web extension interfaces with the code host, GitHub, to inject elements into the DOM, when running the tests, the DOM is not GitHub, but a Cypress.js test browser, with an iframe rendering the GitHub DOM. So when querying the DOM a helper function querySelectorAllFrames() is used instead of document.querySelectorAll, so that regardless of being in production, development, or a testing environment, the nodes you are trying to select and manipulate will be selected if they are in the document or in an iframe within the document.
+
+Additionally, while we need to wait for either DOM to load before injecting, when we are testing the load function is document.onLoad(function()...) and using Turbosrc as normal the listener is document.readyState === 'complete'. Finding one listener for either event  would be ideal.
+
