@@ -83,3 +83,8 @@ you are already logged in, and refresh the page.
 
 ### The ext spec does not show the extension DOM:
 Hit run tests again button a couple of times in the Cypress spec window. Ensure nothing else is running on port 5001.
+
+# Use
+Be aware that while the Turbosrc web extension interfaces with code hosts, GitHub, to inject elements into the DOM, when running
+the tests, the DOM is not GitHub, but a Cypress.js test browser, with an iframe rendering the GitHub DOM. So when querying the DOM
+a helper function querySelectorAllFrames() is used instead of document.querySelectorAll, so that regardless of being in production, development, or a testing environment, the nodes you are trying to select and manipulate will be selected if they are in the document or in an iframe within the document.

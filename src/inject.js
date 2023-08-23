@@ -185,7 +185,7 @@ const testMode = window.location.pathname === '/__/' ? true : false;
       return;
     }
 
-    // Usage example: Find elements with the class 'js-issue-row' in the document and iframes
+    // The parent element of the VoteStatusButtons' container divs
     const containerItems = querySelectorAllFrames('.js-issue-row');
 
     const ce = React.createElement;
