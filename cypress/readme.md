@@ -59,7 +59,7 @@ Check the console. There are warnings and key variables logged to help debug thi
 "test" and "development" Node environments. If you are running tests, having run yarnDevLocal test, ensure the key variables logged to the console look like this:
 ```
 {
-    process.env.NODE_ENV: "test",
+    testMode: true,
     testingDOM: iframe#Your project: 'Test Project'.aut-iframe,
     contributor_id: <Your id which is the same as the on in the account page in the Turbosrc web extension>
 }
@@ -70,15 +70,16 @@ If any of the above are not accurate, close Cypress and run yarnDevLocal test ag
 If you are running in a normal browser window and running yarnDevLocal, the key variables should look like:
 ```
 {
-    process.env.NODE_ENV: "development",
+    testMode: false,
     testingDOM: false,
     contributor_id: <Your id which is the same as the on in the account page in the Turbosrc web extension>
 }
 ```
 
-It sometimes happens that after running the tests and switching back to the "development" Node environment the extension's process.env.NODE_ENV variable persists to "test" instead of development. Remove the extension from the extension manager in your browser, run yarnDevLocal again and reload the /dist folder of the extension in the extension manager. Finally, log out and log back in to the Turbosrc web extension. Check the console that the Node environment is now "development".
-
-Redo this process until the Node environment is "development". Logging out and logging back in again reestablishes your contributor id so it needs to be done when you remove the extension from the extension manager.
+Sometimes switching from yarn devLocalTest to yarn devLocal the environment variable process.env.TEST persists to "true" when
+it should be false. It is for this reason we want to phase out the use of environment variables to determine whether or not
+the extension is being tested or used. In the meantime, remove the extension from the extension manager, reauthenticate, even if
+you are already logged in, and refresh the page.
 
 ### The ext spec does not show the extension DOM:
 Hit run tests again button a couple of times in the Cypress spec window. Ensure nothing else is running on port 5001.
