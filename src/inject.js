@@ -6,7 +6,6 @@ const createButtonHtml = require('./Components/DOM/createButtonHtml');
 import VoteStatusButton from './Components/DOM/VoteStatusButton';
 import ModalVote from './Components/Modal/ModalVote';
 const { socket } = require('./socketConfig');
-const store = require('./store/store');
 const { postGetRepoData, postGetVotes, postFindOrCreateUser } = require('./requests');
 let cypress = {};
 try {
@@ -81,10 +80,10 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
 // Function to get items from chrome storage set from extension
 let getFromStorage = keys =>
   new Promise((resolve, reject) => chrome.storage.local.get([keys], result => resolve(result[keys])));
-
+const testMode = window.location.pathname === '/__/' ? true : false;
 (async function() {
   // Current repo page and current user information:
-  if (process.env.TEST === 'true') {
+  if (testMode) {
     // Stub data here if running tests because they do not access chrome.storage or the URL bar the same way as in production:
     user = cypress.gitHubUsername;
     repo = cypress.gitHubRepo;
@@ -119,13 +118,8 @@ let getFromStorage = keys =>
   const isAuthorizedContributor = repoData?.contributor.contributor;
 
   // Alternate DOM selector for test environment:
-  const testingDOM = process.env.TEST === 'true' ? document.getElementsByTagName('iframe')[0] : false;
+  const testingDOM = document.getElementsByTagName('iframe')[0] || false;
 
-  if (process.env.TEST === 'true' && !testingDOM) {
-    console.error(
-      'Node environment is "test" but the testing preview iframe was not found. If you want to run the tests, run yarnDevLocalTest again to open the Cypress testing environment. Run yarnDevLocal if you want to use the extension in a regular browser window. If the issue persists, try rebundling the extension, removing it from the Chrome extension manager, loading it again, and logging out/in again from the Turbosrc web extension.'
-    );
-  }
   if (!contributor_id) {
     console.error(
       'contributor_id is not set correctly. This happens sometimes when switching between "test" and "development" Node environments. Try logging out and logging back in to the Turbosrc web extension.'
@@ -134,13 +128,46 @@ let getFromStorage = keys =>
 
   // Log key variables to debug:
   const keyVariables = {
-    'process.env.TEST': process.env.TEST,
+    testMode: testMode,
     testingDOM: testingDOM,
     contributor_id: contributor_id
   };
   console.log('Key variables:', keyVariables);
 
-  if (process.env.TEST !== 'true' && document.readyState === 'complete') {
+  // A helper function to run querySelectorAll and find elements within the DOM and nested DOMs
+  function querySelectorAllFrames(selector) {
+    const elementsInMainDocument = document.querySelectorAll(selector);
+    // Because our testing preview window is an iframe so this will get the element if it is in the testing preview window
+    const elementsInFrames = [];
+
+    // Function to search for elements in iframes recursively
+    function searchInFrames(frames) {
+      for (let i = 0; i < frames.length; i++) {
+        try {
+          const iframeDocument = frames[i].contentDocument;
+          const elementsInFrame = iframeDocument.querySelectorAll(selector);
+          elementsInFrames.push(...elementsInFrame);
+
+          // Recursively search in nested iframes
+          const nestedFrames = iframeDocument.querySelectorAll('iframe');
+          if (nestedFrames.length > 0) {
+            searchInFrames(nestedFrames);
+          }
+        } catch (error) {
+          // Handle potential cross-origin iframe access issues
+          console.error(`Error accessing iframe: ${error.message}`);
+        }
+      }
+    }
+
+    // Start searching for elements in iframes
+    const iframes = document.querySelectorAll('iframe');
+    searchInFrames(iframes);
+
+    return [...elementsInMainDocument, ...elementsInFrames];
+  }
+
+  if (!testMode && document.readyState === 'complete') {
     injectDOM();
   }
   if (testingDOM) {
@@ -148,21 +175,19 @@ let getFromStorage = keys =>
       injectDOM();
     };
   }
-  console.log('window.location', window.location)
   function injectDOM() {
     // Only do below DOM logic if project is on turbosrc and we are a contributor
     if (!onTurboSrc || !isAuthorizedContributor) {
       return;
     }
     // Only do below DOM logic if we are on the pull requests page
-    // if (process.env.TEST !== 'true' && window.location.pathname !== `/${user}/${repo}/pulls`) {
-    //   return;
-    // }
-    // Pull request row DOM nodes
-    containerItems =
-      process.env.TEST === 'true'
-        ? testingDOM.contentDocument.querySelectorAll('.js-issue-row')
-        : document.querySelectorAll('.js-issue-row');
+    if (!testMode && window.location.pathname !== `/${user}/${repo}/pulls`) {
+      return;
+    }
+
+    // Usage example: Find elements with the class 'js-issue-row' in the document and iframes
+    const containerItems = querySelectorAllFrames('.js-issue-row');
+
     const ce = React.createElement;
     let startIndex = 0;
 
@@ -179,14 +204,11 @@ let getFromStorage = keys =>
       }
       containerItems[i].querySelector('.flex-shrink-0').insertAdjacentHTML('beforeEnd', html);
     }
-
+    const [myModalNode] = querySelectorAllFrames('#myModal');
     // Now that we have our PR data and DOM elements, we can render React components where needed and
     // update them when our socket tells us to
     // Declare variables we need:
-    modal =
-      process.env.TEST === 'true'
-        ? testingDOM.contentDocument.getElementById('myModal')
-        : document.getElementById('myModal');
+    [modal] = querySelectorAllFrames('#myModal');
     var domContainerTurboSrcButton;
     let socketEvents = 0;
     let getVotesRes;
@@ -199,11 +221,7 @@ let getFromStorage = keys =>
     const toggleModal = async event => {
       if (event.target.id === 'myModal' || event.target.id === 'closeModal') {
         modal.style.display = 'none';
-        unmountComponentAtNode(
-          process.env.TEST === 'true'
-            ? testingDOM.contentDocument.getElementById('myModal')
-            : document.getElementById('myModal')
-        );
+        unmountComponentAtNode(myModalNode);
       }
 
       // Get issue ID from click
@@ -216,10 +234,7 @@ let getFromStorage = keys =>
         const idNameSplit = idName.split('-');
         issue_id = idNameSplit[3];
         modal.style.display = 'block';
-        const domContainerModal =
-          process.env.TEST === 'true'
-            ? testingDOM.contentDocument.getElementById('myModal')
-            : document.getElementById('myModal');
+        const domContainerModal = myModalNode;
         getVotesRes = await getVotes();
         render(
           ce(ModalVote, {
@@ -248,10 +263,7 @@ let getFromStorage = keys =>
     // Update modal (if open) if its associated PR has been voted upon
     const updateModalVotesTable = async issueID => {
       if (issueID === issue_id && modal.style.display === 'block') {
-        const domContainerModal =
-          process.env.TEST === 'true'
-            ? testingDOM.contentDocument.getElementById('myModal')
-            : document.getElementById('myModal');
+        const domContainerModal = myModalNode;
         render(
           ce(ModalVote, {
             user: user,
@@ -276,10 +288,7 @@ let getFromStorage = keys =>
     const renderVoteButtons = async () => {
       for (var i = startIndex; i < containerItems.length; i++) {
         issue_id = containerItems[i].getAttribute('id');
-        domContainerTurboSrcButton =
-          process.env.TEST === 'true'
-            ? testingDOM.contentDocument.querySelector(`#turbo-src-btn-${issue_id}`)
-            : document.querySelector(`#turbo-src-btn-${issue_id}`);
+        const [domContainerTurboSrcButton] = querySelectorAllFrames(`#turbo-src-btn-${issue_id}`);
         render(
           ce(VoteStatusButton, {
             socketEvents: socketEvents,
@@ -302,7 +311,7 @@ let getFromStorage = keys =>
     // Update a voteStatusButton if our socket tells us its associated PR has been voted upon
     const updateVoteStatusButton = async issueID => {
       issue_id = issueID;
-      domContainerTurboSrcButton = document.querySelector(`#turbo-src-btn-${issue_id}`);
+      domContainerTurboSrcButton = querySelectorAllFrames(`#turbosrc-btn-${issue_id}`);
       render(
         ce(VoteStatusButton, {
           user: user,
