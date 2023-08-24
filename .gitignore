@@ -8,5 +8,4 @@ coverage
 .vscode
 cypress.env.json
 
-config.devOnline.json
 src/config.js
