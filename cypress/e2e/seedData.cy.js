@@ -4,8 +4,8 @@ describe('Seed data', () => {
     // If you have not created the repo, run this test before dom.cy.js
     cy.findOrCreateUser(
       Cypress.env('turbosrcID'),
-      Cypress.env('owner'),
       Cypress.env('gitHubUsername'),
+      Cypress.env('gitHubRepo'),
       Cypress.env('contributorID'),
       Cypress.env('gitHubUsername'),
       Cypress.env('contributorSignature'),
