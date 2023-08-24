@@ -60,33 +60,39 @@ Cypress.Commands.add('login', () => {
   });
 });
 
-Cypress.Commands.add('findOrCreateUser', () => {
-  cy.request({
-    method: 'POST',
-    url: 'http://localhost:4000/graphql',
-    body: {
-      operationName: 'findOrCreateUser',
-      query: `
+Cypress.Commands.add(
+  'findOrCreateUser',
+  (turbosrcID, owner, repo, contributor_id, contributor_name, contributor_signature, token) => {
+    cy.request({
+      method: 'POST',
+      url: 'http://localhost:4000/graphql',
+      body: {
+        operationName: 'findOrCreateUser',
+        query: `
       query findOrCreateUser {
         findOrCreateUser(
-          turboSrcID: "${Cypress.env('turboSrcID')}",
-          owner: "${Cypress.env('gitHubUsername')}",
-          repo: "${Cypress.env('repo')}",
-          contributor_id: "${Cypress.env('contributorID')}",
-          contributor_name: "${Cypress.env('gitHubUsername')}",
-          contributor_signature: "${Cypress.env('contributorSignature')}",
-          token: "${Cypress.env('gitHubToken')}"
+          turboSrcID: "${turbosrcID}",
+          owner: "${owner}",
+          repo: "${repo}",
+          contributor_id: "${contributor_id}",
+          contributor_name: "${contributor_name}",
+          contributor_signature: "${contributor_signature}",
+          token: "${token}"
     ) 
     { contributor_name, contributor_id, contributor_signature }
       }
       `
-    }
-  }).then(response => {
-    expect(response.body.data.findOrCreateUser).to.have.property('contributor_name', Cypress.env('gitHubUsername'));
-    expect(response.body.data.findOrCreateUser).to.have.property('contributor_id', Cypress.env('contributorID'));
-    expect(response.body.data.findOrCreateUser).to.have.property('contributor_signature', Cypress.env('contributorSignature'));
-  });
-});
+      }
+    }).then(response => {
+      expect(response.body.data.findOrCreateUser).to.have.property('contributor_name', Cypress.env('gitHubUsername'));
+      expect(response.body.data.findOrCreateUser).to.have.property('contributor_id', Cypress.env('contributorID'));
+      expect(response.body.data.findOrCreateUser).to.have.property(
+        'contributor_signature',
+        Cypress.env('contributorSignature')
+      );
+    });
+  }
+);
 
 Cypress.Commands.add('createRepo', () => {
   cy.request({
