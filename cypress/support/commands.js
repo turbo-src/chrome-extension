@@ -70,29 +70,21 @@ Cypress.Commands.add('findOrCreateUser', () => {
       query findOrCreateUser {
         findOrCreateUser(
           turboSrcID: "${Cypress.env('turboSrcID')}",
-          owner: "",
-          repo: "",
-          contributor_id: "none",
+          owner: "${Cypress.env('gitHubUsername')}",
+          repo: "${Cypress.env('repo')}",
+          contributor_id: "${Cypress.env('contributorID')}",
           contributor_name: "${Cypress.env('gitHubUsername')}",
-          contributor_signature: "none",
+          contributor_signature: "${Cypress.env('contributorSignature')}",
           token: "${Cypress.env('gitHubToken')}"
     ) 
-    { contributor_name, contributor_id }
+    { contributor_name, contributor_id, contributor_signature }
       }
       `
     }
   }).then(response => {
     expect(response.body.data.findOrCreateUser).to.have.property('contributor_name', Cypress.env('gitHubUsername'));
-    // Set contributor id for the next tests
-    Cypress.env('contributorID', response.body.data.findOrCreateUser.contributor_id);
-
-    // Set contributor id and name for inject.js to refer to
-    window.localStorage.setItem('contributor_name', response.body.data.findOrCreateUser.contributor_name);
-    window.localStorage.setItem('contributor_id', response.body.data.findOrCreateUser.contributor_id);
-
-    // Set owner and repo for future use and for inject.js to refer to
-    window.localStorage.setItem('owner', Cypress.env('gitHubUsername'));
-    window.localStorage.setItem('repo', Cypress.env('gitHubRepo'));
+    expect(response.body.data.findOrCreateUser).to.have.property('contributor_id', Cypress.env('contributorID'));
+    expect(response.body.data.findOrCreateUser).to.have.property('contributor_signature', Cypress.env('contributorSignature'));
   });
 });
 

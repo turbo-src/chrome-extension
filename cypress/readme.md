@@ -16,7 +16,9 @@ This guide will assist you in setting up Cypress for testing the Turbosrc web ex
         "gitHubUsername": "YourUsernameHere",
         "gitHubPassword": "YourPasswordHere",
         "gitHubToken": "githubTokenHashHere",
-        "gitHubRepo": "YourRepoNameHere"
+        "gitHubRepo": "YourRepoNameHere",
+        "contributorID": "YourContributorID",
+        "contributorSignature": "YourContributorSignature"
     }
     ```
 
@@ -26,6 +28,8 @@ This guide will assist you in setting up Cypress for testing the Turbosrc web ex
     - `YourPasswordHere`: Replace with your GitHub password.
     - `githubTokenHashHere`: Replace with your GitHub token hash.
     - `YourRepoNameHere`: Replace with your GitHub repository name.
+    - `YourContributorIDHere`: Replace with a contributor ID.
+    - `YourContributorSignature`: Replace with your contributor signature.
 
 > Note: Ensure all replaced items are formatted as strings.
 
@@ -38,7 +42,7 @@ yarn devLocalTest
 
 You have successfully set up Cypress testing for your project. Your environment is now ready for executing test cases.
 
-Run createRepo.cy.js to seed a user and repo. Then run DOM.cy.js to check that the VoteStatusButtons render in the DOM. Run ext.cy.js to check the DOM of the web extension. Further tests are coming.
+Run seedData.cy.js to seed a user and repo. Then run DOM.cy.js to check that the VoteStatusButtons render in the DOM. Run ext.cy.js to check the DOM of the web extension. Further tests are coming.
 
 # Troubleshooting:
 

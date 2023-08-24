@@ -23,8 +23,8 @@ var contributor_id;
 var contributor_name;
 var voteTotals;
 var githubUserObject;
-//Pull request row DOM nodes:
-let containerItems;
+
+const testMode = window.location.pathname === '/__/' ? true : false;
 
 socket.on('connect', () => {
   console.log(socket.id); // x8WIv7-mJelg7on_ALbx
@@ -34,7 +34,7 @@ socket.on('disconnect', () => {
   console.log(socket.id); // undefined
 });
 
-// OAuth Code
+// OAuth Code - NB This only runs in development/production, not testing.
 // Github redirects to <turbosrc-auth url>/authenticated?code=...
 // Get Github code from url:
 const newUrl = window.location.href.split('?code=');
@@ -80,22 +80,13 @@ fetch('https://turbosrc-auth.fly.dev/authenticate', {
 // Function to get items from chrome storage set from extension
 let getFromStorage = keys =>
   new Promise((resolve, reject) => chrome.storage.local.get([keys], result => resolve(result[keys])));
-const testMode = window.location.pathname === '/__/' ? true : false;
+
 (async function() {
-  // Current repo page and current user information:
   if (testMode) {
     // Stub data here if running tests because they do not access chrome.storage or the URL bar the same way as in production:
     user = cypress.gitHubUsername;
     repo = cypress.gitHubRepo;
-    let curUser = await postFindOrCreateUser(
-      user || 'reibase',
-      repo || 'marialis',
-      'none',
-      cypress.gitHubUsername,
-      'none',
-      cypress.gitHubToken
-    );
-    contributor_id = curUser.contributor_id;
+    contributor_id = cypress.contributorID;
   } else {
     // Get data from chrome.storage and the repo from the URL bar:
     // Owner would be a better variable name than user here because it is the repo owner, not current user.
@@ -122,7 +113,7 @@ const testMode = window.location.pathname === '/__/' ? true : false;
 
   if (!contributor_id) {
     console.error(
-      'contributor_id is not set correctly. This happens sometimes when switching between "test" and "development" Node environments. Try logging out and logging back in to the Turbosrc web extension.'
+      'contributor_id is not set correctly. Try logging out and logging back in to the Turbosrc web extension.'
     );
   }
 
@@ -132,6 +123,7 @@ const testMode = window.location.pathname === '/__/' ? true : false;
     testingDOM: testingDOM,
     contributor_id: contributor_id
   };
+
   console.log('Key variables:', keyVariables);
 
   // A helper function to run querySelectorAll and find elements within the DOM and nested DOMs
@@ -175,6 +167,7 @@ const testMode = window.location.pathname === '/__/' ? true : false;
       injectDOM();
     };
   }
+  
   function injectDOM() {
     // Only do below DOM logic if project is on turbosrc and we are a contributor
     if (!onTurboSrc || !isAuthorizedContributor) {
