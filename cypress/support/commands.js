@@ -79,7 +79,7 @@ Cypress.Commands.add(
           contributor_signature: "${contributor_signature}",
           token: "${token}"
     ) 
-    { contributor_name, contributor_id, contributor_signature }
+    { contributor_name, contributor_id, contributor_signature, token }
       }
       `
       }
@@ -90,6 +90,7 @@ Cypress.Commands.add(
         'contributor_signature',
         Cypress.env('contributorSignature')
       );
+      expect(response.body.data.findOrCreateUser).to.have.property('token', Cypress.env('gitHubToken'));
     });
   }
 );
