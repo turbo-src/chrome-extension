@@ -22,7 +22,7 @@ var issue_id;
 var contributor_id;
 var contributor_name;
 var voteTotals;
-var githubUserObject;
+var githubUserObject = {};
 
 const testMode = window.location.pathname === '/__/' ? true : false;
 
@@ -66,6 +66,7 @@ let getFromStorage = keys =>
     user = cypress.gitHubUsername;
     repo = cypress.gitHubRepo;
     contributor_id = cypress.contributorID;
+    githubUserObject.token = cypress.gitHubToken;
   } else {
     // Get data from chrome.storage and the repo from the URL bar:
     // Owner would be a better variable name than user here because it is the repo owner, not current user.
@@ -74,6 +75,8 @@ let getFromStorage = keys =>
     user = path.user;
     contributor_name = await getFromStorage('contributor_name');
     contributor_id = await getFromStorage('contributor_id');
+    let turbosrcUser = await getFromStorage('turbosrcUser');
+    githubUserObject = JSON.parse(turbosrcUser);
   }
 
   repo_id = `${user}/${repo}`;
@@ -282,7 +285,7 @@ let getFromStorage = keys =>
     // Update a voteStatusButton if our socket tells us its associated PR has been voted upon
     const updateVoteStatusButton = async issueID => {
       issue_id = issueID;
-      domContainerTurboSrcButton = querySelectorAllFrames(`#turbosrc-btn-${issue_id}`);
+      const [domContainerTurboSrcButton] = querySelectorAllFrames(`#turbo-src-btn-${issue_id}`);
       render(
         ce(VoteStatusButton, {
           user: user,
