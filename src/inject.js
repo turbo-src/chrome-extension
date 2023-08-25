@@ -34,48 +34,27 @@ socket.on('disconnect', () => {
   console.log(socket.id); // undefined
 });
 
-// OAuth Code - NB This only runs in development/production, not testing.
-// Github redirects to <turbosrc-auth url>/authenticated?code=...
-// Get Github code from url:
+//OAuth Code: ***
+//Github redirects to localhost:5000/authenticated?code=...
+//Get Github code from url:
 const newUrl = window.location.href.split('?code=');
 const reqBody = { code: newUrl[1] };
-// Clear code from browser url: (optional)
+//Clear code from browser url: (optional)
 window.history.pushState({}, null, newUrl[0]);
-// Send code from url which to Github API for an access token
-// The access token is then exchanged for the user's profile. Done on the server of the turbosrc-auth app
+//Send code from url which to Github API for an access token
+//The access token is then exchanged for the user's profile. Done in server/index.js.
 fetch('https://turbosrc-auth.fly.dev/authenticate', {
   method: 'POST',
   body: JSON.stringify(reqBody)
 })
-  // Response is Github profile - username, avatar url, repos etc.
+  //Response is Github profile - username, avatar url, repos etc.
   .then(response => response.json())
-  // Set Github user information to Chrome Storage for the turbo-src extension to get it on load:
-  .then(githubUser => {
-    user = githubUser.login;
-    githubUserObject = githubUser;
-    return githubUser;
-  })
-  .then(githubUser => {
-    return postFindOrCreateUser(
-      user || 'reibase',
-      repo || 'marialis',
-      'none',
-      githubUser.login,
-      'none',
-      githubUser.token
-    );
-  })
-  .then(currentUser => {
-    contributor_id = currentUser.contributor_id;
-    currentUser.ethereumAddress = contributor_id;
-    currentUser.ethereumKey = currentUser.contributor_signature;
-    let turbosrcUser = { ...currentUser, ...githubUserObject };
-    chrome.storage.local.set({ turbosrcUser: JSON.stringify(turbosrcUser) });
-  })
+  //Set Github user information to Chrome Storage for the turbo-src extension to get it on load:
+  .then(turbosrcUser => chrome.storage.local.set({ turbosrcUser: JSON.stringify(turbosrcUser) }))
   .catch(error => {
     console.log(error);
   });
-// End of OAuth Code
+//End of OAuth Code ****
 
 // Function to get items from chrome storage set from extension
 let getFromStorage = keys =>
@@ -93,9 +72,8 @@ let getFromStorage = keys =>
     const path = commonUtil.getUsernameWithReponameFromGithubURL();
     repo = path.repo;
     user = path.user;
-    let turbosrcUserFromStorage = await getFromStorage('turbosrcUser');
-    let turbosrcUserObj = turbosrcUserFromStorage && JSON.parse(turbosrcUserFromStorage);
-    contributor_id = turbosrcUserObj?.contributor_id;
+    contributor_name = await getFromStorage('contributor_name');
+    contributor_id = await getFromStorage('contributor_id');
   }
 
   repo_id = `${user}/${repo}`;
@@ -167,7 +145,7 @@ let getFromStorage = keys =>
       injectDOM();
     };
   }
-  
+
   function injectDOM() {
     // Only do below DOM logic if project is on turbosrc and we are a contributor
     if (!onTurboSrc || !isAuthorizedContributor) {

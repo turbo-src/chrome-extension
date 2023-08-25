@@ -28,13 +28,12 @@ export default function authReducer(state = initialState, action) {
       return newState;
     }
     case LOGOUT: {
-      process.env.TEST !== 'true' &&
-        chrome.storage.local.remove(['turbosrcUser'], function() {
-          var error = chrome.runtime.lastError;
-          if (error) {
-            console.error(error);
-          }
-        });
+      chrome.storage.local.remove(['turbosrcUser'], function() {
+        var error = chrome.runtime.lastError;
+        if (error) {
+          console.error(error);
+        }
+      });
       return { isLoggedIn: false, user: { ethereumAddress: 'none', ethereumKey: 'none' } };
     }
     default:

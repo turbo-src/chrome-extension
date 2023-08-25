@@ -24,9 +24,7 @@ export default function useSetUser() {
   };
 
   useEffect(() => {
-    process.env.TEST === 'true'
-      ? findOrCreateUser()
-      : chrome.storage.local.get(['turbosrcUser'], data => setUser(JSON.parse(data.turbosrcUser)));
+    chrome.storage.local.get(['turbosrcUser'], data => setUser(JSON.parse(data.turbosrcUser)));
   }, []);
   return { user };
 }

@@ -12,7 +12,7 @@ try {
 document.addEventListener('DOMContentLoaded', function() {
   const domContainer = document.querySelector('#rootcontainer');
 
-  process.env.TEST !== 'true'
+  window.location.href !== "http://localhost:5001"
     ? chrome.tabs.query({ active: true, lastFocusedWindow: true }, tabs => {
         const tab = tabs[0];
         const pathnames = tab.url.split('/');
