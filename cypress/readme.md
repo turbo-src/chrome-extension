@@ -42,7 +42,12 @@ yarn devLocalTest
 
 You have successfully set up Cypress testing for your project. Your environment is now ready for executing test cases.
 
-Run seedData.cy.js to seed a user and repo. Then run DOM.cy.js to check that the VoteStatusButtons render in the DOM. Run ext.cy.js to check the DOM of the web extension. Further tests are coming.
+# How to run the tests 
+1. Ensure your turbosrc-engine and namespace services are cleared. Then run seedData.cy.js to seed a user and repo. 
+
+2. Run DOM.cy.js to check that the VoteStatusButtons render in the DOM.
+
+3. If you need to rerun the tests, click the refresh button in the test browser window, not the run all tests button.
 
 # Troubleshooting:
 
