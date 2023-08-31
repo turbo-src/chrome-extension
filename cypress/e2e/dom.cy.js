@@ -17,6 +17,9 @@ describe('DOM', () => {
     cy.get('#turbo-src-btn-issue_3').should('be.visible');
     cy.get('#turbo-src-btn-issue_2').should('be.visible');
     cy.get('#turbo-src-btn-issue_1').should('be.visible');
-    cy.get('#turbo-src-btn-issue_1').should('be.visible');
+
+    cy.wait(3000);
+
+    cy.get('#turbo-src-btn-issue_6').click();
   });
 });

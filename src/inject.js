@@ -143,14 +143,28 @@ let getFromStorage = keys =>
   if (!testMode && document.readyState === 'complete') {
     injectDOM();
   }
-  if (testingDOM) {
+  if (testMode && testingDOM) {
     testingDOM.onload = function() {
+      // injectStyles()
       injectDOM();
     };
   }
 
+  // We need to get the <style> tags from the main window and pass them to the iframe's DOM to 
+  // get the modal styling in test mode. This is not yet functional.
+  const injectStyles = () => {
+    // HTMLCollection:
+    const styleElements = document.getElementsByTagName('style');
+    const heads = querySelectorAllFrames('head');
+    const iframeHead = heads[1];
+    // Not working :(
+    // for (let element in styleElements) {
+    // iframeHead.insertAdjacentHTML('beforeEnd', element)
+    // }
+  };
+
   function injectDOM() {
-    // Only do below DOM logic if project is on turbosrc and we are a contributor
+    // Only do below DOM logic if project is on turboylsrc and we are a contributor
     if (!onTurboSrc || !isAuthorizedContributor) {
       return;
     }
