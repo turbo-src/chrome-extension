@@ -1,7 +1,4 @@
 describe('DOM', () => {
-  // NB - Need to yarnDevLocalTest and close and open cypress each time you run this test for DOM updates *****
-  // If you have not yet created the repo, run createRepo.cy.js
-
   // See cypress/support/commands.js
   // Functions which do not have front end logic are there
   // dom.cy.js runs them and checks the front end
@@ -17,9 +14,5 @@ describe('DOM', () => {
     cy.get('#turbo-src-btn-issue_3').should('be.visible');
     cy.get('#turbo-src-btn-issue_2').should('be.visible');
     cy.get('#turbo-src-btn-issue_1').should('be.visible');
-
-    cy.wait(3000);
-
-    cy.get('#turbo-src-btn-issue_6').click();
   });
 });
