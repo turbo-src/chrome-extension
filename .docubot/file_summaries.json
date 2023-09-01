@@ -1,0 +1,394 @@
+{
+    "/app/filebot-store-000/chrome-extension/README.md": {
+        "summary": "This file provides instructions for installing and building the Turbo-src extension for Chrome or Chromium-based browsers. It also mentions the requirement of a config file and provides steps for loading the extension after building it.",
+        "sha256": "99b9b182df699ede84fbde1864251a57f2af120dd7e6d1757f538103b406af81"
+    },
+    "/app/filebot-store-000/chrome-extension/CHANGELOG.md": {
+        "summary": "This file is a changelog that documents the notable changes made to a project. It includes information such as the version number, release date, and a summary of the fixes or improvements made in each version.",
+        "sha256": "5d84e253ac50ed39889ec77e0c1b7d360487cd60e809475ddb677c614fc6446d"
+    },
+    "/app/filebot-store-000/chrome-extension/LICENSE": {
+        "summary": "This file is the MIT License, which grants permission for anyone to use, modify, and distribute the associated software without restrictions, as long as the copyright notice and permission notice are included. The license also disclaims any warranties and limits liability for the authors.",
+        "sha256": "36538b118298007b293337504265f2b644312a99678bd6c9c15314b27433cbc7"
+    },
+    "/app/filebot-store-000/chrome-extension/test_pull": {
+        "summary": "The purpose of the file \"test_pull\" is likely to test and evaluate the process of pulling data or information from a source. It could involve checking the efficiency, accuracy, or functionality of a program or system that performs data extraction or retrieval tasks.",
+        "sha256": "217549220bf0d09a7a25d1af857b8ec4db664899be94a66cffacc38d058e47df"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/jest.config.js_doc.md": {
+        "summary": "This file is a configuration file for Jest, a JavaScript testing framework in a Chrome extension. It sets the test environment to Node.js, specifies test file detection with a regular expression, enables code coverage collection, defines coverage file output location and patterns to ignore for coverage and test paths, and sets custom display options for the test runner in the console.",
+        "sha256": "84431cefb0ea753631bb7f3943d5d8cdf53330a5b41133a4b5cc6b0cca3d31a7"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/package.json_doc.md": {
+        "summary": "This file is a JSON configuration file for a Google Chrome extension project called \"turbo-src\". It provides details about the project's features, dependencies, and dev dependencies, as well as information about the project's GitHub location, license, and keywords.",
+        "sha256": "ad4c99cf6a843d3ced95219211e8db56d2b2b786fcda22f1dc78d7e51c187309"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/generate-config.js_doc.md": {
+        "summary": "The purpose of this file is to generate a configuration file (`config.js`) for a Chrome extension based on the current environment. It reads the original configuration from a JSON file corresponding to the environment, converts it to a string, formats it into JavaScript, and writes it into `config.js`. It also logs the turbo source build mode, the path of the config file, and the contents of the created `config.js` file for verification purposes.",
+        "sha256": "4f3e716924fb9188811b1f8d3ebae498d0b749d06e30083c424c183d54fe3499"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/config.devLocal.json_doc.md": {
+        "summary": "The purpose of this file is to configure the local server endpoint for GraphQL services in a Chrome extension associated with the application located at filebot-store-000. The setting `'url'` is included in the file to specify the endpoint `'http://localhost:4000/graphql'` for GraphQL requests from the extension during development.",
+        "sha256": "d07a1d31daba89c540a832541d9163f2a2b209f2021e283b4353c81a822ff6ec"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/modal.css_doc.md": {
+        "summary": "This file is a CSS file that defines the styling for modals in a Chrome extension. It sets the font, position, size, background color, and other properties for the modal and its content. It also defines the styles for the close button, including its appearance when hovered over or focused.",
+        "sha256": "f22e511e9fdc555dec1d4b2ad4f4130e6c8ae00d6499b947391e031adc8cd343"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/config.devLocalRouter.json_doc.md": {
+        "summary": "This file is a JSON configuration file for the local development router of a Chrome extension called `filebot-store-000`. It contains parameters such as the local URL of the GraphQL server and a placeholder for a source ID. You can modify this file to fit your local development requirements, but be careful not to impact your production build.",
+        "sha256": "b68146a70fadfb68fdd9782c9d55327e283a56d75f1d52daa519a569e13af33f"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/options.js_doc.md": {
+        "summary": "This file is a JavaScript file for a Google Chrome extension that interacts with GitHub. It contains functions for validating, saving, and restoring a user's GitHub access token as an option for the extension. It also includes event listeners for page load and save button click.",
+        "sha256": "8bd6c3de5c9ef0ec2a8faa847d53d4226bc6ad800951fb7338324352739dc36d"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/options.html_doc.md": {
+        "summary": "This file is an HTML settings page for a Chrome extension called \"Enhanced GitHub\". It allows users to input a GitHub access token, provides input validation, user feedback, and additional features such as linking to the GitHub repo and sharing the project on Twitter. It also references an external JavaScript file for handling behavior not mentioned in this document.",
+        "sha256": "7da2616a1adc4809f1ba52327524f6e7bddb13b2a0ce451ac455316c30eb393d"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/popup.html_doc.md": {
+        "summary": "This file is an HTML document associated with a Chrome extension that incorporates React into its User Interface. It includes a script tag that calls 'extension.bundle.js' to include the React parts of the extension. The visible interface for the user is rendered in a 'div' tag with the id 'rootcontainer'.",
+        "sha256": "20db0c9b6e651f76ee2fdffe601291d22d16739397a70abbd8c36c96d8fac189"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/online-endpoints.sh_doc.md": {
+        "summary": "The purpose of the file `online-endpoints.sh` is to replace local server URLs with production URLs in specific files within a Chrome extension. It uses the `sed` command to replace instances of \"http://localhost:4000\" with \"https://turbosrc-service.fly.dev\" in `src/inject.js` and `src/requests.js`. It also includes commented out lines that may indicate future updates for replacing URLs related to the authentication module.",
+        "sha256": "37c212ab7551c491d790e33d53f8b7d9bf9895ac4b7c357708e1be95a49b4de9"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/config.devOnline.json_doc.md": {
+        "summary": "The file `/app/filebot-store-000/chrome-extension/config.devOnline.json` is a JSON configuration file for a Chrome extension in its development version. It contains the settings, including the root URL, for the online environment the extension communicates with. Modifying this file can redirect the extension's interactions to a different development or testing site, so caution should be exercised.",
+        "sha256": "f331446425510be9920d89079abe2ab9c517748b58b3ccc627b4071cb4622906"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/webpack.config.js_doc.md": {
+        "summary": "This file (`webpack.config.js`) is a configuration file for Webpack. It specifies the dependencies, source files, output files, modules and loaders, plugins, watch options, and other information needed to bundle and package a Chrome extension efficiently.",
+        "sha256": "52fab07cfdfbf5b22dd08d3387f9845c155a014024d31061a34e6446a59b5df8"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/manifest.json_doc.md": {
+        "summary": "The file `/app/filebot-store-000/chrome-extension/manifest.json` is a configuration file for a Chrome extension called \"turbo-src\". It defines various properties of the extension, including its name, version, description, icons, behavior when clicked, permissions, content scripts, content security policy, background page, and options UI.",
+        "sha256": "3d40fc72f273e17c5a7d323c603f64933cef711b8304945209ddb66c00ddf8fd"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Routes.js_doc.md": {
+        "summary": "This file, `Routes.js`, is a React file that handles routing for the Filebot Store Chrome extension. It uses React Router for navigating between pages based on user authentication status. It also includes API communication for finding or creating a user with GitHub authentication details.",
+        "sha256": "1900ba0e7e5f251f6044c58a0bb439c699fad374ff5be8e3cb0a67616cec3f83"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/index.css_doc.md": {
+        "summary": "This file, located in the FileBot Store '000, contains CSS styles for the Chrome extension of the application. It defines the layout, typography, colors, themes, and interaction states of the extension's user interface in the Chrome browser. Knowledge of CSS is necessary before making any changes, and it is advised to create a backup before modifying this file.",
+        "sha256": "f62a4d78843c12225a1a89c5896f306aebb19025b76cdb85864b3faafe1f8322"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/inject.js_doc.md": {
+        "summary": "This file is a JavaScript script that is part of a Chrome extension called Enhanced Github. It uses GraphQL over WebSockets to interact with the GitHub website and offers additional features such as voting and tracking of issues and pull requests. The script handles various events, manipulates the DOM, stores data in Chrome's local storage, and makes asynchronous requests to update voting statuses.",
+        "sha256": "da53f4643a173e1045a38395f7ca345e24e0dfeafc0ed2ddad48f2a4a11edbe7"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/requests.js_doc.md": {
+        "summary": "Based on the information provided, this file, \"requests.js\", is a JavaScript file that manages HTTP requests to an API, specifically using the 'superagent' library. It primarily deals with communication with a GraphQL API, configuration management, user and repo management, pull request and repo manipulations, error handling, and contributor details. Forking may also be included but further information is needed to confirm.",
+        "sha256": "a87b8233d019c0d4fc2b7a8bbdfb6550a22a7406da90cf6e02c9d999c98ae361"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/socketConfig.js_doc.md": {
+        "summary": "The purpose of this file, `socketConfig.js`, is to configure a client's connection to a Socket.IO server. It sets up the socket connection at a specified URL, establishes various transport and security settings, and handles Socket.IO events. The file exports the `socket` object for use in other modules, likely for real-time client-server communication.",
+        "sha256": "9fd158da863dd68ea677cf54a7990ae0e5d0f9c30377136edc423131afe1a9a4"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/popup.js_doc.md": {
+        "summary": "This file is a JavaScript file used by a Chrome extension that interacts with GitHub. It retrieves the active tab's URL, extracts the 'user' and 'repo' details, and sends them to the GitHub API to fetch repository data. It then uses React and ReactDOM to render a React app, passing in the fetched repository information.",
+        "sha256": "868639fdefd7d111d29fee983a009ff8b58c4b14aff584aa8de171631b337be1"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/style.css_doc.md": {
+        "summary": "The purpose of the /app/filebot-store-000/chrome-extension/src/style.css file is to provide styling rules for a chrome extension application. It covers numerous elements such as body text, containers, headers, buttons, authentication forms, tokens, API keys, loading indications, profile settings, error messages, balance display, and other utility classes. This crucial file ensures a visually appealing and user-friendly experience for the extension.",
+        "sha256": "562e0e21500cf51405f87e80eb9914488030aa68cd947d24c0e571ae45942e15"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/App.js_doc.md": {
+        "summary": "This file, App.js, is the main entry point for a React application that uses Redux for state management. It handles application bootstrapping, routes, and state management. It is recommended for understanding how the application functions in relation to these aspects.",
+        "sha256": "516968b703dbaf2238ee2ffe876f179607bff1f3ef62d6d1e8ae7f13eb5d4059"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/authorizedContributor.js_doc.md": {
+        "summary": "This file contains a single JavaScript function called `getAuthContributor()` that returns a hardcoded string value when invoked. The purpose of this file is to provide a constant identifier for an authorized contributor. The function is exported for use in other modules within the application.",
+        "sha256": "fc723e3a4c77c869ed93f40229295e7f2c3afde02d2f3d75c30c1f59614e4d9b"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/turboSrcButton.css_doc.md": {
+        "summary": "The purpose of this file is to provide style definitions for elements in the Chrome extension of the app/filebot-store-000. It includes two CSS classes - .textColor to change text color to white, and .bgColor to change background color to purple. This file is used for customization of UI elements in the extension.",
+        "sha256": "412fe7a1a0d080741d54e613375f5b59dbdaad58a0d8256295fe1a164bc7c406"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/background.js_doc.md": {
+        "summary": "This file is a JavaScript file for a Chrome extension that enhances the functionality of the extension on GitHub pages by implementing listeners. It keeps track of the currently active URL and tab, sends a message when a GitHub request is completed, tracks URL changes in GitHub's Single-Page-Application (SPA) nature, and shows a page action when specific messages are received from the content script. The file also contains links to a blog post for more information on creating a Chrome extension for SPA websites.",
+        "sha256": "2516638edcb29e348ae73e47c98ddd3546c07bfd5a311d10c72e3d173fb0db5a"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/makeData.js_doc.md": {
+        "summary": "This file, `makeData.js`, is a JavaScript file that exports a function named `makeData`. The purpose of this function is to generate a hierarchical data structure representing people. It creates an array of person objects, each with properties like firstName, lastName, age, visits, progress, and status. The function utilizes helper functions like `range`, `newPerson`, and `makeDataLevel` to generate the data structure.",
+        "sha256": "4dc0fe74a89da4ee46e7cdff9d7971593733c2cec1520117492bc424250d8cb6"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/hooks/useCommas.js_doc.md": {
+        "summary": "Based on the information provided, I believe the purpose of this file is to define and export a function called `useCommas` that takes an integer value as input and converts it into a string representation with comma-separated numerical groups for enhanced readability. The function follows specific conversion rules based on the range of the input integer.",
+        "sha256": "ced2eae420e66b4d33460a17fa839be69c5eb3d8259967b823b06d99f94783f0"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/enums/MessageType.js_doc.md": {
+        "summary": "This file, MessageType.js, is a JavaScript module that defines an enumeration for different message types used within a Chrome extension. It includes a message type called \"PAGE_RENDERED\" that can be used to trigger actions after page rendering. The module can be imported and used in other parts of the extension's code.",
+        "sha256": "d36a14317385471bb6570086b2e8f3f6c703d12e13a8722ec5b35eed92183ab1"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/enums/CommonEnum.js_doc.md": {
+        "summary": "This file, `CommonEnum.js`, is a module in the Chrome extension of the application. It exports an enumeration that includes a single constant, `TOKEN`, representing the string value 'token'. It is used to maintain consistency and prevent errors in scenarios where `TOKEN` is used throughout the code, especially in the Chrome extension module.",
+        "sha256": "69f577dc6476d1722c3cfdb3e736c21440f40fb9ae3a0d0f33f3fc496e4dea33"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/utils/handlersUtil.js_doc.md": {
+        "summary": "This file is a JavaScript file that handles utility functions for a Google Chrome extension. It manipulates the DOM, injects button HTML with base64-encoded SVGs, and exports a handlersUtil object for use by other modules.",
+        "sha256": "55ca38dbabbad2d89b9c243905f9674c36bf38dc04f23c7c281ca437d5e6645b"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/utils/commonUtil.js_doc.md": {
+        "summary": "The purpose of the `commonUtil.js` file is to provide utility functions for a Chrome Extension. It includes functions for making requests, extracting information from URLs, sorting arrays, converting file sizes, removing HTML elements, and checking object equality. Some functions are commented out and not in use.",
+        "sha256": "71689999a58cd15417be9d4bea21a0bacaf555e7daa68e09600dd2c9d052158b"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/utils/mainUtil.js_doc.md": {
+        "summary": "The purpose of the file /app/filebot-store-000/chrome-extension/src/utils/mainUtil.js is to provide main utility functions for a Chrome Extension, handling cross-cutting concerns like data formatting, network requests, state management, and manipulation of the browser's API. It promotes code reusability and maintainability within the extension. Developers should have knowledge of JavaScript, Chrome Extensions, and related concepts to work with this file effectively. For precise functionality details, please inspect the file directly.",
+        "sha256": "5c56fe5a5084214be7cc0b28ed2c830a7740b87d8e40e1101a122d8d26d227ac"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/utils/authUtil.js_doc.md": {
+        "summary": "This file is a utility module for authentication in a Chrome extension. Its main function, `getAuthContributor()`, reads a file called `mock_contributor` from the system and returns the data. It is dependent on the 'fs' module from Node's File System module for asynchronous file reading.",
+        "sha256": "a1e90446bf33c7d6832783919e619ef4b3785729bcdca91f7856e33595b62c7b"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/utils/mathUtil.js_doc.md": {
+        "summary": "This file contains a JavaScript function called `votePercentToMergeInteger` that calculates the percentage of affirmative votes needed to merge a proposal. It takes the total number of \"yes\" votes as an input and returns the corresponding percentage in a specific format. The function accounts for different scenarios and provides more accurate representations of the approval percentages.",
+        "sha256": "c752f1031f2afcd420d0f246a86009415ef10c127f2a477fc5c419f61696b210"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/utils/domUtil.js_doc.md": {
+        "summary": "The purpose of this file, `domUtil.js`, is to contain utility functions for manipulating DOM elements, interacting with an API, and handling common tasks in a web-based JavaScript application. It includes functions for voting, fetching data, selecting text, checking and getting class and id of elements, appending repository size element, adding repository data, and managing copy and download buttons and links. The file also exports a `domUtil` object with the defined methods and imports relevant libraries and utility files.",
+        "sha256": "58e32f61c754766396e81304ffd1297588febe71f18c892c2312c5e53e3238a7"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/utils/messageListenerUtil.js_doc.md": {
+        "summary": "The purpose of the file \"messageListenerUtil.js\" is to listen to specific messages passed within the Google Chrome extension. It includes the functions `onMessage` and `addListeners` which, when invoked, listen for specific message types and invoke the necessary actions. This utility is mainly used to update the DOM when a `PAGE_RENDERED` message is received.",
+        "sha256": "4299fdb0a5f944544435a0c7fb339fca7af22aef8955d9581c278798c88b2e16"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/utils/storageUtil.js_doc.md": {
+        "summary": "Based on the summary, the purpose of this file is to provide utility functions for storage operations in a Chrome extension application. It likely abstracts the Storage API, simplifying storage-related code elsewhere in the application.",
+        "sha256": "89efe3d5cc424bf8592d53a8d5bfc85a0d570e9e001a0480d2db4c8ff770b89e"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/utils/apiUtil.js_doc.md": {
+        "summary": "This file, `apiUtil.js`, is a utility module that provides functions for making network requests to the GitHub's repositories API. It includes functions like `checkStatus` to ensure the status of the network response is within a specific range, `parseJSON` to parse the JSON data from the response, and `getRepoContent` to fetch repository content and handle different use cases based on the `isRepoMetaData` flag.",
+        "sha256": "c95ba377b58073cb2cbd62c7d6377d7031ae0f7615487df5780f4d87018439b6"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/utils/deferredUtil.js_doc.md": {
+        "summary": "This file, `deferredUtil.js`, is a JavaScript module that generates and manages Promise objects using the `Deferred` class. It allows for the handling of asynchronous operations and exporting of the `Deferred` class for reuse in other modules within the chrome extension feature of the application.",
+        "sha256": "dcf2af5d3e7514b2b819a6e68c3feb613644eb73df4949211a03b6d4ea9378f1"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/utils/handlersUtil2.js_doc.md": {
+        "summary": "The purpose of the file is to provide utility functions for a Chrome extension. Specifically, it includes methods for handling fetched content and generating voting buttons for GitHub issues. It may be part of a larger system, potentially related to decentralized apps or blockchain projects, as it references web wallets and authorized contributors.",
+        "sha256": "2c7cf0fc5c7ecea7e87c605843d8b8a15487fa2d61d3a09898ef37591cf6b6ca"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/utils/repoUtil.js_doc.md": {
+        "summary": "The purpose of the file /app/filebot-store-000/chrome-extension/src/utils/repoUtil.js is to manage file system storage in a Chrome extension using the Web File API. It adds support for different file system APIs, defines the type and size of storage, requests the specified amount of space, creates a DOMFileSystem instance, and handles any errors that occur.",
+        "sha256": "cb31604d6e54269d0afeee2f57a37cc7bcf258ef24a7008d463c4dae8c03f08b"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/store/store.js_doc.md": {
+        "summary": "This file, `store.js`, serves as a crucial part of the Redux architecture in a Chrome extension. It creates and exports a Redux store, which acts as the central source of truth for the application's state. It utilizes functions such as `createStore` and objects like `rootReducer` to define state changes and manage the application's state.",
+        "sha256": "1214976c53bab91b3614fff12f9ae719be33595b4803c7695461b0fd5bb12450"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/store/reducer.js_doc.md": {
+        "summary": "This file, 'reducer.js,' is located in '/app/filebot-store-000/chrome-extension/src/store/' and is responsible for combining multiple reducers in the Redux Store for the Chrome extension application. It defines a default 'rootReducer' that includes the 'authReducer' and 'repoReducer.' The 'rootReducer' function updates the state object by invoking the 'authReducer' and 'repoReducer' with relevant parts of the previous state and action payload.",
+        "sha256": "e168b29b57b275a348358fac871084a4a289d4f7300e74e5ade7d2ecfae4e802"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/store/repo/index.js_doc.md": {
+        "summary": "This JavaScript file manages repository information in a Redux store. It handles HTTP requests using 'axios' and defines an action type 'SETREPO' to set repository information. The file exports a reducer function called 'repoReducer' that updates the state based on the 'SETREPO' action type and leaves it unchanged for other actions.",
+        "sha256": "8e04846b58c3e5f6dbf1dfc4094ac799eec22d824ccccfae8d466b76cd7d3e44"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/store/auth/index.js_doc.md": {
+        "summary": "The purpose of the file /app/filebot-store-000/chrome-extension/src/store/auth/index.js is to handle user authentication for a Chrome Extension's Redux store. It defines action types, action creators, and a reducer function for user authentication operations. The file contains logic for login, logout, and setting authentication status, and it manages the state to reflect whether a user is logged in or not.",
+        "sha256": "94220edb9906ccc61ff391c3bb6219d062ff8606ffe373c61c23f97aad9ca791"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/DOM/createButtonHtml.js_doc.md": {
+        "summary": "The purpose of this file, \"createButtonHtml.js,\" is to generate HTML code for a `div` element using the function `createButtonHtml`. This function is used to dynamically add button-like elements to a webpage using JavaScript. The file also contains commented out CSS selectors that are currently unused.",
+        "sha256": "1f5351bd7deea874a4843091eaeef6e929663b52cf28d78cfde043979ba84943"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/DOM/updateVotes.js_doc.md": {
+        "summary": "This file, \"updateVotes.js\", is a JavaScript file that handles the process of voting in the context of Github pull requests (PRs). It updates the status of votes, PRs, and vote buttons based on various conditions and utilizes functions like `postGetPullRequest` and `mathUtil.votePercentToMergeInteger`. It also includes exception handling to prevent any errors from breaking the script.",
+        "sha256": "4e53ad2fdd7fe04859dac940c21836ed004b996b37528631b2012cf43b08e769"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/DOM/RefactorTurboSrcButtonOpen.js_doc.md": {
+        "summary": "The purpose of this file is to implement a React component called `FuncTurboSrcButtonOpen` that represents a Button element in a user interface. It is used to display and manage the states of pull request votes, and interacts with voting and PR status. The file includes features such as handling click events, making asynchronous HTTP requests, calculating voting totals, updating button appearance based on server responses, and utilizing props for various data.",
+        "sha256": "454c9f36a8e89d3ba0e36d88a2b139e2825a05b699cb8edb281dd02563275135"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/DOM/VoteStatusButton.js_doc.md": {
+        "summary": "This file is a JavaScript file that defines a custom React component called 'VoteStatusButton'. It is used to handle user votes for pull requests in a Git repository, using state variables and React hooks to track user interaction. The file also makes use of various dependencies including React, ReactDOM, react-bootstrap, and custom requests for fetching data from a remote server.",
+        "sha256": "642d7a111ab83c4ac32945c08f9f55a5efdb2e6dbabdcde088268c843e356a0a"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/DOM/RefreshButton.js_doc.md": {
+        "summary": "This file is a JavaScript file called `RefreshButton.js` that manages the implementation of a draggable refresh button with a 360-degree rotation animation upon clicking. It is a part of a Chrome extension and has dependencies on `react-draggable`, `styled-components`, `@mui/icons-material`, and `react` for its functionality and styling.",
+        "sha256": "04a07700a9bf9bcd0709376e37797587c678316a93d3cc1b696011fd2f8e41df"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Modal/SkeletonModal.js_doc.md": {
+        "summary": "This file, `SkeletonModal.js`, contains a JavaScript code that creates a skeleton UI layout with customized styles using React, Styled-components, and Material UI's Skeleton component. It displays a grid layout with text lines, rectangular sections, and rounded boxes that animate to give the impression of loading progress. It is used to maintain a smooth user experience during data-fetching or processing times.",
+        "sha256": "0140eceb6aeff2cb43aa040c108a92efc24d393ac16cc450345bf43437169762"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Modal/ModalVote.js_doc.md": {
+        "summary": "This file is a JavaScript React component that represents a modal window for a voting system. It includes functionalities such as displaying information about voting, managing local state, and handling side effects. It uses styled-components for styling and imports various components for different elements of the modal.",
+        "sha256": "082f6637a0359447a5368237d18cb9410937bf47c4cfafae39df11ef76ea9907"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Modal/createModal.js_doc.md": {
+        "summary": "This file contains a JavaScript function called \"createModal\" that sets up a basic HTML structure for a modal or popup dialog in an application. The function outputs a string with the necessary HTML and CSS code for a styled modal div. The file can be exported and used in other JavaScript files within the project.",
+        "sha256": "8b9f6bd4c1904be12284e52d5fe28a2f68c01b98ff66a61d13ac45e75d24dfcd"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Modal/VoteTotalResults.js_doc.md": {
+        "summary": "Based on the information provided, this file is a JavaScript code file for a React component called \"VoteTotalResults\" that is part of a chrome extension. The main purpose of this file is to visualize voting results by using props to calculate percentages and display them in a progress bar format within a modal view.",
+        "sha256": "ce9fc8a72d489eb55df8b9e1814a83ab5ee4807ee2526c8493a8770ad2b687f8"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Modal/VotesTable.js_doc.md": {
+        "summary": "This file, `VotesTable.js`, defines a JavaScript component called `VotesTable` for a voting user interface in the Google Chrome extension of the 'FileBot' app. It uses React, Styled Components, and has a dependency on another component file named `Row.js`. The `VotesTable` component generates a scrollable table with rows of voting data, utilizing other styled components for headers and styling.",
+        "sha256": "9d5f05d2adc41ed510a3be3b065b2fae1587495e3280ab35b5ab513d2d451613"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Modal/VoteTotalMain.js_doc.md": {
+        "summary": "This file (`VoteTotalMain.js`) is a JavaScript file that contains the main logic for a voting interface displayed within a modal for a Chrome browser extension. It uses React.js and styled-components library to create styled components for the modal. It includes key functionalities like adding commas to numbers and a React function component for the primary voting interface on the modal.",
+        "sha256": "f0c644db1fef4950ae33757d4b3e3de05a2c9adfd93ea85f49915fa9077fc476"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Modal/VoteText.js_doc.md": {
+        "summary": "The purpose of this file is to define the `VoteText` functional component used in a Chrome extension. It handles the voting system within the application and displays voting information to users based on different voting states. The file also includes a utility function for formatting dates within the component.",
+        "sha256": "a70d4baa007d5ec4cc1ac00fef92d1f4999b6ba0afa713a4997b480d1d93fe7f"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Modal/Row.js_doc.md": {
+        "summary": "This file, \"Row.js\", is a JavaScript file that contains functions for calculating time differences, converting strings to uppercase, and adding commas to numbers. It also defines the `Row` component, which displays voting details using the mentioned functions. The file utilizes styled-components for CSS styling and includes a main exported function called `row()` that handles state and returns the `Row` component.",
+        "sha256": "7a3a95bb506ade5eb442c26e05899bddc052ec90d7dbe70847c513fcb3bb7ca0"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Modal/ProgressBar.js_doc.md": {
+        "summary": "This file defines a `ProgressBar` component for a Google Chrome extension using JavaScript, React, and styled-components. It visually represents voting results with different colored and percentage-based width bars. The component sorts and displays the bars based on voting percentages and only displays the number of votes if they are greater than or equal to 1.",
+        "sha256": "e1c65e8a2d2153fb80880bd6137c1914cfe0d4600912dd3ba6c985a9b31e59f4"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Modal/VoteButtonGroup.js_doc.md": {
+        "summary": "The purpose of this file is to define the `VoteButtonGroup` component in JavaScript. It is responsible for rendering a styled group of two `VoteButton` components, representing \"yes\" and \"no\" voting options. The file also handles the user's interaction and manages the display of the voting options and responses.",
+        "sha256": "f8ed6f75697033457f53461657b4e9ac7a43ebe58d16aa833d0086acc77db966"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Modal/VoteButton.js_doc.md": {
+        "summary": "This file contains a JavaScript file with a React component called VoteButton. It enables users to vote on GitHub repository issues. The component has different appearances and functionalities based on active states.",
+        "sha256": "c4a10ddca822f11e8c7b71c4bc40193aa076504fcd063fc4530aab3f2ad088fe"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Extension/Loader.js_doc.md": {
+        "summary": "This file is a documentation for the Loader.js JavaScript file in a Chrome extension. It defines the Loader component, which provides a visual indicator to users that an operation is executing. The Loader component includes a text, a loader GIF, and an additional message to reassure the user.",
+        "sha256": "e149d7c71677b667a87a1a3fa31054bc941c956d8783f5c8108f926b0c348615"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Extension/Auth.js_doc.md": {
+        "summary": "Based on the information provided, the purpose of the file `/app/filebot-store-000/chrome-extension/src/Components/Extension/Auth.js` is to handle and display the login component for a Chrome extension developed with React.js, specifically dealing with the authentication process.",
+        "sha256": "555f460011d54915364840d5fde936e02d51dcb8b6d02055062c0b259823ef5a"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Extension/Login.js_doc.md": {
+        "summary": "This file is a documentation for the Login.js file, which is a React component for creating a login page view for a Chrome extension. The component allows users to authenticate via their Github accounts by clicking on a button that opens a new browser tab for Github's OAuth login page. The component layout consists of a root div, an anchor element/button for Github authorization, and a span containing the Github login icon and the login prompt text. The file also mentions the need for the 'GITHUB_CLIENT_ID' environmental variable, which holds the OAuth Client ID for Github authentication.",
+        "sha256": "f3c793d2f3c2994df2845322906fc4b73b2f6443dbc7fcd5c076e0157647bc99"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Extension/Home/PullRequestRow.js_doc.md": {
+        "summary": "This file is a JavaScript file for a React application's feature related to handling Pull Requests (PRs) on the UI. It contains components for rendering PR information, managing states, styling UI elements, and displaying voting percentages, issue ID, issue title, and PR status. Its purpose is to provide users with an overview of PR information and assist in code review and decision-making.",
+        "sha256": "19257050b51cef31798e1a93295ee25954d2d685225326323928b92649539c47"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Extension/Home/Home.js_doc.md": {
+        "summary": "This file, `Home.js`, is a React component that serves as the main interface for a Chrome extension called \"Turbosrc\". It handles the management and display of pull request data from a specific GitHub repository, communicates with a backend, establishes a socket connection, and utilizes React Router, Redux, and local storage for various functionalities.",
+        "sha256": "6c6936dedce54bca3b6ab3bb34c1cce36ef2337fa36eb08227afc45d9c847180"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Extension/Home/SkeletonExt.js_doc.md": {
+        "summary": "This file (`SkeletonExt.js`) is a React component file for a Chrome extension. Its purpose is to export a styled skeleton loading screen using React Hooks and styled-components. The loading screen consists of various styled elements such as a grid layout, buttons, and other components.",
+        "sha256": "1adf99813fe3148657c647371e5dd81b4ac9aad625f8e13a3236b19d6b73dba9"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Extension/Home/StatusBadge.js_doc.md": {
+        "summary": "The purpose of this file is to define the `StatusBadge` component for the Chrome extension. It uses React Hooks and styled-components for styling. The component accepts a state prop and returns a styled `div` component with a dynamically changing background color based on the state, reflecting different statuses such as 'merge', 'pre-open', 'new', 'conflict', 'close', and 'open'.",
+        "sha256": "4beb3a204de5d87538fa6819252d374dae1abf9d458baf32d157e49dd2231a6f"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Extension/SinglePullRequestView/SinglePullRequestViewSkeleton.js_doc.md": {
+        "summary": "The purpose of this file, SinglePullRequestViewSkeleton.js, is to define a skeleton screen for a single pull request view in the application. It uses React and styled-components to create a visually engaging loading state with animated placeholders for pull request information, such as the title, description, and interactive buttons. The file also includes styling details using the styled-components library.",
+        "sha256": "31f28a0cc5d7b00d918f139de101420c5340ab26be4f1aa2919fd264c79046ae"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Extension/SinglePullRequestView/VotesTable.js_doc.md": {
+        "summary": "Based on the information provided, the purpose of this file, VotesTable.js, is to create a React component for a Chrome Extension that displays a styled voting table for single pull request views. It sets up styled components for a vote table section and vote table rows, and utilizes a mapping function to populate the table with vote data received as a prop.",
+        "sha256": "6b598f0552a032c9d048bad35e76248195d11156b581e58860e92cf86d39ab6b"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Extension/SinglePullRequestView/SinglePullRequestView.js_doc.md": {
+        "summary": "This file, SinglePullRequestView.js, is a JavaScript component used in a Chrome extension built with React. It manages and displays individual pull requests in a repository, including vote totals, voting status and buttons, a progress bar, and a table of votes. It uses React state and effect hooks to update the component's disabled status based on the state of the pull request.",
+        "sha256": "195922cd17145c3b5ac097f20ec1a4cae7dcaea0991a22b8f79a07f95e6def2e"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Extension/SinglePullRequestView/VoteText.js_doc.md": {
+        "summary": "Based on the provided information, this file, VoteText.js, is a React component used in a Chrome extension. It displays the voting status of a pull request and creates styled text based on various voting situations. It takes props such as whether voting is disabled, if a vote has been cast, the chosen side, and the date the user voted.",
+        "sha256": "49318ba90a8ce1b355d85b0afce10b92693631fe4861dabcc0970a037de44368"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Extension/SinglePullRequestView/Row.js_doc.md": {
+        "summary": "The Row.js file is a React component script that displays details about individual votes in a more readable and formatted manner inside a Google Chrome extension. It includes functionalities such as calculating the duration since a timestamp, styling elements in the row, manipulating text and numerical values, and managing component state and side-effects using React hooks.",
+        "sha256": "ddc457c5e374432122401ccdecc18dee31660a70d21ccfae7f189625a0e98e79"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Extension/SinglePullRequestView/ProgressBar.js_doc.md": {
+        "summary": "Based on the provided summary, this file, ProgressBar.js, is a JavaScript file that contains a React component for a progress bar visual used in the Filebot Chrome extension. The progress bar represents the proportion of 'yes' and 'no' votes and consists of three components: 'YesBar', 'NoBar', and 'RemainingBar'. The file also contains a styled div component called 'VoteBar' that wraps the three bars and has specific styling properties.",
+        "sha256": "d0e8ab54f3c95fb922cb13ae2e81a6163cd4297435994c623f6d40d1f4f693e0"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Extension/SinglePullRequestView/VoteTotal.js_doc.md": {
+        "summary": "The purpose of the file `VoteTotal.js` is to define a React component called `VoteTotal` that handles the view of individual pull request votes in a Chrome extension related to the 'app-filebot-store-000'. The file contains styled-components for various UI elements, an 'addCommas' function for formatting numbers with commas, and a functional React component that uses the styled-components and the 'addCommas' function to construct a JSX template for displaying pull request votes.",
+        "sha256": "08fe4831119be9e2fe39572c9baf5e7bf0090b7bcb207315ae1841da01b92ebf"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Extension/SinglePullRequestView/VoteButtonGroup.js_doc.md": {
+        "summary": "This file, VoteButtonGroup.js, is a key component in a Chrome extension. It renders a group of two 'VoteButton' components for an interface dealing with single pull requests. The exported function 'VoteButtonGroup' configures and enables the functionality of the voting buttons based on a set of properties.",
+        "sha256": "0e8f0623a08d70225732b97ba6ef0112c87682e9d93608cae8b8a2ab1638cecf"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Extension/SinglePullRequestView/VoteButton.js_doc.md": {
+        "summary": "The `VoteButton.js` file is a React component that handles vote functionality for the `filebot-store-000` app's chrome extension. It includes necessary imports, styled-components, and a function component with prop parameters, hooks, and a voteHandler function. The component is exported for use in other parts of the application.",
+        "sha256": "3bc204057b5b5fccaa4d3eb31895a7d8265ec03e0158c2dc09c62ee8061957c0"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Extension/Nav/Nav.js_doc.md": {
+        "summary": "This file is a JavaScript component of a Chrome extension using React.js for its UI. It exports a `Nav` component that renders a navigation menu with icons for different parts of the application. Clicking on certain icons triggers navigation events to specific routes in the application.",
+        "sha256": "855ebca33e6c2152fe1950e28eb7bb73ac35ac7bd0ad6c70d290ec8ba0fc51c8"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Extension/Nav/Footer.js_doc.md": {
+        "summary": "This file, Footer.js, is a JavaScript file that defines a React 'Footer' component. The component creates a clickable text \"turbo-src support\" which is intended to provide users a link to access support if needed. However, the actual URL of the support page needs to be added for it to function properly.",
+        "sha256": "285618beda9933a05abbeeef4fb04d84611781c16ea3694e38df72aea6335011"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Extension/Nav/Header.js_doc.md": {
+        "summary": "The purpose of the file Header.js is to export a Header component for the Chrome extension. It includes a header, an icon for navigating to the home page, a commented-out support section, and a user avatar that redirects to the account page when clicked. It utilizes React Router Dom's `useNavigate` and Redux's `useSelector` for routing and state management respectively.",
+        "sha256": "4b133b015a15c556375f3caeca67199b98e100bd03231c4902dc6b5fb59ff81c"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Extension/Create/CreateRepo.js_doc.md": {
+        "summary": "This file is a JavaScript file for a Chrome extension that is responsible for creating a new repository in the application. It uses ReactJS and various hooks like useState and useEffect. It also has error handling, permission checks, and API calls for repository creation.",
+        "sha256": "cf35e3087a983b5b376a1244653d5cfa0ce97e4e1b9f1bf147e2fa31f1a6bfd0"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Extension/Create/SkeletonPermissions.js_doc.md": {
+        "summary": "This file, SkeletonPermissions.js, is a React component file that displays loading placeholders using Material-UI Skeleton and styled-components. It contains the SkeletonFlex component for overall layout, ButtonSpan and SmallTextSpan for managing margins, and multiple instances of the Skeleton component for different types of placeholders with customizable options.",
+        "sha256": "ef69eef0cb6806c3029eb11272fba45ca2c3758c476bff708beea6e7c813f92a"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Extension/Create/Success.js_doc.md": {
+        "summary": "This file, `Success.js`, is a functional React component named `Success` used in a chrome-extension application. It displays a success message after tokenizing a repository using props such as `amount`, `currency`, and `repo`. The component has a state `complete` which, when true, renders the `Home` component and when false, displays a success message section with an option to continue.",
+        "sha256": "c6c947d3e179d69c1c2310c697a47c4439640449bb60fe7b6e2ef59bf13bd99b"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Extension/Create/PermissionsNotice.js_doc.md": {
+        "summary": "Based on the provided document, the purpose of the file \"PermissionsNotice.js\" is to generate a notice form in a Chrome extension for the 'filebot-store-000' application. The form informs and prompts the user for specific permissions, particularly for read/write access to public GitHub repositories. The form includes styling components, an image highlighting the importance of permissions, and a button that redirects to a GitHub login page with the required scope parameters.",
+        "sha256": "40e82bcd119c0abdb77acf4e5e4e52b6f227e62ae51554ef72538e9e9a7984bc"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Extension/Transfer/Transfer.js_doc.md": {
+        "summary": "The purpose of this file is to handle the transfer of digital tokens within a Chrome extension. It utilizes React and Redux to manage the component's state and access logged-in user details. The file includes functions for updating transfer details and rendering different components based on the current transfer step.",
+        "sha256": "98c0b04139a2fd6ee94a818f08fbf6de2be81be0a2ee5580f6b2599f2fe8e315"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Extension/Transfer/NewTransfer.js_doc.md": {
+        "summary": "The purpose of this file (NewTransfer.js) is to handle the creation of a new \"Transfer of VotePower\" in a chrome extension application. It provides a form for users to input recipient name and vote amount, checks and validates user input, and submits the transfer information for review. It uses React and Styled-components for the layout and styling, and relies on backend requests to fetch and post data.",
+        "sha256": "a5e9ff59b5e403149f23b0f466bc01903d323115ba12a339a3f301914aa77278"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Extension/Transfer/Review.js_doc.md": {
+        "summary": "Based on the information provided, it seems like this file, `Review.js`, is a React component in a Chrome extension that displays a summary of a pending token transfer for review, including transfer details and network info. It also handles the functionality to process the transfer when the \"Continue\" button is clicked and provides error message handling. The file utilizes `react-redux` for retrieving user details and `styled-components` for styling.",
+        "sha256": "305b0cdf5e15fce47df6690943fa6632d86c67a4bcc6cb556b5e083d47c42438"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Extension/Transfer/SuccessTransfer.js_doc.md": {
+        "summary": "The purpose of this file is to define the JavaScript component 'SuccessTransfer' which displays a success message after a file/data transfer, using React and other libraries. It includes design elements such as headers, image, transferring receipt, and navigation buttons. It also contains functions for converting timestamp and handling button clicks for navigation.",
+        "sha256": "0ab82d019438de55d5c8cc4b4e7d1fd90c70a938950481ef80cb8b18878ee7d6"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Extension/Account/Settings.js_doc.md": {
+        "summary": "The `Settings.js` file is a React component that represents the account settings section in a Chrome extension application. It utilizes react-router-dom for navigation and react-redux for managing application state. The file contains a function `logoutHandler` that dispatches the `logoutUser` action from the Redux store and redirects to the `/popup.html` page when triggered. Additionally, there are sections for \"Personal Information\" and \"Privacy\" settings that could be implemented in future versions of the application.",
+        "sha256": "497adaf1d47ee301ef6d6f8dae54495f74e50079dc00eb3f2ab7e95233149c1b"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Extension/Account/Account.js_doc.md": {
+        "summary": "The purpose of this file is to handle the user account module in a Chrome extension. It displays user profile information, settings, and allows users to copy and toggle visibility of their Ethereum address and key. The file also includes styled components, integrates the settings component, fetches token amount, and allows users to redirect to their user URL.",
+        "sha256": "b3db6ad622a6cfab4fda62321347570e218f8fc5933c0736f49ceeb2b7e6b1de"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/authenticated/index.html_doc.md": {
+        "summary": "This file is an HTML document that defines the web page interface for users who have successfully authorized using their Github account. It is used in the `turbo-src` Chrome extension. The webpage displays a message informing the user of successful authentication and advises them to open the extension to complete the login procedure.",
+        "sha256": "46c5bd63b6274ce5424f3d40adef935ff48d178647f428c262894d93fe1c59c6"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/test/inject.spec.js_doc.md": {
+        "summary": "File: inject.spec.js\n\nThis JavaScript file is part of a Chrome Extension testing suite, specifically testing file injection functionality. It utilizes Jest as the testing framework. The file includes a test unit for injecting files, a placeholder for future test cases, and a validation test to ensure basic functionality is working correctly. However, more comprehensive test cases can be added to effectively test different file injection scenarios.",
+        "sha256": "a5f2fefcc1461573da9341eaaf8904c8d9b74dbfc522b5ead1726a68ae188096"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/README.dir/flex-span-ideas.html_doc.md": {
+        "summary": "This file is an HTML document of a GitHub pull request titled \"Improve debcontrol xs vcs fields\" for the project \"/vim/vim\". It was opened by \"elboulangero\" 6 hours ago. It likely contains information about the pull request and its associated project.",
+        "sha256": "b46c2d88ab9a9b4d3bb7a43a7cf30d11c093610c79313d9f8b73eaa504ba9872"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/server/index.js_doc.md": {
+        "summary": "This file, index.js, is a JavaScript file responsible for the server-side functionalities of a Chrome Extension web application. It utilizes Express.js as the web framework and has features such as Cross-Origin Resource Sharing (CORS), OAuth authentication with Github, serving static files, error handling, and port configuration. It relies on several dependencies including express, body-parser, node-fetch, path, form-data, and dotenv.",
+        "sha256": "37c2eae671da2bd3757eeac64de3c3404b0ec9ef69b1482a79e0c37d87fad18a"
+    },
+    "/app/filebot-store-000/chrome-extension/README.dir/important_functions.md": {
+        "summary": "This file discusses the use of agnostic pull requests, where pull requests are tracked using hashes instead of relying on a specific git service provider. The purpose is to obtain the OID (object ID) of a pull request and other information for cryptographic verification. The file also provides an example of how to retrieve pull request details using the GitHub API.",
+        "sha256": "e23f13a4b790d47caf74a84de85f28257f292a7114b3d7a479fbb835964eebd2"
+    }
+}
