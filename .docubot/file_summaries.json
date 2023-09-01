@@ -1,6 +1,6 @@
 {
     "/app/filebot-store-000/chrome-extension/README.md": {
-        "summary": "This document provides instructions for installing and running an extension specific to Chrome or Chromium-based browsers. It guides users on cloning the repository, installing dependencies, building and running tests, and deploying the extension locally or online. It also offers guidance on setting up the extension on the browser by loading the unpacked extension from the created `dist/` directory.",
+        "summary": "This file provides instructions for installing and running a Chrome extension called \"Turbo-src.\" The document explains how to clone the repository, install dependencies, build and run the extension locally or in the cloud, and perform E2E testing. It also provides steps for loading the extension in Chrome's developer mode.",
         "sha256": "0ad31f622a29bd104adc30e6a46686511257a332adf8ba3151ec85c740438c34"
     },
     "/app/filebot-store-000/chrome-extension/CHANGELOG.md": {
@@ -384,11 +384,11 @@
         "sha256": "b46c2d88ab9a9b4d3bb7a43a7cf30d11c093610c79313d9f8b73eaa504ba9872"
     },
     "/app/filebot-store-000/chrome-extension/.docubot/server/index.js_doc.md": {
-        "summary": "This file is a server-side JavaScript file for a Chrome Extension application. It uses Express.js to create a server and has various features like parsing request bodies, handling CORS errors, serving static files, and logging the server's port.",
+        "summary": "This file is a server-side JavaScript file for a Chrome Extension application. It utilizes Express.js to create a server and includes features like body parsing, CORS headers, serving static files, and logging the listening port.",
         "sha256": "0e487c380fe4c5b1d1b1b115cceeeffba355e16f5c77dc49323c1f46a3d600b0"
     },
     "/app/filebot-store-000/chrome-extension/README.dir/important_functions.md": {
-        "summary": "This file is about using hashes to track pull requests without relying on a single git service provider. It discusses obtaining the OID (object identifier) of a pull request and other information needed for cryptographic confirmation. The format for getting pull request data from a specific repository is also provided.",
+        "summary": "This file provides information on tracking pull requests using hashes instead of relying on a single git service provider. It includes details on how to get the pull request OID and other necessary information for cryptographic confirmation.",
         "sha256": "e23f13a4b790d47caf74a84de85f28257f292a7114b3d7a479fbb835964eebd2"
     },
     "/app/filebot-store-000/chrome-extension/.env": {
@@ -396,7 +396,7 @@
         "sha256": "f82282655112bd531f36b1d31e7089468bf2e5fbd131b06d8d4ce1e976bf879f"
     },
     "/app/filebot-store-000/chrome-extension/requirements.txt": {
-        "summary": "This file is a requirements.txt file that lists the specific version of Selenium (3.141.0) that is needed for a software project. This file is typically used to manage and install project dependencies.",
+        "summary": "This file is a Python requirements file that specifies the version of the Selenium package to be installed in a project.",
         "sha256": "217549220bf0d09a7a25d1af857b8ec4db664899be94a66cffacc38d058e47df"
     },
     "/app/filebot-store-000/chrome-extension/.docubot/.eslintrc.json_doc.md": {
