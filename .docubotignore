@@ -1,0 +1,10 @@
+processed_files*
+.filebotignore
+yarn.lock
+package-lock.json
+.gitignore
+.prettierrc
+.eslintrc.json
+.env
+.travis.yml
+.eslintignore
