@@ -3,100 +3,77 @@ import { render } from 'react-dom';
 import { postGetPullRequest, postGetPRvoteYesTotals, postGetPRvoteNoTotals } from '../../requests';
 import { Button } from 'react-bootstrap';
 
-export default function VoteStatusButton(props){
+export default function VoteStatusButton(props) {
+  const [user, setUser] = useState(props.user);
+  const [repo, setRepo] = useState(props.repo);
+  const [issueID, setIssueID] = useState(props.issueID);
+  const [contributorID, setContributorID] = useState(props.contributorID);
+  const [voteStatusButton, setVoteStatusButton] = useState({ color: 'gray', text: '?' });
+  const [tsrcPRStatus, setTsrcPRStatus] = useState(props.tsrcPRstatus || { state: 'vote', mergeableCodeHost: true });
+  const [voteYesTotalState, setVoteYesTotalState] = useState(0.0);
+  const [voteNoTotalState, setVoteNoTotalState] = useState(0.0);
+  const [voteTotals, setVoteTotals] = useState(0);
+  const [yesPercent, setYesPercent] = useState(0);
+  const [noPercent, setNoPercent] = useState(0);
+  const [side, setSide] = useState(props.side);
+  const [clicked, setClicked] = useState(props.clicked);
+  const buttonStyle = {
+    new: ['lightgreen', 'vote'],
+    vote: ['lightgreen', 'vote'],
+    'pre-open': ['green', voteTotals],
+    open: ['orchid', voteTotals],
+    conflict: ['orange', 'conflict'],
+    merge: ['darkorchid', 'merged'],
+    close: ['red', 'closed']
+  };
 
-    const [user, setUser] = useState(props.user);
-    const [repo, setRepo] = useState(props.repo);
-    const [issueID, setIssueID] = useState(props.issueID);
-    const [contributorID, setContributorID] = useState(props.contributorID);
-    const [voteStatusButton, setVoteStatusButton] = useState({ color: 'gray', text: '?' });
-    const [tsrcPRStatus, setTsrcPRStatus] = useState(props.tsrcPRstatus || {state: 'vote', mergeableCodeHost: true});
-    const [voteYesTotalState, setVoteYesTotalState] = useState(0.0);
-    const [voteNoTotalState, setVoteNoTotalState] = useState(0.0);
-    const [voteTotals, setVoteTotals] = useState(0);
-    const [yesPercent, setYesPercent] = useState(0);
-    const [noPercent, setNoPercent] = useState(0);
-    const [side, setSide] = useState(props.side);
-    const [clicked, setClicked] = useState(props.clicked);
-    const buttonStyle = {
-      vote: ['lightgreen', 'vote'],
-      'pre-open': ['green', voteTotals],
-      open: ['orchid', voteTotals],
-      conflict: ['orange', 'conflict'],
-      merge: ['darkorchid', 'merged'],
-      close: ['red', 'closed']
-    };
-    
-    const fetchVoteStatus = async () => {
-      let textMath = voteStatusButton.textMath;
-      let tsrcPRStatusComponent
-      try {
-          tsrcPRStatusComponent = await postGetPullRequest(
-          user,
-          repo,
-          issueID,
-          contributorID,
-          side
-          );
-        const voteYesTotal = await postGetPRvoteYesTotals(
-          user,
-          repo,
-          issueID,
-          contributorID,
-          ""
-        );
-        const voteNoTotal = await postGetPRvoteNoTotals(
-          user,
-          repo,
-          issueID,
-          contributorID,
-          ""
-        );
-        let quorum = 0.5;
-        const totalVotes = voteYesTotal + voteNoTotal;
-        const totalPossibleVotes = 1_000_000;
-        const totalPercent = (totalVotes / totalPossibleVotes) * 100 * (1 / quorum);
-        if (totalPercent !== null) {
-          setVoteTotals(`${Math.round(totalPercent)}%`);
-        }
-        setVoteYesTotalState(voteYesTotal);
-        setVoteNoTotalState(voteNoTotal);
-        setTsrcPRStatus(tsrcPRStatusComponent);
-      } catch (error) {
-        console.log('fetchVoteStatus error:', error)
-        textMath = "";
+  const fetchVoteStatus = async () => {
+    let textMath = voteStatusButton.textMath;
+    let tsrcPRStatusComponent;
+    try {
+      tsrcPRStatusComponent = await postGetPullRequest(user, repo, issueID, contributorID, side);
+      const voteYesTotal = await postGetPRvoteYesTotals(user, repo, issueID, contributorID, '');
+      const voteNoTotal = await postGetPRvoteNoTotals(user, repo, issueID, contributorID, '');
+      let quorum = 0.5;
+      const totalVotes = voteYesTotal + voteNoTotal;
+      const totalPossibleVotes = 1_000_000;
+      const totalPercent = (totalVotes / totalPossibleVotes) * 100 * (1 / quorum);
+      if (totalPercent !== null) {
+        setVoteTotals(`${Math.round(totalPercent)}%`);
       }
-        };
+      setVoteYesTotalState(voteYesTotal);
+      setVoteNoTotalState(voteNoTotal);
+      setTsrcPRStatus(tsrcPRStatusComponent);
+    } catch (error) {
+      console.log('fetchVoteStatus error:', error);
+      textMath = '';
+    }
+  };
 
-    useEffect(() => {
-        fetchVoteStatus();
-    }, [props.socketEvents, clicked]);
+  useEffect(() => {
+    fetchVoteStatus();
+  }, [props.socketEvents, clicked]);
 
-    useEffect(() => {
-      
-        if(!tsrcPRStatus) {
-          return;
-        }
-        if(!tsrcPRStatus.mergeableCodeHost) {
-          tsrcPRStatus.state = 'conflict';
-        }
-        const buttonColor = buttonStyle[tsrcPRStatus.state][0]
-        const buttonText = buttonStyle[tsrcPRStatus.state][1]
-        setVoteStatusButton({color: buttonColor, text: buttonText});
-    }, [voteYesTotalState, voteNoTotalState, tsrcPRStatus, voteTotals]);
+  useEffect(() => {
+    if (!tsrcPRStatus) {
+      return;
+    }
+    if (!tsrcPRStatus.mergeableCodeHost) {
+      tsrcPRStatus.state = 'conflict';
+    }
+    const buttonColor = buttonStyle[tsrcPRStatus.state][0];
+    const buttonText = buttonStyle[tsrcPRStatus.state][1];
+    setVoteStatusButton({ color: buttonColor, text: buttonText });
+  }, [voteYesTotalState, voteNoTotalState, tsrcPRStatus, voteTotals]);
 
+  const handleClick = e => {
+    e.preventDefault();
+    props.toggleModal(e);
+  };
 
-    const handleClick = (e) => {
-        e.preventDefault();
-        props.toggleModal(e)
-    };
-
-    return (
-        <Button
-        style={{ color: 'white', background: voteStatusButton.color }}
-        onClick={(e) => handleClick(e)}
-        >
-        {voteStatusButton.text}
-        </Button>
-    );
-};
+  return (
+    <Button style={{ color: 'white', background: voteStatusButton.color }} onClick={e => handleClick(e)}>
+      {voteStatusButton.text}
+    </Button>
+  );
+}
