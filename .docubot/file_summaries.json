@@ -1,6 +1,6 @@
 {
     "/app/filebot-store-000/chrome-extension/README.md": {
-        "summary": "This file provides instructions for installing and running a Chrome extension called \"Turbo-src.\" The document explains how to clone the repository, install dependencies, build and run the extension locally or in the cloud, and perform E2E testing. It also provides steps for loading the extension in Chrome's developer mode.",
+        "summary": "The file serves as a guide to install and run a specific extension only compatible with Chrome or Chromium-based browser. It includes detailed steps for cloning the repository, installing, building, testing the project and setting up online endpoint. Furthermore, it instructs on how to enable the extension in a Chrome/Chromium browser by loading the 'dist/' folder from the extension page.",
         "sha256": "0ad31f622a29bd104adc30e6a46686511257a332adf8ba3151ec85c740438c34"
     },
     "/app/filebot-store-000/chrome-extension/CHANGELOG.md": {
@@ -384,20 +384,20 @@
         "sha256": "b46c2d88ab9a9b4d3bb7a43a7cf30d11c093610c79313d9f8b73eaa504ba9872"
     },
     "/app/filebot-store-000/chrome-extension/.docubot/server/index.js_doc.md": {
-        "summary": "This file is a server-side JavaScript file for a Chrome Extension application. It utilizes Express.js to create a server and includes features like body parsing, CORS headers, serving static files, and logging the listening port.",
-        "sha256": "0e487c380fe4c5b1d1b1b115cceeeffba355e16f5c77dc49323c1f46a3d600b0"
+        "summary": "This is a server-side JavaScript code for a Chrome Extension, utilizing Express.js to establish a server. The file comprises several libraries, parsing incoming requests with body-parser, addresses CORS issues, and serves static files from the 'dist' directory. Lastly, it is configured to listen on a specified port or default to 5001, providing a log once operational.",
+        "sha256": "5414c6f30a1f6803d4ac9403342736b60eac8f984e16ad4c2d9c33e88d8e61a8"
     },
     "/app/filebot-store-000/chrome-extension/README.dir/important_functions.md": {
-        "summary": "This file provides information on tracking pull requests using hashes instead of relying on a single git service provider. It includes details on how to get the pull request OID and other necessary information for cryptographic confirmation.",
-        "sha256": "e23f13a4b790d47caf74a84de85f28257f292a7114b3d7a479fbb835964eebd2"
+        "summary": "This file describes a method for tracking pull requests through unique hashes instead of depending on a single git service provider. It provides the process of obtaining the OID of a pull request along with other critical information to confirm it cryptographically. The document shows how to use the Octokit library for this purpose.",
+        "sha256": "217264a6aa107de16b16dc86a09e794d23dea1dac4a3040a199cdd32e4196e55"
     },
     "/app/filebot-store-000/chrome-extension/.env": {
         "summary": "This file contains configuration settings for a development environment, including a GitHub client ID.",
         "sha256": "f82282655112bd531f36b1d31e7089468bf2e5fbd131b06d8d4ce1e976bf879f"
     },
     "/app/filebot-store-000/chrome-extension/requirements.txt": {
-        "summary": "This file is a Python requirements file that specifies the version of the Selenium package to be installed in a project.",
-        "sha256": "217549220bf0d09a7a25d1af857b8ec4db664899be94a66cffacc38d058e47df"
+        "summary": "The file specifies the version of Selenium that is required for a Python project. The given version is 3.141.0. This is typically used in requirements.txt files for Python projects to manage dependencies.",
+        "sha256": "ab421084cc7ccd5d8df5fa39e796e50764266d22c1edead72459b46bf5692f98"
     },
     "/app/filebot-store-000/chrome-extension/.docubot/.eslintrc.json_doc.md": {
         "summary": "This file, \".eslintrc.json,\" is used to configure ESLint, a tool for analyzing JavaScript code. It sets rules for code quality and formatting, includes specific linting rules, and specifies the environments the code is designed to run in.",
