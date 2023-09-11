@@ -31,7 +31,7 @@ export default function Routes(props) {
     if (auth.isLoggedIn) {
       return;
     }
-    chrome.storage.local.get(['githubUser'], data => setUser(data.githubUser));
+    chrome.storage.local.get(['turbosrcUser'], data => setUser(data.turbosrcUser));
   });
 
   useEffect(() => {
@@ -55,8 +55,7 @@ export default function Routes(props) {
       .then(res => {
         githubUser.ethereumAddress = res.contributor_id,
         githubUser.ethereumKey = res.contributor_signature});
-
-      dispatch(setAuth(githubUser));
+        dispatch(setAuth(githubUser));
     }
   }, [user]);
 

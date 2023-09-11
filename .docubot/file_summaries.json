@@ -1,7 +1,12 @@
 {
     "/app/filebot-store-000/chrome-extension/README.md": {
+<<<<<<< HEAD
         "summary": "This file provides instructions for installing and building the Turbo-src extension for Chrome or Chromium-based browsers. It also mentions the requirement of a config file and provides steps for loading the extension after building it.",
         "sha256": "99b9b182df699ede84fbde1864251a57f2af120dd7e6d1757f538103b406af81"
+=======
+        "summary": "The file serves as a guide to install and run a specific extension only compatible with Chrome or Chromium-based browser. It includes detailed steps for cloning the repository, installing, building, testing the project and setting up online endpoint. Furthermore, it instructs on how to enable the extension in a Chrome/Chromium browser by loading the 'dist/' folder from the extension page.",
+        "sha256": "0ad31f622a29bd104adc30e6a46686511257a332adf8ba3151ec85c740438c34"
+>>>>>>> routeClientModeAndOnline
     },
     "/app/filebot-store-000/chrome-extension/CHANGELOG.md": {
         "summary": "This file is a changelog that documents the notable changes made to a project. It includes information such as the version number, release date, and a summary of the fixes or improvements made in each version.",
@@ -12,16 +17,26 @@
         "sha256": "36538b118298007b293337504265f2b644312a99678bd6c9c15314b27433cbc7"
     },
     "/app/filebot-store-000/chrome-extension/test_pull": {
+<<<<<<< HEAD
         "summary": "The purpose of the file \"test_pull\" is likely to test and evaluate the process of pulling data or information from a source. It could involve checking the efficiency, accuracy, or functionality of a program or system that performs data extraction or retrieval tasks.",
         "sha256": "217549220bf0d09a7a25d1af857b8ec4db664899be94a66cffacc38d058e47df"
+=======
+        "summary": "The purpose of the file \"test_pull\" appears to be conducting a test or assessment related to pulling or extracting data. The specific details or objectives of the test are not provided in the document.",
+        "sha256": "377c16b156fa8257e6f831f36063ee4c7be9d687f57a700509d064eecbe39bec"
+>>>>>>> routeClientModeAndOnline
     },
     "/app/filebot-store-000/chrome-extension/.docubot/jest.config.js_doc.md": {
         "summary": "This file is a configuration file for Jest, a JavaScript testing framework in a Chrome extension. It sets the test environment to Node.js, specifies test file detection with a regular expression, enables code coverage collection, defines coverage file output location and patterns to ignore for coverage and test paths, and sets custom display options for the test runner in the console.",
         "sha256": "84431cefb0ea753631bb7f3943d5d8cdf53330a5b41133a4b5cc6b0cca3d31a7"
     },
     "/app/filebot-store-000/chrome-extension/.docubot/package.json_doc.md": {
+<<<<<<< HEAD
         "summary": "This file is a JSON configuration file for a Google Chrome extension project called \"turbo-src\". It provides details about the project's features, dependencies, and dev dependencies, as well as information about the project's GitHub location, license, and keywords.",
         "sha256": "ad4c99cf6a843d3ced95219211e8db56d2b2b786fcda22f1dc78d7e51c187309"
+=======
+        "summary": "This file is the package file for a Chrome extension called 'turbo-src' that enhances the GitHub website. It includes features like displaying file size, copying file content, downloading files, and repo size. The package has dependencies, development tools, and various scripts for different contexts. It requires Node.js version '>= 10.16.0' and is licensed under MIT. Bugs can be reported through the provided URL in the 'bugs' section.",
+        "sha256": "360ed87324d97f4ce74b91c1ed0cee75222180246d0c6edbdb8a32cee4b6a0b7"
+>>>>>>> routeClientModeAndOnline
     },
     "/app/filebot-store-000/chrome-extension/.docubot/generate-config.js_doc.md": {
         "summary": "The purpose of this file is to generate a configuration file (`config.js`) for a Chrome extension based on the current environment. It reads the original configuration from a JSON file corresponding to the environment, converts it to a string, formats it into JavaScript, and writes it into `config.js`. It also logs the turbo source build mode, the path of the config file, and the contents of the created `config.js` file for verification purposes.",
@@ -60,6 +75,7 @@
         "sha256": "f331446425510be9920d89079abe2ab9c517748b58b3ccc627b4071cb4622906"
     },
     "/app/filebot-store-000/chrome-extension/.docubot/webpack.config.js_doc.md": {
+<<<<<<< HEAD
         "summary": "This file (`webpack.config.js`) is a configuration file for Webpack. It specifies the dependencies, source files, output files, modules and loaders, plugins, watch options, and other information needed to bundle and package a Chrome extension efficiently.",
         "sha256": "52fab07cfdfbf5b22dd08d3387f9845c155a014024d31061a34e6446a59b5df8"
     },
@@ -70,24 +86,46 @@
     "/app/filebot-store-000/chrome-extension/.docubot/src/Routes.js_doc.md": {
         "summary": "This file, `Routes.js`, is a React file that handles routing for the Filebot Store Chrome extension. It uses React Router for navigating between pages based on user authentication status. It also includes API communication for finding or creating a user with GitHub authentication details.",
         "sha256": "1900ba0e7e5f251f6044c58a0bb439c699fad374ff5be8e3cb0a67616cec3f83"
+=======
+        "summary": "This file is a Webpack configuration file for a Chrome extension project. It sets up the entry points, output directory, rules for handling different types of files, and a sequence of plugins for enhancing the build process. It also includes a function to dynamically add plugins based on the build mode.",
+        "sha256": "ba93e12d8b0994a3b1b7e35b301cf842b357849eb6752e050a92acaac584b13e"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/manifest.json_doc.md": {
+        "summary": "This file is the manifest file for the \"turbo-src\" Chrome extension, version 0.0.1. It provides a popup for voting on pull requests and requires permissions to access GitHub and other specific URLs. It injects a stylesheet and JavaScript file into matching pages and includes a background script that remains running. It also provides a user interface for options in the Chrome extension options UI.",
+        "sha256": "1a20b98da11a7be6da47433f8f6366da5875f5b5fd5c489c8784ab84549cffed"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/Routes.js_doc.md": {
+        "summary": "The purpose of this file, Routes.js, is to serve as the main routing and navigation system for a Chrome extension built on React using react-router-dom. It handles user authentication, sets up different routes for authenticated and non-authenticated users, imports and assigns components to different paths, and uses React useEffect for dispatching actions and state updates. It also provides default behavior for 'owner' and 'repo' names.",
+        "sha256": "70b5cf018823c4d11e32d81a8f960da6b2811cfa6db44a000ec04fd5a526101c"
+>>>>>>> routeClientModeAndOnline
     },
     "/app/filebot-store-000/chrome-extension/.docubot/src/index.css_doc.md": {
         "summary": "This file, located in the FileBot Store '000, contains CSS styles for the Chrome extension of the application. It defines the layout, typography, colors, themes, and interaction states of the extension's user interface in the Chrome browser. Knowledge of CSS is necessary before making any changes, and it is advised to create a backup before modifying this file.",
         "sha256": "f62a4d78843c12225a1a89c5896f306aebb19025b76cdb85864b3faafe1f8322"
     },
     "/app/filebot-store-000/chrome-extension/.docubot/src/inject.js_doc.md": {
+<<<<<<< HEAD
         "summary": "This file is a JavaScript script that is part of a Chrome extension called Enhanced Github. It uses GraphQL over WebSockets to interact with the GitHub website and offers additional features such as voting and tracking of issues and pull requests. The script handles various events, manipulates the DOM, stores data in Chrome's local storage, and makes asynchronous requests to update voting statuses.",
         "sha256": "da53f4643a173e1045a38395f7ca345e24e0dfeafc0ed2ddad48f2a4a11edbe7"
     },
     "/app/filebot-store-000/chrome-extension/.docubot/src/requests.js_doc.md": {
         "summary": "Based on the information provided, this file, \"requests.js\", is a JavaScript file that manages HTTP requests to an API, specifically using the 'superagent' library. It primarily deals with communication with a GraphQL API, configuration management, user and repo management, pull request and repo manipulations, error handling, and contributor details. Forking may also be included but further information is needed to confirm.",
         "sha256": "a87b8233d019c0d4fc2b7a8bbdfb6550a22a7406da90cf6e02c9d999c98ae361"
+=======
+        "summary": "The file `inject.js` is a JavaScript file that handles authentication, interactivity, and data manipulation in a GitHub web extension. It integrates OAuth authentication, manages socket events, manipulates the DOM, communicates with server endpoints, generates modals, renders React components, and has testing capabilities.",
+        "sha256": "63ffc3b9ae6e5ff045a2ba83253f034f5ba20124d06260f5d6138c392bc5e090"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/requests.js_doc.md": {
+        "summary": "The purpose of this file is to handle HTTP(S) requests in the application. It imports dependencies, defines variables, and includes functions to fetch data from the server, manage contributors and users.",
+        "sha256": "a279c09043c14293020c591dcf43a701b2486fc4517b3ea380dd370cfe90d4b6"
+>>>>>>> routeClientModeAndOnline
     },
     "/app/filebot-store-000/chrome-extension/.docubot/src/socketConfig.js_doc.md": {
         "summary": "The purpose of this file, `socketConfig.js`, is to configure a client's connection to a Socket.IO server. It sets up the socket connection at a specified URL, establishes various transport and security settings, and handles Socket.IO events. The file exports the `socket` object for use in other modules, likely for real-time client-server communication.",
         "sha256": "9fd158da863dd68ea677cf54a7990ae0e5d0f9c30377136edc423131afe1a9a4"
     },
     "/app/filebot-store-000/chrome-extension/.docubot/src/popup.js_doc.md": {
+<<<<<<< HEAD
         "summary": "This file is a JavaScript file used by a Chrome extension that interacts with GitHub. It retrieves the active tab's URL, extracts the 'user' and 'repo' details, and sends them to the GitHub API to fetch repository data. It then uses React and ReactDOM to render a React app, passing in the fetched repository information.",
         "sha256": "868639fdefd7d111d29fee983a009ff8b58c4b14aff584aa8de171631b337be1"
     },
@@ -98,6 +136,18 @@
     "/app/filebot-store-000/chrome-extension/.docubot/src/App.js_doc.md": {
         "summary": "This file, App.js, is the main entry point for a React application that uses Redux for state management. It handles application bootstrapping, routes, and state management. It is recommended for understanding how the application functions in relation to these aspects.",
         "sha256": "516968b703dbaf2238ee2ffe876f179607bff1f3ef62d6d1e8ae7f13eb5d4059"
+=======
+        "summary": "This file is a part of a chrome extension and it utilizes React and ReactDOM libraries to create and render the UI. It also fetches repository data based on the current window location or the `cypress` config, and renders the App component with the retrieved data.",
+        "sha256": "8ded2ec5483501ab83d046d18ef3818cb96baebbf76184cdcd57d2313d4e8f55"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/style.css_doc.md": {
+        "summary": "The purpose of this file is to provide the necessary CSS styling for a Chrome extension's user interface. It includes global settings, a color palette, various CSS classes for UI components, responsive designs, interactivity indicators, and typography styles. It is intended for use in styling a Chrome extension with multiple page types and states.",
+        "sha256": "aad0a9ecafc2f116c644c85501a80db6220cdbd5ba1da7007335f79157540cec"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/App.js_doc.md": {
+        "summary": "Based on the summary, it seems like this file is the main application file for a Chrome Extension built with React and 'react-redux'. It sets up the provider for the React-Redux store, handles routing with 'Routes', and includes a toaster for user notifications.",
+        "sha256": "36207302a4d89de26e4b2174b31b78cad1fee1ebbb8dcd727bb9560645a6722f"
+>>>>>>> routeClientModeAndOnline
     },
     "/app/filebot-store-000/chrome-extension/.docubot/src/authorizedContributor.js_doc.md": {
         "summary": "This file contains a single JavaScript function called `getAuthContributor()` that returns a hardcoded string value when invoked. The purpose of this file is to provide a constant identifier for an authorized contributor. The function is exported for use in other modules within the application.",
@@ -188,8 +238,13 @@
         "sha256": "8e04846b58c3e5f6dbf1dfc4094ac799eec22d824ccccfae8d466b76cd7d3e44"
     },
     "/app/filebot-store-000/chrome-extension/.docubot/src/store/auth/index.js_doc.md": {
+<<<<<<< HEAD
         "summary": "The purpose of the file /app/filebot-store-000/chrome-extension/src/store/auth/index.js is to handle user authentication for a Chrome Extension's Redux store. It defines action types, action creators, and a reducer function for user authentication operations. The file contains logic for login, logout, and setting authentication status, and it manages the state to reflect whether a user is logged in or not.",
         "sha256": "94220edb9906ccc61ff391c3bb6219d062ff8606ffe373c61c23f97aad9ca791"
+=======
+        "summary": "The purpose of this file is to provide authentication implementation for a Chrome extension. It utilizes Redux for state management, handles user authentication and session management, and interacts with the Chrome Storage API. It is expected to be part of a larger Redux store architecture and assumes usage within an application interoperating with Ethereum.",
+        "sha256": "0dd276a74ec416ff0dec6cb92a602e57f23fcd0e43fe929c3815b4da16a44081"
+>>>>>>> routeClientModeAndOnline
     },
     "/app/filebot-store-000/chrome-extension/.docubot/src/Components/DOM/createButtonHtml.js_doc.md": {
         "summary": "The purpose of this file, \"createButtonHtml.js,\" is to generate HTML code for a `div` element using the function `createButtonHtml`. This function is used to dynamically add button-like elements to a webpage using JavaScript. The file also contains commented out CSS selectors that are currently unused.",
@@ -272,8 +327,13 @@
         "sha256": "19257050b51cef31798e1a93295ee25954d2d685225326323928b92649539c47"
     },
     "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Extension/Home/Home.js_doc.md": {
+<<<<<<< HEAD
         "summary": "This file, `Home.js`, is a React component that serves as the main interface for a Chrome extension called \"Turbosrc\". It handles the management and display of pull request data from a specific GitHub repository, communicates with a backend, establishes a socket connection, and utilizes React Router, Redux, and local storage for various functionalities.",
         "sha256": "6c6936dedce54bca3b6ab3bb34c1cce36ef2337fa36eb08227afc45d9c847180"
+=======
+        "summary": "The purpose of this file, `Home.js`, is to serve as a React component in a Chrome Extension that interacts with a GitHub repository. It manages state variables, defines styles, includes reusable components, handles live data updates, retrieves data from the Redux store, fetches repository and votes-related data, enables navigation, and renders the home page of the extension. Additionally, it includes conditional rendering for different UI behaviors and displays detailed information about specific pull requests when clicked.",
+        "sha256": "fa0bf0a79b382ab52a6558776a7a054c79feb13322f4eee2f8cbb31759769e3b"
+>>>>>>> routeClientModeAndOnline
     },
     "/app/filebot-store-000/chrome-extension/.docubot/src/Components/Extension/Home/SkeletonExt.js_doc.md": {
         "summary": "This file (`SkeletonExt.js`) is a React component file for a Chrome extension. Its purpose is to export a styled skeleton loading screen using React Hooks and styled-components. The loading screen consists of various styled elements such as a grid layout, buttons, and other components.",
@@ -384,11 +444,80 @@
         "sha256": "b46c2d88ab9a9b4d3bb7a43a7cf30d11c093610c79313d9f8b73eaa504ba9872"
     },
     "/app/filebot-store-000/chrome-extension/.docubot/server/index.js_doc.md": {
+<<<<<<< HEAD
         "summary": "This file, index.js, is a JavaScript file responsible for the server-side functionalities of a Chrome Extension web application. It utilizes Express.js as the web framework and has features such as Cross-Origin Resource Sharing (CORS), OAuth authentication with Github, serving static files, error handling, and port configuration. It relies on several dependencies including express, body-parser, node-fetch, path, form-data, and dotenv.",
         "sha256": "37c2eae671da2bd3757eeac64de3c3404b0ec9ef69b1482a79e0c37d87fad18a"
     },
     "/app/filebot-store-000/chrome-extension/README.dir/important_functions.md": {
         "summary": "This file discusses the use of agnostic pull requests, where pull requests are tracked using hashes instead of relying on a specific git service provider. The purpose is to obtain the OID (object ID) of a pull request and other information for cryptographic verification. The file also provides an example of how to retrieve pull request details using the GitHub API.",
         "sha256": "e23f13a4b790d47caf74a84de85f28257f292a7114b3d7a479fbb835964eebd2"
+=======
+        "summary": "This is a server-side JavaScript code for a Chrome Extension, utilizing Express.js to establish a server. The file comprises several libraries, parsing incoming requests with body-parser, addresses CORS issues, and serves static files from the 'dist' directory. Lastly, it is configured to listen on a specified port or default to 5001, providing a log once operational.",
+        "sha256": "5414c6f30a1f6803d4ac9403342736b60eac8f984e16ad4c2d9c33e88d8e61a8"
+    },
+    "/app/filebot-store-000/chrome-extension/README.dir/important_functions.md": {
+        "summary": "This file describes a method for tracking pull requests through unique hashes instead of depending on a single git service provider. It provides the process of obtaining the OID of a pull request along with other critical information to confirm it cryptographically. The document shows how to use the Octokit library for this purpose.",
+        "sha256": "217264a6aa107de16b16dc86a09e794d23dea1dac4a3040a199cdd32e4196e55"
+    },
+    "/app/filebot-store-000/chrome-extension/.env": {
+        "summary": "This file contains configuration settings for a development environment, including a GitHub client ID.",
+        "sha256": "f82282655112bd531f36b1d31e7089468bf2e5fbd131b06d8d4ce1e976bf879f"
+    },
+    "/app/filebot-store-000/chrome-extension/requirements.txt": {
+        "summary": "The file specifies the version of Selenium that is required for a Python project. The given version is 3.141.0. This is typically used in requirements.txt files for Python projects to manage dependencies.",
+        "sha256": "ab421084cc7ccd5d8df5fa39e796e50764266d22c1edead72459b46bf5692f98"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/.eslintrc.json_doc.md": {
+        "summary": "This file, \".eslintrc.json,\" is used to configure ESLint, a tool for analyzing JavaScript code. It sets rules for code quality and formatting, includes specific linting rules, and specifies the environments the code is designed to run in.",
+        "sha256": "9f2785e0a55e3325f6243cb1172217d7e1a1ffc73ab28e2113ca6ffdc2aa13da"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/package-lock.json_doc.md": {
+        "summary": "The document is a project proposal outlining a plan to develop and implement a new mobile application for a retail company. It includes details about the app's features, target audience, timeline, and estimated budget.",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/.gitignore_doc.md": {
+        "summary": "This file is a .gitignore file for a Chrome extension project. It specifies which files and directories should be ignored when committing changes to the repository. The ignored items include ZIP files, distribution code, node.js modules, log files, JetBrains IDE config files, Mac OS generated files, code coverage reports, Visual Studio Code settings, the Cypress testing framework environment file, and a source code configuration file.",
+        "sha256": "aede77514b39b9430beb82c1cd7f57dfade373cbd5c8e8a22921d620d558c5e6"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/.travis.yml_doc.md": {
+        "summary": "This is a Travis CI configuration file for a Node.js application, specifically a Chrome extension in the 'filebot-store-000' directory. It specifies the Node.js runtime versions, runs 'yarn install' to install dependencies, and uses caching to speed up build times by reusing previously installed dependencies.",
+        "sha256": "1508c63ebd84d3fb5537206cc0abd541d3b9ef5d58ae265fe559c13ba931019e"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/cypress.config.js_doc.md": {
+        "summary": "The purpose of this file, `cypress.config.js`, is to configure the Cypress testing framework for the `filebot-store-000` Chrome extension. It exports a configuration object through the `defineConfig` method, which includes settings like disabling the same-origin policy and defining lifecycle events. One specific configuration, `setupNodeEvents`, handles the 'before:browser:launch' event by adding the 'dist' directory path to the browser's launch options, likely for testing purposes.",
+        "sha256": "5ad1284ff6091e480f071624f8116a8124b9715411560a8e4a3a2b9c4f19525e"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/src/hooks/useSetUser.js_doc.md": {
+        "summary": "This file, \"useSetUser.js\", is a part of a Chrome extension and contains a custom React hook for managing user state. It exports a function called `useSetUser` that sets up a user in the app based on data from Chrome storage or a product-related database. It also includes integration with Cypress testing tool and is capable of fetching user information from the database when the Chrome storage API is unavailable.",
+        "sha256": "f8a2c94ea29084519282bec28129c882481b405d37e380b24c1e6a3ca82e47c2"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/cypress/fixtures/example.json_doc.md": {
+        "summary": "This file, \"example.json\" in the Cypress fixtures directory, contains mock user data for testing purposes. It can be utilized by the Cypress testing system to generate simulated user data during test runs, ensuring consistent data for specific routes and faking server responses.",
+        "sha256": "7b71fe5178f76829aedb4bdd223f6a5b6c5f40ee320fe90d2f7c55a0fb59c210"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/cypress/support/e2e.js_doc.md": {
+        "summary": "This file, e2e.js, is used for end-to-end (E2E) testing with the Cypress framework. It provides global configurations and behaviors that modify Cypress, allowing for customization and syntax compatibility. More information on customization can be found in the official Cypress documentation.",
+        "sha256": "ef3266a70278d50ecb8d7c08398a1d192872c84cb95e996d86546ab4b00fb701"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/cypress/support/commands.js_doc.md": {
+        "summary": "The \"commands.js\" file provides custom and expanded functionality for Cypress, a JavaScript testing framework. It includes examples of creating custom commands, manipulating local storage, automating account login for a GitHub account, and interacting with GraphQL to perform actions such as user and repository creation. This file aids in enhancing Cypress testing capabilities for GitHub repository interactions and tailored end-to-end tests.",
+        "sha256": "bea3e906325405c9a62e41a98af4919a2f4368c568cb8b5928f7e06c0854a074"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/cypress/e2e/ext.cy.js_doc.md": {
+        "summary": "The purpose of the file ext.cy.js is to conduct a unit test for a Chrome Extension using the Cypress end-to-end testing framework. The test simulates visiting the home page of the extension's UI, checking specific elements for expected text, and interacting with the site's navigation bar. Before running the test, the Extension needs to be started from the root directory and the UI will be accessible at a specific URL.",
+        "sha256": "a544143de861fc3015a1d148ad15822f13a02041a3b02eacac9ce1375a931656"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/cypress/e2e/dom.cy.js_doc.md": {
+        "summary": "This file is a test script written for the Cypress testing framework. It focuses on testing the visibility of vote status buttons in the Document Object Model (DOM) of a GitHub repository's \"Pull requests\" page. It may provide insights on front-end testing and validating button visibility.",
+        "sha256": "d70d1ebeb7d01d0b8275c5a61ef05db9ba3a93ccf46797fc7b7e0f5514729241"
+    },
+    "/app/filebot-store-000/chrome-extension/.docubot/cypress/e2e/seedData.cy.js_doc.md": {
+        "summary": "Based on the provided document, the purpose of the \"seedData.cy.js\" file is to set up the necessary data for Cypress End-to-End (E2E) testing. It creates a user and repository for testing purposes using the Cypress testing framework for JavaScript applications. This file should be run before \"dom.cy.js\" if the repository has not already been created.",
+        "sha256": "0a05fbe0c8614c36bfd1b4dbe27f48a745ef64f17cd1c7cdf13c99ede41c11e4"
+    },
+    "/app/filebot-store-000/chrome-extension/cypress/readme.md": {
+        "summary": "This file provides setup instructions for Cypress testing for the Turbosrc web extension. It includes steps for creating a Cypress environment file, bundling the extension, running the tests, and troubleshooting common issues. It also explains the differences between testing Turbosrc and using it in a normal browser environment.",
+        "sha256": "6155ad9a755b891de2e4521f4813306d24d26cedb84f49dbe1605d09803f6c84"
+>>>>>>> routeClientModeAndOnline
     }
 }

@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import { Toaster } from 'react-hot-toast';
 
 export default function App(props) {
-  
+  console.log('props', props)
   return (
     <Provider store={store}>
       <Routes currentRepo={props.currentRepo} />

@@ -15,6 +15,7 @@ export const logoutUser = () => {
 };
 
 export const setAuth = data => {
+  console.log('action creator', data);
   return { type: SETAUTH, data: data };
 };
 
@@ -27,19 +28,13 @@ export default function authReducer(state = initialState, action) {
       return newState;
     }
     case LOGOUT: {
-      localStorage.clear();
-      chrome.storage.local.remove(['githubUser'], function() {
+      chrome.storage.local.remove(['turbosrcUser'], function() {
         var error = chrome.runtime.lastError;
         if (error) {
           console.error(error);
         }
       });
-
-      return {
-        ...state,
-        isLoggedIn: false,
-        user: null
-      };
+      return { isLoggedIn: false, user: { ethereumAddress: 'none', ethereumKey: 'none' } };
     }
     default:
       return state;

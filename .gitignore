@@ -6,5 +6,6 @@ node_modules/
 .DS_Store
 coverage
 .vscode
+cypress.env.json
 
 src/config.js

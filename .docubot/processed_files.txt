@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 /app/filebot-store-000/chrome-extension/webpack.config.js	4e8039a2ef9c4a9c66cfa21ea12e1e4d4855a1a4b965f07d5f09970a0bc1d3e2
+=======
+/app/filebot-store-000/chrome-extension/webpack.config.js	879d34ae5e8e7d8229713c013774cd528eadcb1c16e1a3ed2629a4054f4b4dc2
+>>>>>>> routeClientModeAndOnline
 /app/filebot-store-000/chrome-extension/config.devLocal.json	93970911a33c48f459c53607f0ea1cf157a2ce4d6d71b57b7776b81cae914318
 /app/filebot-store-000/chrome-extension/popup.html	5bfb6a450b3ab3b6d011be376b248f026b3beaf144615f73394fac413a64fef5
 /app/filebot-store-000/chrome-extension/config.devLocalRouter.json	6e79fee2034e06541413f7327c15d25de4ba43567fd23a4b26d34488eec06a78
@@ -6,6 +10,7 @@
 /app/filebot-store-000/chrome-extension/modal.css	17fa5a7e677940ab3930ff55288e57b26dd5d4335a76967f78523413f9c5f5ab
 /app/filebot-store-000/chrome-extension/jest.config.js	14ae6f845d400aaba9259fc568dc5feb5ebf4d297f189fc1ad9dade032f75865
 /app/filebot-store-000/chrome-extension/online-endpoints.sh	21c74908b84737c271f2e0636c313b49bc7833536ec54c114284055f16631d85
+<<<<<<< HEAD
 /app/filebot-store-000/chrome-extension/manifest.json	204aeaab34bb316b679e364fd0dc6b44df17fdc427d98bd42b3e2cfd623021a9
 /app/filebot-store-000/chrome-extension/options.html	183101bfba82f5a88e427ae65b06479011ff493bdba650887fdc19f1f8d29025
 /app/filebot-store-000/chrome-extension/generate-config.js	f1c6b9248f9fb38e531dce0681effdd8153af123fec1739bf2e2edeb4018f352
@@ -23,6 +28,25 @@
 /app/filebot-store-000/chrome-extension/src/makeData.js	18f6bb5636e05704f3022a2d0f0c7c6084260b5d08fe6f7e0513a2f7a14c2443
 /app/filebot-store-000/chrome-extension/src/Routes.js	f7b750a172b388bc330cf8f32e00946dc3906df5ff4de23664f26a7b9bbea2e6
 /app/filebot-store-000/chrome-extension/src/style.css	d3f52dc0c603a1694c7baab64bb277e57a91648678b1379ecc2590bfee92c85d
+=======
+/app/filebot-store-000/chrome-extension/manifest.json	4585f44dd7b8cac638581fca5be9df1708831e264ece966db42cff273453ea01
+/app/filebot-store-000/chrome-extension/options.html	183101bfba82f5a88e427ae65b06479011ff493bdba650887fdc19f1f8d29025
+/app/filebot-store-000/chrome-extension/generate-config.js	f1c6b9248f9fb38e531dce0681effdd8153af123fec1739bf2e2edeb4018f352
+/app/filebot-store-000/chrome-extension/config.devOnline.json	e835d782659988d8ecb669fdcba09000a91d3b499a08d7e9c2ccf7b8c7c0590c
+/app/filebot-store-000/chrome-extension/package.json	143b535852e447c35fab53419aa408d8f31c244e86c130bcf108f2d8c6b2f74a
+/app/filebot-store-000/chrome-extension/src/socketConfig.js	5ec60efaa4159572ff5b58768117f6e30aac407cff8364f78fae7dfa98336fe3
+/app/filebot-store-000/chrome-extension/src/requests.js	e63254aa99178af4c5e4ec1be28adea08634ac19595ebf787fb1d1175e3dddc2
+/app/filebot-store-000/chrome-extension/src/inject.js	4f2a27efbc088443939939ac340a90815960f67a3f9ec0ff6829dc9b44144583
+/app/filebot-store-000/chrome-extension/src/background.js	d668b887d029540bda244e518ba4796bbfab90712875cc7146a872f182b0435c
+/app/filebot-store-000/chrome-extension/src/authorizedContributor.js	3e316750c827e470d2890dd31f834350f7ca3921f62fea37b9e1c388690e479d
+/app/filebot-store-000/chrome-extension/src/App.js	9962443caf56f0bd19a96d5038c528f90ac128627475da92e9037d4a3ac3f5eb
+/app/filebot-store-000/chrome-extension/src/popup.js	523e9d35faee87ca4771521e0a2732d3eaebc7a992d05da2e4cb336735b01c32
+/app/filebot-store-000/chrome-extension/src/index.css	e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+/app/filebot-store-000/chrome-extension/src/turboSrcButton.css	cf3d183f55789382d3e81ab243040f1f23e49086e3f046ea4c7993bb4a9d195e
+/app/filebot-store-000/chrome-extension/src/makeData.js	18f6bb5636e05704f3022a2d0f0c7c6084260b5d08fe6f7e0513a2f7a14c2443
+/app/filebot-store-000/chrome-extension/src/Routes.js	b6f0a1361d23b97cc410d46fbed2f6fd02efd516d1438f5af310c40798edbce7
+/app/filebot-store-000/chrome-extension/src/style.css	a5db8f599e552eb41290f52b1f3dc3cb8e9947d2186b4468778bac2b41e2fda7
+>>>>>>> routeClientModeAndOnline
 /app/filebot-store-000/chrome-extension/src/hooks/useCommas.js	f511686e20119cc718f5ba0103237ca32848a4a4705e7b5350842f110b556cbd
 /app/filebot-store-000/chrome-extension/src/enums/MessageType.js	30fd17f38288ddbf24e7d8fa1e932706b995a979a32370dfd34dd661761b9283
 /app/filebot-store-000/chrome-extension/src/enums/CommonEnum.js	c7df9e9a4bc346ab35d5cbd48e4d6506c7c5d6f9abbae185c7acc864d6afc962
@@ -41,7 +65,11 @@
 /app/filebot-store-000/chrome-extension/src/store/reducer.js	440486cee51fb1cb975ce61039dbfa67b246006c979bb338854343c2ceca97c9
 /app/filebot-store-000/chrome-extension/src/store/store.js	8e719ea7f11b8fc3aaa91c8603c1305b29e4b99378901d85717b8f25cb7a126c
 /app/filebot-store-000/chrome-extension/src/store/repo/index.js	613a38727eae49ef2062154dd3144257138e364f606714e387b7052d7706b33b
+<<<<<<< HEAD
 /app/filebot-store-000/chrome-extension/src/store/auth/index.js	66d8afb9a8f329414bc3f4bd71ea02fcd257648484b7567a946920bb626a6069
+=======
+/app/filebot-store-000/chrome-extension/src/store/auth/index.js	d27948653810d118787913f580c3c2ea3ec677e63a2c6e6c77d941b4ad9e1a69
+>>>>>>> routeClientModeAndOnline
 /app/filebot-store-000/chrome-extension/src/Components/DOM/RefreshButton.js	bbba76294ecf63081efec6aa254baaa2e3e6ecb4f4569ec855252161adef5961
 /app/filebot-store-000/chrome-extension/src/Components/DOM/createButtonHtml.js	f79cefa7fc43b69d2a2fb10d6ae9830442ca08935ade29a2b2003fd5944b3c92
 /app/filebot-store-000/chrome-extension/src/Components/DOM/VoteStatusButton.js	c01f18d9479b294bd5f072a8cc88c45bc8d6f398892816cdcfd89278a297e490
@@ -62,7 +90,11 @@
 /app/filebot-store-000/chrome-extension/src/Components/Extension/Login.js	0a87ab27df8d206a427a067f918f0791d96989d2295b5693601b9482dfe42619
 /app/filebot-store-000/chrome-extension/src/Components/Extension/Auth.js	df3090db31e86e92b348a7d48144ceb2c03053abe8db8449015e13fbfdb43433
 /app/filebot-store-000/chrome-extension/src/Components/Extension/Home/SkeletonExt.js	6b76f142789d599f3a8d2400689443b19074afac9dd1fe08d836ac095139d85a
+<<<<<<< HEAD
 /app/filebot-store-000/chrome-extension/src/Components/Extension/Home/Home.js	b72da1b3e42f2f2489162f461b635824d71653e57f8c5eb9c7258197a5d3d9c3
+=======
+/app/filebot-store-000/chrome-extension/src/Components/Extension/Home/Home.js	12a3347ecb1ddfc3b6526da8a31daa53461b80097cb0bcf00e450819c9f3cd50
+>>>>>>> routeClientModeAndOnline
 /app/filebot-store-000/chrome-extension/src/Components/Extension/Home/StatusBadge.js	4ce619f89a50286e12116acd354e604260f3f0cfc54a36f3d8b278f971c9ee84
 /app/filebot-store-000/chrome-extension/src/Components/Extension/Home/PullRequestRow.js	24c27dccfbeb82ff7350379d4028957e2718500b0c34175e38765bbcf49896a1
 /app/filebot-store-000/chrome-extension/src/Components/Extension/SinglePullRequestView/SinglePullRequestView.js	8fddff9cde05a52db34e3b183af571b03da7aee364bda120fdcfa9511a89eb76
@@ -90,4 +122,20 @@
 /app/filebot-store-000/chrome-extension/src/authenticated/index.html	e11cedba587b4aef061870f498d31983ce5a554c10d44fdbc482bef04c3aaffa
 /app/filebot-store-000/chrome-extension/test/inject.spec.js	3984c146d9fd39796bb256e976ff0fdc0f71138e60329a14c9b8a7996ee61111
 /app/filebot-store-000/chrome-extension/README.dir/flex-span-ideas.html	cc15a61c9538dce88b39836bbe39e0347f54428adcfb93f18c75a8f426e3b1c4
+<<<<<<< HEAD
 /app/filebot-store-000/chrome-extension/server/index.js	e0dc08f4e3b159038bd6dfc40972ed277d873e02e256676f37a1b2d076d54817
+=======
+/app/filebot-store-000/chrome-extension/server/index.js	208bfc45c969b06eda2d10f56b239d1e3d31830d4ef81248ff4203bdfae6e77f
+/app/filebot-store-000/chrome-extension/.eslintrc.json	95c0dfbe04e2f423a88cd60822dbafaf595ab721586510b60e5c446a1bae1526
+/app/filebot-store-000/chrome-extension/cypress.config.js	dacd437c1cecf058d6f1e7d50e232c057d22fd085178f74f62e1f378403c2e53
+/app/filebot-store-000/chrome-extension/package-lock.json	e78eb5d73b8efc8512238fe25975754bb5afbfebff4287f950641eb144ab240a
+/app/filebot-store-000/chrome-extension/.gitignore	e4ffaf0931d302793ed71f38671d769cd595980f1085ae4ec42d7fe8db0b788c
+/app/filebot-store-000/chrome-extension/.travis.yml	6ad493e53461c1a82018620dbe7c495879e37f90f077c7a4a449d00a4007aba5
+/app/filebot-store-000/chrome-extension/src/hooks/useSetUser.js	72a9a13029b0038b81051dbebfb5c0d034f7b0a797d6c222afdd498b1e4a91c7
+/app/filebot-store-000/chrome-extension/cypress/fixtures/example.json	1800ff4b34f25a4a02d9e697a1724e84b2483faa85b7cf7812036916d6f6982b
+/app/filebot-store-000/chrome-extension/cypress/support/e2e.js	75b66dd63771f8d88bf01a16360bdf32208f5d4309a946790baa6c47695fdf6f
+/app/filebot-store-000/chrome-extension/cypress/support/commands.js	67701ae6698bf8f47d1e1d83f0b2771fbaa8561fef75eb83c9de31597a63c60e
+/app/filebot-store-000/chrome-extension/cypress/e2e/ext.cy.js	f1b1a432754ffc0103e6eecd897fd630af2d48205df71346548b71afbac49c7e
+/app/filebot-store-000/chrome-extension/cypress/e2e/dom.cy.js	15672060337c4272c9c132c618ab8170c16c44cabae41176cd7929367251796c
+/app/filebot-store-000/chrome-extension/cypress/e2e/seedData.cy.js	789bae100ca41921e32a8417f4017c3729c500348be9efcd85bd0f3ab72f4efd
+>>>>>>> routeClientModeAndOnline
