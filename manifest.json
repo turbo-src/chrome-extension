@@ -16,7 +16,7 @@
     "default_popup": "popup.html",
     "default_title": "turbo-src"
   },
-  "permissions": ["*://*.github.com/*", "https://turbosrc-marialis.dev/*", "https://turbosrc-auth.fly.dev/*", "storage", "webRequest", "webNavigation", "activeTab"],
+  "permissions": ["*://*.github.com/*", "https://turbosrc-marialis.dev/*", "https://turbosrc-auth.fly.dev/*", "http://localhost:5001/*", "storage", "webRequest", "webNavigation", "activeTab"],
   "content_scripts": [
     {
       "matches": ["*://*.github.com/*", "https://turbosrc-marialis.dev/*", "https://turbosrc-auth.fly.dev/*"],

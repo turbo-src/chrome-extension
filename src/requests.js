@@ -679,6 +679,7 @@ async function postGetRepoData(repo_id, contributor_id) {
     })
     .set('accept', 'json');
   const json = JSON.parse(res.text);
+  console.log(json.data.getRepoData);
   return json.data.getRepoData;
 }
 async function postGetVotes(repo, defaultHash, contributor_id) {

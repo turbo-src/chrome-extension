@@ -228,7 +228,6 @@ export default function Home() {
     setTimeout(() => setLoading(false), 1500);
     console.log('user', user, 'repo', repo, 'owner', owner);
   });
-
   const handlePullRequestClick = pullRequest => {
     setSelectedPullRequest(pullRequest);
     setSelectedPullRequestID(pullRequest.repo_id);
@@ -250,7 +249,7 @@ export default function Home() {
     setSelectedPullRequestVoted(pullRequest.voteData.contributor.voted);
     setSelectedPullRequestTotalVotes(pullRequest.voteData.voteTotals.totalVotes);
   };
-
+console.log('home component')
   const getRepoDataHandler = async () => {
     try {
       const response = await postGetRepoData(`${owner}/${repo}`, user.ethereumAddress).then(res => {

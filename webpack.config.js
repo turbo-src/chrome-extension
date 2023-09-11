@@ -56,7 +56,6 @@ function addPlugins(argv) {
       { copyUnmodified: true }
     )
   );
-
   if (argv.mode === 'production') {
     plugins.push(
       new ZipFilesPlugin({
