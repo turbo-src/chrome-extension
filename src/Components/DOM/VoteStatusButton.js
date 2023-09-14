@@ -57,7 +57,7 @@ export default function VoteStatusButton(props){
         const totalPossibleVotes = 1_000_000;
         const totalPercent = (totalVotes / totalPossibleVotes) * 100 * (1 / quorum);
         if (totalPercent !== null) {
-          setVoteTotals(`${Math.round(totalPercent)}%`);
+          setVoteTotals(`${Math.floor(totalPercent)}%`);
         }
         setVoteYesTotalState(voteYesTotal);
         setVoteNoTotalState(voteNoTotal);
