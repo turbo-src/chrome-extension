@@ -3,8 +3,6 @@ import { postGetPullRequest, postGetPRvoteYesTotals, postGetPRvoteNoTotals } fro
 
 const useGetVotes = (user, repo, issueID, contributorID, side, socketEvents, clicked) => {
   const [tsrcPRStatus, setTsrcPRStatus] = useState({ state: 'vote', mergeableCodeHost: true });
-  const [voteYesTotalState, setVoteYesTotalState] = useState(0.0);
-  const [voteNoTotalState, setVoteNoTotalState] = useState(0.0);
   const [voteTotals, setVoteTotals] = useState(0);
 
   useEffect(() => {
@@ -21,9 +19,6 @@ const useGetVotes = (user, repo, issueID, contributorID, side, socketEvents, cli
         if (totalPercent !== null) {
           setVoteTotals(`${Math.round(totalPercent)}%`);
         }
-        
-        setVoteYesTotalState(voteYesTotal);
-        setVoteNoTotalState(voteNoTotal);
         setTsrcPRStatus(tsrcPRStatusComponent);
       } catch (error) {
         console.error('useFetchVoteStatus error:', error);
