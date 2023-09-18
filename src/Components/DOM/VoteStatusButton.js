@@ -10,8 +10,8 @@ export default function VoteStatusButton({user, repo, issueID, contributorID, si
 
     const buttonStyle = {
       vote: ['lightgreen', 'vote'],
-      'pre-open': ['green', Math.round(voteTotals)],
-      open: ['orchid', Math.round(voteTotals)],
+      'pre-open': ['green', Math.round(voteTotals) + '%'],
+      open: ['orchid', Math.round(voteTotals) + '%'],
       conflict: ['orange', 'conflict'],
       merge: ['darkorchid', 'merged'],
       close: ['red', 'closed']
