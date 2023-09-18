@@ -9,12 +9,12 @@ const useGetVotes = (user, repo, issueID, contributorID, side, socketEvents, cli
       try {
         let repo_id = user + '/' + repo;
         const votes = await postGetVotes(repo_id, issueID, contributorID);
-        console.log('votes:', votes);
+        
         let quorum = 0.5;
         const totalVotes = votes.voteData.voteTotals.totalVotes
         const totalPossibleVotes = 1_000_000;
         const totalPercent = (totalVotes / totalPossibleVotes) * 100 * (1 / quorum);
-        
+
         if (totalPercent !== null) {
           setTsrcPRStatus({state: votes.state, mergeableCodeHost: votes.mergeable});
           setVoteTotals(totalPercent);
