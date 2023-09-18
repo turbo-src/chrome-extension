@@ -279,6 +279,7 @@ console.log('home component')
   });
 
   let getVotes = async () => await postGetVotes(repo_id, issue_id, contributor_id);
+ 
   if (oldVersion){
     return (
       <TurbosrcNotice>Your version of Turbosrc is out of date and needs to be updated to continue.</TurbosrcNotice>

@@ -201,6 +201,7 @@ let getFromStorage = keys =>
     let socketEvents = 0;
     let getVotesRes;
     let getVotes = async () => await postGetVotes(repo_id, issue_id, contributor_id);
+    console.log('checking args for getvotes', repo_id, issue_id, contributor_id);
     const clickedState = {
       clicked: false
     };
