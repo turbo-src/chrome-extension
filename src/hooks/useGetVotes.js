@@ -1,23 +1,25 @@
 import { useState, useEffect } from 'react';
 import { postGetVotes } from '../requests';
 const useGetVotes = (user, repo, issueID, contributorID, side, socketEvents, clicked) => {
-  const [votes, setVotes] = useState({ state: 'vote', voteData: { voteTotals: { totalVotes: 0 } } });
-  
+  const [prData, setPRData] = useState({});
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchData = async () => {
       try {
         let repo_id = user + '/' + repo;
-        let getVotes = await postGetVotes(repo_id, issueID, contributorID);
-        setVotes(getVotes);
-        
+        let getVotesRes = await postGetVotes(repo_id, issueID, contributorID);
+        setPRData(getVotesRes);
+        if (getVotesRes) {
+          setLoading(false);
+        }
       } catch (error) {
         console.error('useFetchVoteStatus error:', error);
       }
     };
-    
+
     fetchData();
   }, [user, repo, issueID, contributorID, side, socketEvents, clicked]);
-  return { votes };
+  return { prData, loading };
 };
 
 export default useGetVotes;
