@@ -257,6 +257,7 @@ let getFromStorage = keys =>
           ce(ModalVote, {
             user: user,
             repo: repo,
+            repoID: repoID,
             issueID: issue_id,
             contributorID: contributor_id,
             contributorName: contributor_name,
@@ -283,6 +284,7 @@ let getFromStorage = keys =>
             socketEvents: socketEvents,
             user: user,
             repo: repo,
+            repoID: repoID,
             issueID: issue_id,
             contributorName: contributor_name,
             contributorID: contributor_id,
@@ -305,6 +307,7 @@ let getFromStorage = keys =>
         ce(VoteStatusButton, {
           user: user,
           repo: repo,
+          repoID: repoID,
           issueID: issue_id,
           contributorName: contributor_name,
           contributorID: contributor_id,

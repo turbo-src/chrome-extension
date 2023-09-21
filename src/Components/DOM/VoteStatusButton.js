@@ -33,21 +33,21 @@ export default function VoteStatusButton(props){
       try {
           tsrcPRStatusComponent = await postGetPullRequest(
           user,
-          repo,
+          props.repoID,
           issueID,
           contributorID,
           side
           );
         const voteYesTotal = await postGetPRvoteYesTotals(
           user,
-          repo,
+          props.repoID,
           issueID,
           contributorID,
           ""
         );
         const voteNoTotal = await postGetPRvoteNoTotals(
           user,
-          repo,
+          props.repoID,
           issueID,
           contributorID,
           ""
