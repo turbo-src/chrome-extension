@@ -41,7 +41,9 @@ const SinglePullRequestView = ({ pullRequests, repo_id, title, votesArray, state
     <Content>
 
       <VoteTotal
-        repo={repo_id}
+        repoID={repo_id}
+        owner={owner}
+        repo={repo}
         title={title}
         forkBranch={forkBranch}
         votePower={votePower}
