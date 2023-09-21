@@ -124,12 +124,14 @@ export default function Review({
   repo
 }) {
   const user = useSelector(state => state.auth.user);
+  const currentRepo = useSelector(state => state.repo);
+
   let [errorText, setErrorText] = useState(' ');
 
   const clickHandler = async e => {
     e.preventDefault()
     setStep('Loading');
-    await postTransferTokens(owner, repo, user.ethereumAddress, recipientId, amount, user.token).then(res => {
+    await postTransferTokens(owner, currentRepo.repoID, user.ethereumAddress, recipientId, amount, user.token).then(res => {
       if (res.status === 201) {
         setTransfer({...transfer, amount: res.amount, createdAt: res.createdAt, id: res.id, network: res.network });
         setTimeout(() => {

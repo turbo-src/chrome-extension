@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import superagent from 'superagent';
 import { postGetRepoData } from '../../../requests';
@@ -13,6 +13,7 @@ import SinglePullRequestView from '../SinglePullRequestView/SinglePullRequestVie
 import { set } from '../../../utils/storageUtil';
 const { socket } = require('../../../socketConfig');
 const { postGetVotes, getNameSpaceRepo } = require('../../../requests');
+import { setRepo } from '../../../store/repo';
 
 const VoteText = styled.span`
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -190,6 +191,9 @@ export default function Home() {
   const user = useSelector(state => state.auth.user);
   const repo = useSelector(state => state.repo.name);
   const owner = useSelector(state => state.repo.owner.login);
+  const currentRepo = useSelector(state => state.repo);
+  const dispatch = useDispatch()
+
   const oldVersion = false;
   const [pullRequests, setPullRequests] = useState([]);
   const [tokenized, setTokenized] = useState(false);
@@ -217,7 +221,6 @@ export default function Home() {
   const navigate = useNavigate();
   let name = user?.name;
   let username = user?.login;
-
   let [tokenAmount, setTokenAmount] = useState('');
 
   let avatar = user?.avatar_url || null;
@@ -271,6 +274,7 @@ export default function Home() {
         setPullRequests(res.pullRequests);
         let tokens = useCommas(res.contributor.votePower);
         setTokenAmount(tokens);
+        dispatch(setRepo({...currentRepo, repoID: res.repo_id}))
       });
     } catch (error) {
       console.error('Error fetching repo data:', error);
