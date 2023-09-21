@@ -319,6 +319,7 @@ export default function Home() {
           <SinglePullRequestView
             pullRequests={selectedPullRequest}
             repo_id={selectedPullRequestID}
+            repoID={selectedPullRequestID}
             title={selectedPullRequestTitle}
             votesArray={selectedPullRequestVotesArray}
             state={selectedPullRequestState}
