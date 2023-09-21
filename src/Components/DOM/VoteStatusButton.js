@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
 import useGetVotes from '../../hooks/useGetVotes.js';
+import Skeleton from '@mui/material/Skeleton';
 
 export default function VoteStatusButton({
   user,
@@ -23,8 +24,8 @@ export default function VoteStatusButton({
   const { prData, loading } = useGetVotes(user, repo, issueID, contributorID, side, socketEvents, clicked);
   const buttonStyle = {
     vote: ['lightgreen', 'vote'],
-    'pre-open': ['green', Math.round(voteTotals) + '%'],
-    open: ['orchid', Math.round(voteTotals) + '%'],
+    'pre-open': ['green', Math.floor(voteTotals) + '%'],
+    open: ['orchid', Math.floor(voteTotals) + '%'],
     conflict: ['orange', 'conflict'],
     merge: ['darkorchid', 'merged'],
     close: ['red', 'closed']
@@ -32,7 +33,7 @@ export default function VoteStatusButton({
 
   useEffect(() => {
     if (!loading) {
-      let quorum = 0.5;
+      let quorum = prData.voteData.voteTotals.quorum;
       const totalVotes = prData.voteData.voteTotals.totalVotes;
       const totalPossibleVotes = 1_000_000;
       const voteTotals = (totalVotes / totalPossibleVotes) * 100 * (1 / quorum);
@@ -44,6 +45,7 @@ export default function VoteStatusButton({
         state: prData.state,
         mergeableCodeHost: prData.mergeable
       };
+
       if (!prData.mergeable) {
         newState.state = 'conflict';
       } else if (voteTotals === 0) {
@@ -56,7 +58,7 @@ export default function VoteStatusButton({
         const buttonText = buttonStyle[prData.state][1];
         newState.color = buttonColor;
         newState.text = buttonText;
-        newState.voteTotals = Math.round(voteTotals);
+        newState.voteTotals = Math.floor(voteTotals);
       }
 
       setVoteStatusButton(newState);
@@ -68,8 +70,12 @@ export default function VoteStatusButton({
     toggleModal(e);
   };
 
+  if (loading) {
+    return <Skeleton animation="wave" variant="rounded" width={80} height={30} />;
+  }
+
   return (
-    <Button style={{ color: 'white', background: voteStatusButton.color }} onClick={e => handleClick(e)}>
+    <Button style={{ color: 'white', background: voteStatusButton.color, width: '80px' }} onClick={e => handleClick(e)}>
       {voteStatusButton.voteTotals < 100 ? voteStatusButton.voteTotals + '%' : voteStatusButton.text}
     </Button>
   );
