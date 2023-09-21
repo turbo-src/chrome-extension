@@ -9,3 +9,4 @@ coverage
 cypress.env.json
 
 src/config.js
+config.devOnline.json
