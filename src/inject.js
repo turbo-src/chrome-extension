@@ -6,7 +6,7 @@ const createButtonHtml = require('./Components/DOM/createButtonHtml');
 import VoteStatusButton from './Components/DOM/VoteStatusButton';
 import ModalVote from './Components/Modal/ModalVote';
 const { socket } = require('./socketConfig');
-const { postGetRepoData, postGetVotes, postFindOrCreateUser } = require('./requests');
+const { postGetRepoData, postGetVotes, getNameSpaceRepo } = require('./requests');
 let cypress = {};
 try {
   cypress = require('../cypress.env.json');
@@ -17,7 +17,7 @@ try {
 var modal;
 var user;
 var repo;
-var repo_id;
+var repoID;
 var issue_id;
 var contributor_id;
 var contributor_name;
@@ -79,11 +79,12 @@ let getFromStorage = keys =>
     githubUserObject = JSON.parse(turbosrcUser);
   }
 
-  repo_id = `${user}/${repo}`;
+  const repoName = `${user}/${repo}`;
+  const { status, repoID } = await getNameSpaceRepo(repoName)
 
   // Backend:
   // All relevant data for this repo can be found in this response:
-  var repoData = await postGetRepoData(repo_id, contributor_id);
+  var repoData = status === 200 && await postGetRepoData(repoID, contributor_id);
   // Is repo on turbosrc:
   const onTurboSrc = repoData?.status === 200 ? true : false;
   // Is current contributor is authorized for this repo:
@@ -200,7 +201,7 @@ let getFromStorage = keys =>
     var domContainerTurboSrcButton;
     let socketEvents = 0;
     let getVotesRes;
-    let getVotes = async () => await postGetVotes(repo_id, issue_id, contributor_id);
+    let getVotes = async () => await postGetVotes(repoID, issue_id, contributor_id);
     const clickedState = {
       clicked: false
     };
@@ -256,6 +257,7 @@ let getFromStorage = keys =>
           ce(ModalVote, {
             user: user,
             repo: repo,
+            repoID: repoID,
             issueID: issue_id,
             contributorID: contributor_id,
             contributorName: contributor_name,
@@ -282,6 +284,7 @@ let getFromStorage = keys =>
             socketEvents: socketEvents,
             user: user,
             repo: repo,
+            repoID: repoID,
             issueID: issue_id,
             contributorName: contributor_name,
             contributorID: contributor_id,
@@ -304,6 +307,7 @@ let getFromStorage = keys =>
         ce(VoteStatusButton, {
           user: user,
           repo: repo,
+          repoID: repoID,
           issueID: issue_id,
           contributorName: contributor_name,
           contributorID: contributor_id,

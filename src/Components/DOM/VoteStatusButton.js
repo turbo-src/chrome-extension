@@ -6,6 +6,7 @@ import Skeleton from '@mui/material/Skeleton';
 export default function VoteStatusButton({
   user,
   repo,
+  repoID,
   issueID,
   contributorID,
   side,
@@ -21,7 +22,7 @@ export default function VoteStatusButton({
   });
   const [voteTotals, setVoteTotals] = useState(0);
 
-  const { prData, loading } = useGetVotes(user, repo, issueID, contributorID, side, socketEvents, clicked);
+  const { prData, loading } = useGetVotes(user, repoID, issueID, contributorID, side, socketEvents, clicked);
   const buttonStyle = {
     vote: ['lightgreen', 'vote'],
     'pre-open': ['green', Math.floor(voteTotals) + '%'],

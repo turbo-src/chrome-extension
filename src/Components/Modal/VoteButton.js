@@ -71,6 +71,7 @@ function VoteButton({
   setChosenSide,
   user,
   repo,
+  repoID,
   issueID,
   contributorID,
   contributerName,
@@ -88,7 +89,7 @@ function VoteButton({
 
   const voteHandler = async e => {
     e.preventDefault();
-    await postSetVote(user, repo, issueID, issueID, false, contributorID, side, githubUser.token);
+    await postSetVote(user, repoID, issueID, issueID, false, contributorID, side, githubUser.token);
     // Toggle clickVoteHandler to update vote data
     setClickVoteHandler(!clickVoteHandler)
     socket.emit('vote cast', user, repo, issueID)

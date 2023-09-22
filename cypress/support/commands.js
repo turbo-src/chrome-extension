@@ -105,8 +105,8 @@ Cypress.Commands.add('createRepo', () => {
         query createRepo {
           createRepo(
               turboSrcID: "${Cypress.env('turboSrcID')}",
-              owner: "${Cypress.env('gitHubUsername')}",
-              repo: "${Cypress.env('gitHubRepo')}",
+              owner: "",
+              repo: "${Cypress.env('gitHubUsername')}/${Cypress.env('gitHubRepo')}",
               defaultHash: "",
               contributor_id: "${Cypress.env('contributorID')}",
               side: "",
