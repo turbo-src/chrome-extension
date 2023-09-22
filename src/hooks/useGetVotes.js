@@ -17,7 +17,7 @@ const useGetVotes = (user, repoID, issueID, contributorID, side, socketEvents, c
     };
 
     fetchData();
-  }, [user, repo, issueID, contributorID, side, socketEvents, clicked]);
+  }, [user, repoID, issueID, contributorID, side, socketEvents, clicked]);
   return { prData, loading };
 };
 
