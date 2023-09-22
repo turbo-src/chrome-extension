@@ -81,7 +81,7 @@ let getFromStorage = keys =>
 
   const repoName = `${user}/${repo}`;
   const { status, repoID } = await getNameSpaceRepo(repoName)
-
+console.log('repoID =>', repoID)
   // Backend:
   // All relevant data for this repo can be found in this response:
   var repoData = status === 200 && await postGetRepoData(repoID, contributor_id);
@@ -229,6 +229,7 @@ let getFromStorage = keys =>
           ce(ModalVote, {
             user: user,
             repo: repo,
+            repoID: repoID,
             issueID: issue_id,
             contributorID: contributor_id,
             contributorName: contributor_name,
