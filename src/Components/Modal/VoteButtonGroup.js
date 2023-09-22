@@ -53,6 +53,7 @@ export default function VoteButtonGroup({disabled, setDisabled, clickVoteHandler
         setChosenSide={setChosenSide}
         user={user}
         repo={repo}
+        repoID={repoID}
         issueID={issueID}
         contributorID={contributorID}
         contributerName={contributorName}
