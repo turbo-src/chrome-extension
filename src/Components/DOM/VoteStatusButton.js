@@ -65,7 +65,7 @@ export default function VoteStatusButton({
 
       setVoteStatusButton(newState);
     }
-  }, [prData, loading]);
+  }, [prData, loading, socketEvents]);
 
   const handleClick = e => {
     e.preventDefault();

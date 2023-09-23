@@ -92,7 +92,7 @@ function VoteButton({
     await postSetVote(user, repoID, issueID, issueID, false, contributorID, side, githubUser.token);
     // Toggle clickVoteHandler to update vote data
     setClickVoteHandler(!clickVoteHandler)
-    socket.emit('vote cast', user, repo, issueID)
+    socket.emit('vote cast', user, repoID, issueID)
   };
 
   //Set switch case use effect:

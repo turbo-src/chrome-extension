@@ -81,7 +81,7 @@ let getFromStorage = keys =>
 
   const repoName = `${user}/${repo}`;
   const { status, repoID } = await getNameSpaceRepo(repoName)
-console.log('repoID =>', repoID)
+
   // Backend:
   // All relevant data for this repo can be found in this response:
   var repoData = status === 200 && await postGetRepoData(repoID, contributor_id);
@@ -323,7 +323,7 @@ console.log('repoID =>', repoID)
 
     // Socket listener for above actions. Every time a user votes our socket will check if it's for the current repo and update
     socket.on('vote received', function(ownerFromServer, repoFromServer, issueIDFromServer) {
-      if (user === ownerFromServer && repo === repoFromServer) {
+      if (user === ownerFromServer && repoID === repoFromServer) {
         /* To update the correct VoteStatusButton & VotesTable we need to both update the socketEvents variable 
           and call the React render function for them. */
         socketEvents += 1;
