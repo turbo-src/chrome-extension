@@ -678,7 +678,15 @@ async function postGetRepoData(repo_id, contributor_id) {
     })
     .set('accept', 'json');
   const json = JSON.parse(res.text);
-  console.log(json.data.getRepoData);
+  console.log(json.data.getRepoData, 'json.data.getRepoData');
+  /*
+  for (let i = 0; i < json.data.getRepoData.pullRequests.length; i++) {
+    console.log(json.data.getRepoData.pullRequests[i].voteData.votes, 'json.data.getRepoData.pullRequests[i].voteData.votes')
+    const reversedVotes = [...json.data.getRepoData.pullRequests[i].voteData.votes].reverse();
+    
+    json.data.getRepoData.pullRequests[i].voteData.votes = reversedVotes;
+    console.log(json.data.getRepoData.pullRequests[i].voteData.votes, 'reversed votes')
+  }*/
   return json.data.getRepoData;
 }
 async function postGetVotes(repo, defaultHash, contributor_id) {
