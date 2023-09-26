@@ -5,7 +5,6 @@ import Skeleton from '@mui/material/Skeleton';
 
 export default function VoteStatusButton({
   user,
-  repo,
   repoID,
   issueID,
   contributorID,
@@ -14,18 +13,18 @@ export default function VoteStatusButton({
   toggleModal,
   socketEvents
 }) {
+
   const [voteStatusButton, setVoteStatusButton] = useState({
     color: 'lightgreen',
     text: 'vote'
   });
-  const [voteTotals, setVoteTotals] = useState(0);
 
   const { prData, loading } = useGetVotes(user, repoID, issueID, contributorID, side, socketEvents, clicked);
 
   const buttonStyle = {
     vote: ['lightgreen', 'vote'],
-    'pre-open': ['green', voteTotals + '%'],
-    open: ['orchid', voteTotals + '%'],
+    'pre-open': ['green', prData?.voteData?.voteTotals?.totalVotePercent + '%'],
+    open: ['orchid', prData?.voteData?.voteTotals?.totalVotePercent + '%'],
     conflict: ['orange', 'conflict'],
     merge: ['darkorchid', 'merged'],
     close: ['red', 'closed']
@@ -33,21 +32,11 @@ export default function VoteStatusButton({
 
   useEffect(() => {
     if (!loading) {
-      let totalVotePercent = prData.voteData.voteTotals.totalVotePercent;
-      setVoteTotals(totalVotePercent);
       const buttonColor = buttonStyle[prData.state][0];
       const buttonText = buttonStyle[prData.state][1];
       setVoteStatusButton({ color: buttonColor, text: buttonText });
     }
   }, [prData, loading, socketEvents]);
-
-  useEffect(() => {
-    if (!loading) {
-      const buttonColor = buttonStyle[prData.state][0];
-      const buttonText = buttonStyle[prData.state][1];
-      setVoteStatusButton({ color: buttonColor, text: buttonText });
-    }
-  }, [voteTotals]);
 
   const handleClick = e => {
     e.preventDefault();
