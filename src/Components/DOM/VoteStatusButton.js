@@ -15,10 +15,8 @@ export default function VoteStatusButton({
   socketEvents
 }) {
   const [voteStatusButton, setVoteStatusButton] = useState({
-    color: 'gray',
-    text: '?',
-    state: 'vote',
-    mergeableCodeHost: true
+    color: 'lightgreen',
+    text: 'vote'
   });
   const [voteTotals, setVoteTotals] = useState(0);
 
@@ -26,8 +24,8 @@ export default function VoteStatusButton({
   
   const buttonStyle = {
     vote: ['lightgreen', 'vote'],
-    'pre-open': ['green', Math.floor(voteTotals) + '%'],
-    open: ['orchid', Math.floor(voteTotals) + '%'],
+    'pre-open': ['green', voteTotals + '%'],
+    open: ['orchid', voteTotals + '%'],
     conflict: ['orange', 'conflict'],
     merge: ['darkorchid', 'merged'],
     close: ['red', 'closed']
@@ -35,37 +33,21 @@ export default function VoteStatusButton({
 
   useEffect(() => {
     if (!loading) {
-      let quorum = prData.voteData.voteTotals.quorum;
-      const totalVotes = prData.voteData.voteTotals.totalVotes;
-      const totalPossibleVotes = 1_000_000;
-      const voteTotals = (totalVotes / totalPossibleVotes) * 100 * (1 / quorum);
-      setVoteTotals(voteTotals);
-
-      let newState = {
-        color: 'lightgreen',
-        text: 'vote',
-        state: prData.state,
-        mergeableCodeHost: prData.mergeable
-      };
-
-      if (!prData.mergeable) {
-        newState.state = 'conflict';
-      } else if (voteTotals === 0) {
-        newState.state = 'vote';
-        newState.color = 'lightgreen';
-        newState.text = 'vote';
-        newState.mergeableCodeHost = true;
-      } else {
-        const buttonColor = buttonStyle[prData.state][0];
-        const buttonText = buttonStyle[prData.state][1];
-        newState.color = buttonColor;
-        newState.text = buttonText;
-        newState.voteTotals = Math.floor(voteTotals);
-      }
-
-      setVoteStatusButton(newState);
+      let totalVotePercent = prData.voteData.voteTotals.totalVotePercent;
+      setVoteTotals(totalVotePercent);
+      const buttonColor = buttonStyle[prData.state][0];
+      const buttonText = buttonStyle[prData.state][1];
+      setVoteStatusButton({ color: buttonColor, text: buttonText });
     }
   }, [prData, loading, socketEvents]);
+
+  useEffect(() => {
+    if (!loading) {
+      const buttonColor = buttonStyle[prData.state][0];
+      const buttonText = buttonStyle[prData.state][1];
+      setVoteStatusButton({ color: buttonColor, text: buttonText });
+    }
+  }, [voteTotals]);
 
   const handleClick = e => {
     e.preventDefault();
@@ -78,7 +60,7 @@ export default function VoteStatusButton({
 
   return (
     <Button style={{ color: 'white', background: voteStatusButton.color, width: '80px' }} onClick={e => handleClick(e)}>
-      {voteStatusButton.voteTotals < 100 ? voteStatusButton.voteTotals + '%' : voteStatusButton.text}
+      {voteStatusButton.text}
     </Button>
   );
 }
