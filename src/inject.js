@@ -173,7 +173,10 @@ let getFromStorage = keys =>
     if (!testMode && window.location.pathname !== `/${user}/${repo}/pulls`) {
       return;
     }
-
+    // Do not do below DOM logic if viewing closed pull requests
+    if (window.location.search === '?q=is%3Apr+is%3Aclosed') {
+      return;
+    }
     // The parent element of the VoteStatusButtons' container divs
     const containerItems = querySelectorAllFrames('.js-issue-row');
 
