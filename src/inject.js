@@ -80,11 +80,11 @@ let getFromStorage = keys =>
   }
 
   const repoName = `${user}/${repo}`;
-  const { status, repoID } = await getNameSpaceRepo(repoName)
+  const { status, repoID } = await getNameSpaceRepo(repoName);
 
   // Backend:
   // All relevant data for this repo can be found in this response:
-  var repoData = status === 200 && await postGetRepoData(repoID, contributor_id);
+  var repoData = status === 200 && (await postGetRepoData(repoID, contributor_id));
   // Is repo on turbosrc:
   const onTurboSrc = repoData?.status === 200 ? true : false;
   // Is current contributor is authorized for this repo:
@@ -151,7 +151,7 @@ let getFromStorage = keys =>
     };
   }
 
-  // We need to get the <style> tags from the main window and pass them to the iframe's DOM to 
+  // We need to get the <style> tags from the main window and pass them to the iframe's DOM to
   // get the modal styling in test mode. This is not yet functional.
   const injectStyles = () => {
     // HTMLCollection:
@@ -171,6 +171,10 @@ let getFromStorage = keys =>
     }
     // Only do below DOM logic if we are on the pull requests page
     if (!testMode && window.location.pathname !== `/${user}/${repo}/pulls`) {
+      return;
+    }
+    // Do not do below DOM logic if viewing closed pull requests
+    if (window.location.search === '?q=is%3Apr+is%3Aclosed') {
       return;
     }
 
