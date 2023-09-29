@@ -716,6 +716,7 @@ async function postGetRepoData(repo_id, contributor_id) {
       owner,
       contributor_id,
       head,
+      inSession,
       quorum,
       contributor {
         contributor_id,

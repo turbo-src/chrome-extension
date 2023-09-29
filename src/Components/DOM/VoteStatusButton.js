@@ -25,6 +25,7 @@ export default function VoteStatusButton({
     vote: ['lightgreen', 'vote'],
     'pre-open': ['green', prData?.voteData?.voteTotals?.totalVotePercent + '%'],
     open: ['orchid', prData?.voteData?.voteTotals?.totalVotePercent + '%'],
+    frozen: ['#BFD4F2', prData?.voteData?.voteTotals?.totalVotePercent + '%'],
     conflict: ['orange', 'conflict'],
     merge: ['darkorchid', 'merged'],
     close: ['red', 'closed']
@@ -37,7 +38,7 @@ export default function VoteStatusButton({
       setVoteStatusButton({ color: buttonColor, text: buttonText });
     }
   }, [prData, loading, socketEvents]);
-
+console.log(prData.state)
   const handleClick = e => {
     e.preventDefault();
     toggleModal(e);
