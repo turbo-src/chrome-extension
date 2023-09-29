@@ -203,7 +203,8 @@ let getFromStorage = keys =>
     let getVotesRes;
     let getVotes = async () => await postGetVotes(repoID, issue_id, contributor_id);
     const clickedState = {
-      clicked: false
+      clicked: false,
+      current_issue_id: issue_id  
     };
 
     // Modal functionality below:
@@ -225,6 +226,7 @@ let getFromStorage = keys =>
         modal.style.display = 'block';
         const domContainerModal = myModalNode;
         getVotesRes = await getVotes();
+        clickedState.current_issue_id = issue_id;
         render(
           ce(ModalVote, {
             user: user,
@@ -252,7 +254,7 @@ let getFromStorage = keys =>
 
     // Update modal (if open) if its associated PR has been voted upon
     const updateModalVotesTable = async issueID => {
-      if (issueID === issue_id && modal.style.display === 'block') {
+      if (issueID === issue_id && issueID === clickedState.current_issue_id && modal.style.display === 'block') {
         const domContainerModal = myModalNode;
         render(
           ce(ModalVote, {
