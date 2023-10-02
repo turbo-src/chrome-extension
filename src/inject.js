@@ -6,7 +6,7 @@ const createButtonHtml = require('./Components/DOM/createButtonHtml');
 import VoteStatusButton from './Components/DOM/VoteStatusButton';
 import ModalVote from './Components/Modal/ModalVote';
 const { socket } = require('./socketConfig');
-const { postGetRepoData, postGetVotes, postFindOrCreateUser } = require('./requests');
+const { postGetRepoData, postGetVotes, getNameSpaceRepo } = require('./requests');
 let cypress = {};
 try {
   cypress = require('../cypress.env.json');
@@ -17,7 +17,7 @@ try {
 var modal;
 var user;
 var repo;
-var repo_id;
+var repoID;
 var issue_id;
 var contributor_id;
 var contributor_name;
@@ -79,11 +79,12 @@ let getFromStorage = keys =>
     githubUserObject = JSON.parse(turbosrcUser);
   }
 
-  repo_id = `${user}/${repo}`;
+  const repoName = `${user}/${repo}`;
+  const { status, repoID } = await getNameSpaceRepo(repoName)
 
   // Backend:
   // All relevant data for this repo can be found in this response:
-  var repoData = await postGetRepoData(repo_id, contributor_id);
+  var repoData = status === 200 && await postGetRepoData(repoID, contributor_id);
   // Is repo on turbosrc:
   const onTurboSrc = repoData?.status === 200 ? true : false;
   // Is current contributor is authorized for this repo:
@@ -200,9 +201,10 @@ let getFromStorage = keys =>
     var domContainerTurboSrcButton;
     let socketEvents = 0;
     let getVotesRes;
-    let getVotes = async () => await postGetVotes(repo_id, issue_id, contributor_id);
-    const clickedState = {
-      clicked: false
+    let getVotes = async () => await postGetVotes(repoID, issue_id, contributor_id);
+    const modalState = {
+      modalOpen: false,
+      currentIssueID: issue_id  
     };
 
     // Modal functionality below:
@@ -224,10 +226,12 @@ let getFromStorage = keys =>
         modal.style.display = 'block';
         const domContainerModal = myModalNode;
         getVotesRes = await getVotes();
+        modalState.currentIssueID = issue_id;
         render(
           ce(ModalVote, {
             user: user,
             repo: repo,
+            repoID: repoID,
             issueID: issue_id,
             contributorID: contributor_id,
             contributorName: contributor_name,
@@ -250,12 +254,13 @@ let getFromStorage = keys =>
 
     // Update modal (if open) if its associated PR has been voted upon
     const updateModalVotesTable = async issueID => {
-      if (issueID === issue_id && modal.style.display === 'block') {
+      if (issueID === modalState.currentIssueID && modal.style.display === 'block') {
         const domContainerModal = myModalNode;
         render(
           ce(ModalVote, {
             user: user,
             repo: repo,
+            repoID: repoID,
             issueID: issue_id,
             contributorID: contributor_id,
             contributorName: contributor_name,
@@ -282,10 +287,11 @@ let getFromStorage = keys =>
             socketEvents: socketEvents,
             user: user,
             repo: repo,
+            repoID: repoID,
             issueID: issue_id,
             contributorName: contributor_name,
             contributorID: contributor_id,
-            clicked: clickedState.clicked,
+            modalOpen: modalState.modalOpen,
             toggleModal: toggleModal
           }),
           domContainerTurboSrcButton
@@ -304,11 +310,12 @@ let getFromStorage = keys =>
         ce(VoteStatusButton, {
           user: user,
           repo: repo,
+          repoID: repoID,
           issueID: issue_id,
           contributorName: contributor_name,
           contributorID: contributor_id,
           repoData: repoData,
-          clicked: clickedState.clicked,
+          modalOpen: modalState.modalOpen,
           toggleModal: toggleModal,
           socketEvents: socketEvents
         }),
@@ -318,7 +325,7 @@ let getFromStorage = keys =>
 
     // Socket listener for above actions. Every time a user votes our socket will check if it's for the current repo and update
     socket.on('vote received', function(ownerFromServer, repoFromServer, issueIDFromServer) {
-      if (user === ownerFromServer && repo === repoFromServer) {
+      if (user === ownerFromServer && repoID === repoFromServer) {
         /* To update the correct VoteStatusButton & VotesTable we need to both update the socketEvents variable 
           and call the React render function for them. */
         socketEvents += 1;

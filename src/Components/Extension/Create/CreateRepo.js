@@ -95,7 +95,8 @@ export default function Onboard2() {
 
   const createRepo = async () => {
     setLoader(true);
-    await postCreateRepo(owner, repo, '', user.ethereumAddress, '', user.token).then(res => {
+    const repoName = `${owner}/${repo}`
+    await postCreateRepo(owner, repoName, '', user.ethereumAddress, '', user.token).then(res => {
       setLoader(false);
       if (res === '201') {
         navigate('/home');

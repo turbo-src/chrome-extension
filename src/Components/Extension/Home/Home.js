@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import superagent from 'superagent';
 import { postGetRepoData } from '../../../requests';
@@ -12,7 +12,8 @@ import SkeletonModal from './SkeletonExt.js';
 import SinglePullRequestView from '../SinglePullRequestView/SinglePullRequestView.js';
 import { set } from '../../../utils/storageUtil';
 const { socket } = require('../../../socketConfig');
-const { postGetVotes } = require('../../../requests');
+const { postGetVotes, getNameSpaceRepo } = require('../../../requests');
+import { setRepo } from '../../../store/repo';
 
 const VoteText = styled.span`
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -68,9 +69,9 @@ const BoldText = styled(VoteText)`
   font-size: 18px;
   margin-bottom: 0px;
   white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width:120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
 `;
 
 const TopBar = styled.div`
@@ -92,13 +93,13 @@ const OwnerText = styled(VoteText)`
   font-size: 18px;
   margin-bottom: 0px;
   white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width:120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
 `;
 
 const SlashText = styled(OwnerText)`
-  color: #6A6868;
+  color: #6a6868;
   margin-left: -5px;
   margin-right: -5px;
 `;
@@ -146,7 +147,7 @@ const RepoButton = styled.button`
   align-items: center;
   gap: 5px;
 
-  &:disabled{
+  &:disabled {
     background-color: darkgrey;
     cursor: auto;
   }
@@ -190,6 +191,9 @@ export default function Home() {
   const user = useSelector(state => state.auth.user);
   const repo = useSelector(state => state.repo.name);
   const owner = useSelector(state => state.repo.owner.login);
+  const currentRepo = useSelector(state => state.repo);
+  const dispatch = useDispatch()
+
   const oldVersion = false;
   const [pullRequests, setPullRequests] = useState([]);
   const [tokenized, setTokenized] = useState(false);
@@ -213,10 +217,10 @@ export default function Home() {
   const [selectedPullRequestChildDefaultHash, setSelectedPullRequestChildDefaultHash] = useState('');
   const [selectedPullRequestIssueID, setSelectedPullRequestIssueID] = useState('');
   const [selectedPullRequestTotalVotes, setSelectedPullRequestTotalVotes] = useState('');
+  const [repoID, setRepoID] = useState('');
   const navigate = useNavigate();
   let name = user?.name;
   let username = user?.login;
-
   let [tokenAmount, setTokenAmount] = useState('');
 
   let avatar = user?.avatar_url || null;
@@ -235,7 +239,7 @@ export default function Home() {
     setSelectedPullRequestState(pullRequest.state);
     setSelectedPullRequestBaseBranch(pullRequest.baseBranch);
     setSelectedPullRequestForkBranch(pullRequest.forkBranch);
-    setSelectedPullRequestYesPercent((pullRequest.voteData.voteTotals.yesPercent));
+    setSelectedPullRequestYesPercent(pullRequest.voteData.voteTotals.yesPercent);
     setSelectedPullRequestNoPercent(pullRequest.voteData.voteTotals.noPercent);
     setSelectedPullRequestCreatedAt(pullRequest.voteData.contributor.createdAt);
     setSelectedPullRequestVotePower(pullRequest.voteData.contributor.votePower);
@@ -249,16 +253,28 @@ export default function Home() {
     setSelectedPullRequestVoted(pullRequest.voteData.contributor.voted);
     setSelectedPullRequestTotalVotes(pullRequest.voteData.voteTotals.totalVotes);
   };
-console.log('home component')
+  console.log('home component');
+
+  const getRepoIDHandler = async () => {
+    try {
+      const response = await getNameSpaceRepo(`${owner}/${repo}`).then(res => {
+        setRepoID(res.repoID);
+      });
+    } catch (error) {
+      console.error('Error fetching repo id:', error);
+    }
+  };
+
   const getRepoDataHandler = async () => {
     try {
-      const response = await postGetRepoData(`${owner}/${repo}`, user.ethereumAddress).then(res => {
+      const response = await postGetRepoData(repoID, user.ethereumAddress).then(res => {
         if (res != null || res != undefined) {
           setTokenized(true);
         }
         setPullRequests(res.pullRequests);
         let tokens = useCommas(res.contributor.votePower);
         setTokenAmount(tokens);
+        dispatch(setRepo({...currentRepo, repoID: res.repo_id}))
       });
     } catch (error) {
       console.error('Error fetching repo data:', error);
@@ -267,10 +283,15 @@ console.log('home component')
 
   useEffect(() => {
     setTimeout(() => {
-      getRepoDataHandler();
+      getRepoIDHandler();
     }, 500);
     setPullRequestsLoaded(false);
   }, [owner, repo]);
+
+  useEffect(() => {
+    getRepoDataHandler();
+    setPullRequestsLoaded(false);
+  }, [repoID]);
 
   socket.on('vote received', function(ownerFromServer, repoFromServer, issueIDFromServer) {
     if (owner === ownerFromServer && repo === repoFromServer) {
@@ -279,17 +300,15 @@ console.log('home component')
   });
 
   let getVotes = async () => await postGetVotes(repo_id, issue_id, contributor_id);
+ 
   if (oldVersion){
     return (
       <TurbosrcNotice>Your version of Turbosrc is out of date and needs to be updated to continue.</TurbosrcNotice>
     );
   } else if (owner === 'none' && repo === 'none') {
-    return (
-      <TurbosrcNotice>Please visit a Github repo page in your browser to use Turbosrc.</TurbosrcNotice>
-    );
+    return <TurbosrcNotice>Please visit a Github repo page in your browser to use Turbosrc.</TurbosrcNotice>;
   }
-  
-  
+
   switch (seeModal) {
     case true:
       return (
@@ -301,6 +320,7 @@ console.log('home component')
           <SinglePullRequestView
             pullRequests={selectedPullRequest}
             repo_id={selectedPullRequestID}
+            repoID={selectedPullRequestID}
             title={selectedPullRequestTitle}
             votesArray={selectedPullRequestVotesArray}
             state={selectedPullRequestState}
@@ -335,7 +355,6 @@ console.log('home component')
                     <GithubLink href={`https://github.com/${owner}`} target="_blank">
                       {owner}
                     </GithubLink>{' '}
-                    
                   </OwnerText>
                   <SlashText>/</SlashText>
                   <BoldText>
@@ -388,11 +407,14 @@ console.log('home component')
                   </CreateRepo>{' '}
                   you can add it to Turbosrc
                 </CreateNotice>
-                
-                  <RepoButton type="button" disabled={owner === user.login ? false : true} onClick={() => navigate('/onboard')}>
-                    <p>Continue</p> <ArrowPic src={ArrowRight} />
-                  </RepoButton>
-                
+
+                <RepoButton
+                  type="button"
+                  disabled={owner === user.login ? false : true}
+                  onClick={() => navigate('/onboard')}
+                >
+                  <p>Continue</p> <ArrowPic src={ArrowRight} />
+                </RepoButton>
               </CenteredWrapper>
             )}
           </div>
