@@ -19,6 +19,7 @@ const ModalContent = styled.div`
 const ModalVote = props => {
   let user = props.user;
   let repo = props.repo;
+  let repoID = props.repoID
   let issue_id = props.issueID;
   let contributor_id = props.contributorID;
   let contributor_name = props.contributorName;
@@ -135,6 +136,7 @@ const ModalVote = props => {
             setChosenSide={setChosenSide}
             user={user}
             repo={repo}
+            repoID={repoID}
             issueID={issue_id}
             contributorID={contributor_id}
             contributorName={contributor_name}

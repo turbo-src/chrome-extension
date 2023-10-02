@@ -24,7 +24,7 @@ const Results = styled.div`
   height: 60px;
   `;
 
-const SinglePullRequestView = ({ pullRequests, repo_id, title, votesArray, state, baseBranch, forkBranch, yesPercent, noPercent, createdAt, votePower, alreadyVoted, chosenSide, user, repo, githubToken, defaultHash, childDefaultHash, contributorID, owner, issueID, totalVotes }) => {
+const SinglePullRequestView = ({ pullRequests, repo_id, repoID, title, votesArray, state, baseBranch, forkBranch, yesPercent, noPercent, createdAt, votePower, alreadyVoted, chosenSide, user, repo, githubToken, defaultHash, childDefaultHash, contributorID, owner, issueID, totalVotes }) => {
   const quorum = 0.5;
   const voteableStates = new Set(['vote', 'pre-open', 'open']);
   const notVoteableStates = new Set(['conflict', 'merge', 'close']);
@@ -41,7 +41,9 @@ const SinglePullRequestView = ({ pullRequests, repo_id, title, votesArray, state
     <Content>
 
       <VoteTotal
-        repo={repo_id}
+        repoID={repo_id}
+        owner={owner}
+        repo={repo}
         title={title}
         forkBranch={forkBranch}
         votePower={votePower}
@@ -59,6 +61,7 @@ const SinglePullRequestView = ({ pullRequests, repo_id, title, votesArray, state
         chosenSide={chosenSide}
         user={user}
         repo={repo}
+        repoID={repoID}
         issueID={issueID}
         contributorID={contributorID}
         githubToken={githubToken}
