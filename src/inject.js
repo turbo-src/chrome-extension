@@ -202,9 +202,9 @@ let getFromStorage = keys =>
     let socketEvents = 0;
     let getVotesRes;
     let getVotes = async () => await postGetVotes(repoID, issue_id, contributor_id);
-    const clickedState = {
-      clicked: false,
-      current_issue_id: issue_id  
+    const modalState = {
+      modalOpen: false,
+      currentIssueID: issue_id  
     };
 
     // Modal functionality below:
@@ -226,7 +226,7 @@ let getFromStorage = keys =>
         modal.style.display = 'block';
         const domContainerModal = myModalNode;
         getVotesRes = await getVotes();
-        clickedState.current_issue_id = issue_id;
+        modalState.currentIssueID = issue_id;
         render(
           ce(ModalVote, {
             user: user,
@@ -254,7 +254,7 @@ let getFromStorage = keys =>
 
     // Update modal (if open) if its associated PR has been voted upon
     const updateModalVotesTable = async issueID => {
-      if (issueID === issue_id && issueID === clickedState.current_issue_id && modal.style.display === 'block') {
+      if (issueID === modalState.currentIssueID && modal.style.display === 'block') {
         const domContainerModal = myModalNode;
         render(
           ce(ModalVote, {
@@ -291,7 +291,7 @@ let getFromStorage = keys =>
             issueID: issue_id,
             contributorName: contributor_name,
             contributorID: contributor_id,
-            clicked: clickedState.clicked,
+            modalOpen: modalState.modalOpen,
             toggleModal: toggleModal
           }),
           domContainerTurboSrcButton
@@ -315,7 +315,7 @@ let getFromStorage = keys =>
           contributorName: contributor_name,
           contributorID: contributor_id,
           repoData: repoData,
-          clicked: clickedState.clicked,
+          modalOpen: modalState.modalOpen,
           toggleModal: toggleModal,
           socketEvents: socketEvents
         }),
