@@ -205,8 +205,9 @@ let getFromStorage = keys =>
     let socketEvents = 0;
     let getVotesRes;
     let getVotes = async () => await postGetVotes(repoID, issue_id, contributor_id);
-    const clickedState = {
-      clicked: false
+    const modalState = {
+      modalOpen: false,
+      currentIssueID: issue_id  
     };
 
     // Modal functionality below:
@@ -226,6 +227,7 @@ let getFromStorage = keys =>
         const idNameSplit = idName.split('-');
         issue_id = idNameSplit[3];
         modal.style.display = 'block';
+        modalState.currentIssueID = issue_id;
         const domContainerModal = myModalNode;
         getVotesRes = await getVotes();
         render(
@@ -255,7 +257,7 @@ let getFromStorage = keys =>
 
     // Update modal (if open) if its associated PR has been voted upon
     const updateModalVotesTable = async issueID => {
-      if (issueID === issue_id && modal.style.display === 'block') {
+      if (issueID === modalState.currentIssueID && modal.style.display === 'block') {
         const domContainerModal = myModalNode;
         render(
           ce(ModalVote, {
@@ -271,6 +273,7 @@ let getFromStorage = keys =>
             getVotes: getVotes,
             toggleModal: toggleModal,
             socketEvents: socketEvents
+            //modalOpen: modalState.modalOpen,
           }),
           domContainerModal
         );
@@ -292,7 +295,7 @@ let getFromStorage = keys =>
             issueID: issue_id,
             contributorName: contributor_name,
             contributorID: contributor_id,
-            clicked: clickedState.clicked,
+            modalOpen: modalState.modalOpen,
             toggleModal: toggleModal
           }),
           domContainerTurboSrcButton
@@ -316,7 +319,7 @@ let getFromStorage = keys =>
           contributorName: contributor_name,
           contributorID: contributor_id,
           repoData: repoData,
-          clicked: clickedState.clicked,
+          modalOpen: modalState.modalOpen,
           toggleModal: toggleModal,
           socketEvents: socketEvents
         }),
