@@ -27,7 +27,7 @@ const Results = styled.div`
 const SinglePullRequestView = ({ pullRequests, repo_id, repoID, title, votesArray, state, baseBranch, forkBranch, yesPercent, noPercent, createdAt, votePower, alreadyVoted, chosenSide, user, repo, githubToken, defaultHash, childDefaultHash, contributorID, owner, issueID, totalVotes }) => {
   const quorum = 0.5;
   const voteableStates = new Set(['vote', 'pre-open', 'open']);
-  const notVoteableStates = new Set(['conflict', 'merge', 'close']);
+  const notVoteableStates = new Set(['conflict', 'merge', 'close', 'frozen']);
   const [disabled, setDisabled] = useState(false);
   useEffect(() => {
     if (voteableStates.has(state)) {

@@ -46,7 +46,7 @@ const ModalVote = props => {
   const [quorum, setQuorum] = useState(0.5);
   const [userVotedAt, setUserVotedAt] = useState(''); //date
   const voteableStates = new Set(['vote', 'pre-open', 'open']);
-  const notVoteableStates = new Set(['conflict', 'merge', 'close']);
+  const notVoteableStates = new Set(['conflict', 'merge', 'close', 'frozen']);
   const [clickVoteHandler, setClickVoteHandler] = useState(false);
   const socketEvents = props.socketEvents
   useEffect(() => {
