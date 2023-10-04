@@ -99,13 +99,13 @@ function addCommas(num) {
 } 
 
 function VoteTotal(props) {
-  const {repo, title, baseBranch, forkBranch, votePower} = props;
+  const {repo, owner, title, baseBranch, forkBranch, votePower} = props;
 
   return (
     <Heading>
         <TopModalTitle>
           <OwnerRepo>
-          <OwnerText>{repo} </OwnerText>
+          <OwnerText>{owner}/{repo}</OwnerText>
           </OwnerRepo>
           <MediumText>{addCommas(votePower)} VotePower</MediumText>
         </TopModalTitle>

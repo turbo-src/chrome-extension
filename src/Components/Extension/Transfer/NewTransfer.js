@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import loadergif from '../../../loader.gif';
 import styled from 'styled-components';
 import { postGetContributorID, postGetVotePowerAmount } from '../../../requests';
-
+import { useSelector } from 'react-redux';
 const Content = styled.div`
   height: 27rem;
   width: 100%;
@@ -172,6 +172,8 @@ export default function StartTransfer({
   changeHandler,
   setStep
 }) {
+  const currentRepo = useSelector(state => state.repo);
+
   let [errorText, setErrorText] = useState(' ');
   let [checking, setChecking] = useState(false);
   let [verified, setVerified] = useState(false);
@@ -183,7 +185,7 @@ export default function StartTransfer({
   let [invalidText, setInvalidText] = useState('');
 
   const getTokenAmount = async () => {
-    await postGetVotePowerAmount(owner, repo, '', user.ethereumAddress, '', user.token).then(res =>
+    await postGetVotePowerAmount(owner, currentRepo.repoID, '', user.ethereumAddress, '', user.token).then(res =>
       setTokenAmount(res.amount)
     );
   };

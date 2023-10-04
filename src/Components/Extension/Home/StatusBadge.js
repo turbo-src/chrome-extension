@@ -6,7 +6,8 @@ const statusMap = {
     "new": ['#1ED61B', 'NEW'],
     "conflict": ['#FF8A00', 'CONFLICT'],
     "close": ['#D33131', 'CLOSED'],
-    "open": ['#FF6489', 'OPEN']
+    "open": ['#FF6489', 'OPEN'],
+    "frozen": ['#BFD4F2', 'FROZEN'],
   };
 const Wrapper = styled.div`
     font-size: 10px;

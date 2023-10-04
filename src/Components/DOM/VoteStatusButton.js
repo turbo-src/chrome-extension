@@ -1,102 +1,58 @@
 import React, { useState, useEffect } from 'react';
-import { render } from 'react-dom';
-import { postGetPullRequest, postGetPRvoteYesTotals, postGetPRvoteNoTotals } from '../../requests';
 import { Button } from 'react-bootstrap';
+import useGetVotes from '../../hooks/useGetVotes.js';
+import Skeleton from '@mui/material/Skeleton';
 
-export default function VoteStatusButton(props){
+export default function VoteStatusButton({
+  user,
+  repoID,
+  issueID,
+  contributorID,
+  side,
+  clicked,
+  toggleModal,
+  socketEvents
+}) {
+  const [voteStatusButton, setVoteStatusButton] = useState({
+    color: 'lightgreen',
+    text: 'vote'
+  });
 
-    const [user, setUser] = useState(props.user);
-    const [repo, setRepo] = useState(props.repo);
-    const [issueID, setIssueID] = useState(props.issueID);
-    const [contributorID, setContributorID] = useState(props.contributorID);
-    const [voteStatusButton, setVoteStatusButton] = useState({ color: 'gray', text: '?' });
-    const [tsrcPRStatus, setTsrcPRStatus] = useState(props.tsrcPRstatus || {state: 'vote', mergeableCodeHost: true});
-    const [voteYesTotalState, setVoteYesTotalState] = useState(0.0);
-    const [voteNoTotalState, setVoteNoTotalState] = useState(0.0);
-    const [voteTotals, setVoteTotals] = useState(0);
-    const [yesPercent, setYesPercent] = useState(0);
-    const [noPercent, setNoPercent] = useState(0);
-    const [side, setSide] = useState(props.side);
-    const [clicked, setClicked] = useState(props.clicked);
-    const buttonStyle = {
-      vote: ['lightgreen', 'vote'],
-      'pre-open': ['green', voteTotals],
-      open: ['orchid', voteTotals],
-      conflict: ['orange', 'conflict'],
-      merge: ['darkorchid', 'merged'],
-      close: ['red', 'closed']
-    };
-    
-    const fetchVoteStatus = async () => {
-      let textMath = voteStatusButton.textMath;
-      let tsrcPRStatusComponent
-      try {
-          tsrcPRStatusComponent = await postGetPullRequest(
-          user,
-          repo,
-          issueID,
-          contributorID,
-          side
-          );
-        const voteYesTotal = await postGetPRvoteYesTotals(
-          user,
-          repo,
-          issueID,
-          contributorID,
-          ""
-        );
-        const voteNoTotal = await postGetPRvoteNoTotals(
-          user,
-          repo,
-          issueID,
-          contributorID,
-          ""
-        );
-        let quorum = 0.5;
-        const totalVotes = voteYesTotal + voteNoTotal;
-        const totalPossibleVotes = 1_000_000;
-        const totalPercent = (totalVotes / totalPossibleVotes) * 100 * (1 / quorum);
-        if (totalPercent !== null) {
-          setVoteTotals(`${Math.floor(totalPercent)}%`);
-        }
-        setVoteYesTotalState(voteYesTotal);
-        setVoteNoTotalState(voteNoTotal);
-        setTsrcPRStatus(tsrcPRStatusComponent);
-      } catch (error) {
-        console.log('fetchVoteStatus error:', error)
-        textMath = "";
-      }
-        };
+  const { prData, loading } = useGetVotes(user, repoID, issueID, contributorID, side, socketEvents, clicked);
 
-    useEffect(() => {
-        fetchVoteStatus();
-    }, [props.socketEvents, clicked]);
+  const buttonStyle = {
+    vote: ['lightgreen', 'vote'],
+    'pre-open': ['green', prData?.voteData?.voteTotals?.totalVotePercent + '%'],
+    open: ['orchid', prData?.voteData?.voteTotals?.totalVotePercent + '%'],
+    frozen: [
+      '#BFD4F2',
+      prData?.voteData?.voteTotals?.totalVotePercent > 0 ? prData?.voteData?.voteTotals?.totalVotePercent + '%' : 'vote'
+    ],
+    conflict: ['orange', 'conflict'],
+    merge: ['darkorchid', 'merged'],
+    close: ['red', 'closed']
+  };
 
-    useEffect(() => {
-      
-        if(!tsrcPRStatus) {
-          return;
-        }
-        if(!tsrcPRStatus.mergeableCodeHost) {
-          tsrcPRStatus.state = 'conflict';
-        }
-        const buttonColor = buttonStyle[tsrcPRStatus.state][0]
-        const buttonText = buttonStyle[tsrcPRStatus.state][1]
-        setVoteStatusButton({color: buttonColor, text: buttonText});
-    }, [voteYesTotalState, voteNoTotalState, tsrcPRStatus, voteTotals]);
+  useEffect(() => {
+    if (!loading) {
+      const buttonColor = buttonStyle[prData.state][0];
+      const buttonText = buttonStyle[prData.state][1];
+      setVoteStatusButton({ color: buttonColor, text: buttonText });
+    }
+  }, [prData, loading, socketEvents]);
 
+  const handleClick = e => {
+    e.preventDefault();
+    toggleModal(e);
+  };
 
-    const handleClick = (e) => {
-        e.preventDefault();
-        props.toggleModal(e)
-    };
+  if (loading) {
+    return <Skeleton animation="wave" variant="rounded" width={80} height={30} />;
+  }
 
-    return (
-        <Button
-        style={{ color: 'white', background: voteStatusButton.color }}
-        onClick={(e) => handleClick(e)}
-        >
-        {voteStatusButton.text}
-        </Button>
-    );
-};
+  return (
+    <Button style={{ color: 'white', background: voteStatusButton.color, width: '80px' }} onClick={e => handleClick(e)}>
+      {voteStatusButton.text}
+    </Button>
+  );
+}
