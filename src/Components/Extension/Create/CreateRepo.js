@@ -125,7 +125,20 @@ export default function Onboard2() {
   if (loader) {
     return <Loader />;
   }
-
+  if (!permissions.push_permissions) {
+    return(
+      <>
+      {loadingPerms ? (
+        <>
+          <SkeletonPermissions />
+        </>
+      ) : (
+        <>
+          'You are do not have push permissions to this repository.'
+        </>
+      )}
+    </> );
+}
   if (!permissions.public_repo_scopes) {
       return(
         <>

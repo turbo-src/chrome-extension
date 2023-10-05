@@ -410,7 +410,6 @@ export default function Home() {
 
                 <RepoButton
                   type="button"
-                  disabled={owner === user.login ? false : true}
                   onClick={() => navigate('/onboard')}
                 >
                   <p>Continue</p> <ArrowPic src={ArrowRight} />
