@@ -18,12 +18,12 @@ const RepoButton = styled.button`
   const PermsNotice = styled.span`
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap'); 
   font-family: 'Inter', sans-serif;
-  font-weight: 500;
+  font-weight: 700;
   color: black;
   text-align: center;
   margin: 1rem 0;
   line-height: 1.75;
-  font-size: 16px;
+  font-size: 17px;
   `;
   
   const BtnSpan = styled.span`
@@ -46,40 +46,68 @@ color: black;
 text-align: center;
 list-style-type: disc;
 width: 80%;
-margin: 0px auto 40px auto;
+margin: 10px auto 40px auto;
 
 li{
     list-style-type: disc;
 }
 `;
 
+const PermsText = styled.span`
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+font-family: 'Inter', sans-serif;
+font-weight: 400;
+color: black;
+text-align: left;
+width: 95%;
+margin: 0px auto 40px auto;
+line-height: 1.5;
+font-size: 15px;
+`;
+
 export default function PermissionsNotice(props){
 
 
-
-    return (
-        <div className="content">
-        <div className="onboard">
-          <form name="create">
-            <KeyAPI>
-              <PermsNotice>  
-                <img src={Importance} style={{height: '13px', width: '13px'}}/> Additional permissions are required to add this repository to Turbosrc:
-              </PermsNotice>
-              <PermsList>
-                <li>Read/write access to your public repositories</li>
-              </PermsList>
-              <BtnSpan>
-                <a
-                  href={`https://github.com/login/oauth/authorize?scope=user:email%20public_repo&client_id=${process.env.GITHUB_CLIENT_ID}`}
-                  target="_blank"
-                >
-                  <RepoButton type="button">Update Permissions</RepoButton>
-                </a>
-              </BtnSpan>
-            </KeyAPI>
-            <span>{props.errorText}</span>
-          </form>
-        </div>
+  console.log(props.perms, 'perms');
+  return (
+    <div className="content">
+      <div className="onboard">
+        <form name="create">
+          <KeyAPI>
+            {props.perms &&
+              <>
+                <PermsNotice>  
+                  <img src={Importance} style={{height: '13px', width: '13px'}}/> Additional permissions are required to add this repository to Turbosrc:
+                </PermsNotice>
+                <PermsList>
+                  <li>Read/write access to your public repositories</li>
+                </PermsList>
+                <BtnSpan>
+                  <a
+                    href={`https://github.com/login/oauth/authorize?scope=user:email%20public_repo&client_id=${process.env.GITHUB_CLIENT_ID}`}
+                    target="_blank"
+                    rel="noopener noreferrer" // it's good practice to add this for security reasons when using target="_blank"
+                  >
+                    <RepoButton type="button">Update Permissions</RepoButton>
+                  </a>
+                </BtnSpan>
+              </>
+            }
+            {!props.perms && 
+              <>
+                <PermsNotice>
+                <img src={Importance} style={{height: '13px', width: '13px'}}/> You do not have push permissions to this repository.
+                </PermsNotice>
+                <PermsText>
+                  You can only create VotePower for repositories you maintain.             
+                </PermsText>
+              </>
+            }
+          </KeyAPI>
+          <span>{props.errorText}</span>
+        </form>
       </div>
-    );
+    </div>
+  );
+  
 }

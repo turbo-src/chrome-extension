@@ -124,7 +124,7 @@ export default function Onboard2() {
 
   if (loader) {
     return <Loader />;
-  }
+  } /*
   if (!permissions.push_permissions) {
     return(
       <>
@@ -134,11 +134,11 @@ export default function Onboard2() {
         </>
       ) : (
         <>
-          'You are do not have push permissions to this repository.'
+          <PermissionsNotice errorText={errorText} />
         </>
       )}
     </> );
-}
+  } */
   if (!permissions.public_repo_scopes) {
       return(
         <>
@@ -148,7 +148,7 @@ export default function Onboard2() {
           </>
         ) : (
           <>
-            <PermissionsNotice errorText={errorText} />
+            <PermissionsNotice errorText={errorText} perms={permissions.push_permissions} />
           </>
         )}
       </> );
