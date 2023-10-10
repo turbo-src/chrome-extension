@@ -69,34 +69,29 @@ export default function PermissionsNotice({ errorText, perms }) {
       <div className="onboard">
         <form name="create">
           <KeyAPI>
-            {perms.push_permissions && (
-              <>
-                <PermsNotice>
-                  <img src={Importance} style={{ height: '13px', width: '13px' }} /> Additional permissions are required
-                  to add this repository to Turbosrc:
-                </PermsNotice>
-                <PermsList>
-                  <li>Read/write access to your public repositories</li>
-                </PermsList>
-                <BtnSpan>
-                  <a
-                    href={`https://github.com/login/oauth/authorize?scope=user:email%20public_repo&client_id=${process.env.GITHUB_CLIENT_ID}`}
-                    target="_blank"
-                    rel="noopener noreferrer" // it's good practice to add this for security reasons when using target="_blank"
-                  >
-                    <RepoButton type="button">Update Permissions</RepoButton>
-                  </a>
-                </BtnSpan>
-              </>
+            <PermsNotice>
+              <img src={Importance} style={{ height: '13px', width: '13px' }} />
+              {perms.push_permissions
+                ? 'Additional permissions are required to add this repository to Turbosrc:'
+                : 'You do not have push permissions to this repository.'}
+            </PermsNotice>
+            {perms.push_permissions ? (
+              <PermsList>
+                <li>Read/write access to your public repositories</li>
+              </PermsList>
+            ) : (
+              <PermsText>You can only create VotePower for repositories you maintain.</PermsText>
             )}
-            {!perms.push_permissions && (
-              <>
-                <PermsNotice>
-                  <img src={Importance} style={{ height: '13px', width: '13px' }} /> You do not have push permissions to
-                  this repository.
-                </PermsNotice>
-                <PermsText>You can only create VotePower for repositories you maintain.</PermsText>
-              </>
+            {perms.push_permissions && (
+              <BtnSpan>
+                <a
+                  href={`https://github.com/login/oauth/authorize?scope=user:email%20public_repo&client_id=${process.env.GITHUB_CLIENT_ID}`}
+                  target="_blank"
+                  rel="noopener noreferrer" // it's good practice to add this for security reasons when using target="_blank"
+                >
+                  <RepoButton type="button">Update Permissions</RepoButton>
+                </a>
+              </BtnSpan>
             )}
           </KeyAPI>
           <span>{errorText}</span>
