@@ -231,7 +231,7 @@ async function postCreateRepo(owner, repo, defaultHash, contributor_id, side, to
   const res = await superagent
     .post(`${url}`)
     .send({
-      query: `{ createRepo(turboSrcID: "${turboSrcID}", owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}", token: "${token}") }`
+      query: `{ createRepo(turboSrcID: "${turboSrcID}", owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}", token: "${token}") {status, repoName, repoID, repoSignature, message} }`,
     })
     .set('accept', 'json');
 
