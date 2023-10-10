@@ -14,38 +14,39 @@ const RepoButton = styled.button`
   width: 200px;
   height: 50px;
   border: none;
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap'); 
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
   font-family: 'Inter', sans-serif;
   font-weight: 400;
   cursor: pointer;
-  `;
+`;
 
-  const Onboard = styled.div`
+const Onboard = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
   position: relative;
   bottom: 10px;
   gap: 10px;
-  `;
+`;
 
 const CreateRepoInfo = styled.p`
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-font-family: 'Inter', sans-serif;
-font-weight: 400;
-color: black;
-text-align: left;
-width: 80%;
-margin: 0px auto 10px;
-line-height: 1.5;`;
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  color: black;
+  text-align: left;
+  width: 80%;
+  margin: 0px auto 10px;
+  line-height: 1.5;
+`;
 
 const BtnSpan = styled.span`
-text-align: center;
+  text-align: center;
 `;
 
 const CreateRepoForm = styled.form`
   margin: 0 auto;
-  `;
+`;
 
 export default function Onboard2() {
   const user = useSelector(state => state.auth.user);
@@ -63,16 +64,16 @@ export default function Onboard2() {
   const [successful, setSuccessful] = useState(false);
   const [length, setLength] = useState(false);
   const [errorText, setErrorText] = useState('');
-  const [permissions, setPermissions] = useState({public_repo_scopes:false, push_permissions:false});
+  const [permissions, setPermissions] = useState({ public_repo_scopes: false, push_permissions: false });
   const [loadingPerms, setLoadingPerms] = useState(true);
   const checkPermissions = async () => {
     try {
-        await postCheckGithubTokenPermissions(owner, repo, user.login, user.token).then(res => {
-        setPermissions({public_repo_scopes: res.public_repo_scopes, push_permissions: res.push_permissions});
-      })
+      await postCheckGithubTokenPermissions(owner, repo, user.login, user.token).then(res => {
+        setPermissions({ public_repo_scopes: res.public_repo_scopes, push_permissions: res.push_permissions });
+      });
     } catch (error) {
-      console.log(error)
-      setErrorText(error.message)
+      console.log(error);
+      setErrorText(error.message);
     }
   };
 
@@ -95,7 +96,7 @@ export default function Onboard2() {
 
   const createRepo = async () => {
     setLoader(true);
-    const repoName = `${owner}/${repo}`
+    const repoName = `${owner}/${repo}`;
     await postCreateRepo(owner, repoName, '', user.ethereumAddress, '', user.token).then(res => {
       setLoader(false);
       if (res === '201') {
@@ -111,7 +112,6 @@ export default function Onboard2() {
       navigate('/ethereum');
     }
     setTimeout(() => setLoadingPerms(false), 1500);
-
   });
 
   useEffect(() => {
@@ -121,37 +121,23 @@ export default function Onboard2() {
   if (owner === 'none' && repo === 'none') {
     return <Home />;
   }
-
   if (loader) {
     return <Loader />;
-  } /*
-  if (!permissions.push_permissions) {
-    return(
-      <>
-      {loadingPerms ? (
-        <>
-          <SkeletonPermissions />
-        </>
-      ) : (
-        <>
-          <PermissionsNotice errorText={errorText} />
-        </>
-      )}
-    </> );
-  } */
+  }
   if (!permissions.public_repo_scopes) {
-      return(
-        <>
+    return (
+      <>
         {loadingPerms ? (
           <>
             <SkeletonPermissions />
           </>
         ) : (
           <>
-            <PermissionsNotice errorText={errorText} perms={permissions.push_permissions} />
+            <PermissionsNotice errorText={errorText} perms={permissions} />
           </>
         )}
-      </> );
+      </>
+    );
   } else {
     return (
       <div className="content">
@@ -159,17 +145,18 @@ export default function Onboard2() {
           <CreateRepoInfo>
             Creating this repository on Turbosrc will generate VotePower for this project.
           </CreateRepoInfo>
-          <p/>
+          <p />
           <CreateRepoInfo>
-            You can then transfer as much or as little VotePower to your community as you like and vote on pull requests.
+            You can then transfer as much or as little VotePower to your community as you like and vote on pull
+            requests.
           </CreateRepoInfo>
-          <p/>
+          <p />
           <CreateRepoInfo>
             When a majority consensus has been reached, the pull request will either be merged or closed automatically.
           </CreateRepoInfo>
           <CreateRepoForm name="create">
             <span>{errorText}</span>
-            <BtnSpan >
+            <BtnSpan>
               <RepoButton type="button" onClick={() => createRepo()}>
                 Create
               </RepoButton>
@@ -178,5 +165,5 @@ export default function Onboard2() {
         </Onboard>
       </div>
     );
-    } 
+  }
 }

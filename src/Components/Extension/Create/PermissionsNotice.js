@@ -2,21 +2,19 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Importance from '../../../../icons/importance.png';
 
-
 const RepoButton = styled.button`
   background-color: #313131;
   color: white;
   width: 200px;
   height: 50px;
   border: none;
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap'); 
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
   font-family: 'Inter', sans-serif;
   font-weight: 500;
-  `;
+`;
 
-
-  const PermsNotice = styled.span`
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap'); 
+const PermsNotice = styled.span`
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
   font-family: 'Inter', sans-serif;
   font-weight: 700;
   color: black;
@@ -24,60 +22,58 @@ const RepoButton = styled.button`
   margin: 1rem 0;
   line-height: 1.75;
   font-size: 17px;
-  `;
-  
-  const BtnSpan = styled.span`
-    text-align: center;
+`;
+
+const BtnSpan = styled.span`
+  text-align: center;
 `;
 
 const KeyAPI = styled.div`
-display: flex;
-flex-direction: column;
-width: 100%;
-margin: 1rem 0 2rem 0;
-padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 1rem 0 2rem 0;
+  padding: 1rem;
 `;
 
 const PermsList = styled.ul`
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-font-family: 'Inter', sans-serif;
-font-weight: 400;
-color: black;
-text-align: center;
-list-style-type: disc;
-width: 80%;
-margin: 10px auto 40px auto;
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  color: black;
+  text-align: center;
+  list-style-type: disc;
+  width: 80%;
+  margin: 10px auto 40px auto;
 
-li{
+  li {
     list-style-type: disc;
-}
+  }
 `;
 
 const PermsText = styled.span`
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-font-family: 'Inter', sans-serif;
-font-weight: 400;
-color: black;
-text-align: left;
-width: 95%;
-margin: 0px auto 40px auto;
-line-height: 1.5;
-font-size: 15px;
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  color: black;
+  text-align: left;
+  width: 95%;
+  margin: 0px auto 40px auto;
+  line-height: 1.5;
+  font-size: 15px;
 `;
 
-export default function PermissionsNotice(props){
-
-
-  console.log(props.perms, 'perms');
+export default function PermissionsNotice({ errorText, perms }) {
   return (
     <div className="content">
       <div className="onboard">
         <form name="create">
           <KeyAPI>
-            {props.perms &&
+            {perms.push_permissions && (
               <>
-                <PermsNotice>  
-                  <img src={Importance} style={{height: '13px', width: '13px'}}/> Additional permissions are required to add this repository to Turbosrc:
+                <PermsNotice>
+                  <img src={Importance} style={{ height: '13px', width: '13px' }} /> Additional permissions are required
+                  to add this repository to Turbosrc:
                 </PermsNotice>
                 <PermsList>
                   <li>Read/write access to your public repositories</li>
@@ -92,22 +88,20 @@ export default function PermissionsNotice(props){
                   </a>
                 </BtnSpan>
               </>
-            }
-            {!props.perms && 
+            )}
+            {!perms.push_permissions && (
               <>
                 <PermsNotice>
-                <img src={Importance} style={{height: '13px', width: '13px'}}/> You do not have push permissions to this repository.
+                  <img src={Importance} style={{ height: '13px', width: '13px' }} /> You do not have push permissions to
+                  this repository.
                 </PermsNotice>
-                <PermsText>
-                  You can only create VotePower for repositories you maintain.             
-                </PermsText>
+                <PermsText>You can only create VotePower for repositories you maintain.</PermsText>
               </>
-            }
+            )}
           </KeyAPI>
-          <span>{props.errorText}</span>
+          <span>{errorText}</span>
         </form>
       </div>
     </div>
   );
-  
 }
