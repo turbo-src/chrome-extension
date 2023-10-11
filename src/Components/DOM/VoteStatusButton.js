@@ -19,13 +19,21 @@ export default function VoteStatusButton({
   });
 
   const { prData, loading } = useGetVotes(user, repoID, issueID, contributorID, side, socketEvents, clicked);
+  const totalYesVotes = prData?.voteData?.voteTotals?.totalYesVotes
+  const totalNoVotes = prData?.voteData?.voteTotals?.totalNoVotes
 
   const buttonStyle = {
-    vote: ['lightgreen', 'vote'],
-    'pre-open': ['green', prData?.voteData?.voteTotals?.totalVotePercent + '%'],
-    open: ['orchid', prData?.voteData?.voteTotals?.totalVotePercent + '%'],
+    vote: ['#61D25E', 'vote'],
+    'pre-open': [
+      totalYesVotes >= totalNoVotes ? '#61D25E' : '#FA4D57',
+      prData?.voteData?.voteTotals?.totalVotePercent + '%'
+    ],
+    open: [
+      totalYesVotes >= totalNoVotes ? '#09AE10' : '#E2222D',
+      prData?.voteData?.voteTotals?.totalVotePercent + '%'
+    ],
     frozen: [
-      '#BFD4F2',
+      totalYesVotes >= totalNoVotes ? '#8ECA8C' : '#E2222D',
       prData?.voteData?.voteTotals?.totalVotePercent > 0 ? prData?.voteData?.voteTotals?.totalVotePercent + '%' : 'vote'
     ],
     conflict: ['orange', 'conflict'],

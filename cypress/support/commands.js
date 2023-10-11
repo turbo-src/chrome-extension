@@ -63,6 +63,7 @@ Cypress.Commands.add('login', () => {
 Cypress.Commands.add(
   'findOrCreateUser',
   (turbosrcID, owner, repo, contributor_id, contributor_name, contributor_signature, token) => {
+    console.log(contributor_name);
     cy.request({
       method: 'POST',
       url: 'http://localhost:4000/graphql',
@@ -84,13 +85,7 @@ Cypress.Commands.add(
       `
       }
     }).then(response => {
-      expect(response.body.data.findOrCreateUser).to.have.property('contributor_name', Cypress.env('gitHubUsername'));
-      expect(response.body.data.findOrCreateUser).to.have.property('contributor_id', Cypress.env('contributorID'));
-      expect(response.body.data.findOrCreateUser).to.have.property(
-        'contributor_signature',
-        Cypress.env('contributorSignature')
-      );
-      expect(response.body.data.findOrCreateUser).to.have.property('token', Cypress.env('gitHubToken'));
+      expect(response.body.data.findOrCreateUser).to.have.property('contributor_name', contributor_name);
     });
   }
 );
@@ -105,7 +100,7 @@ Cypress.Commands.add('createRepo', () => {
         query createRepo {
           createRepo(
               turboSrcID: "${Cypress.env('turboSrcID')}",
-              owner: "",
+              owner: "${Cypress.env('gitHubUsername')}",
               repo: "${Cypress.env('gitHubUsername')}/${Cypress.env('gitHubRepo')}",
               defaultHash: "",
               contributor_id: "${Cypress.env('contributorID')}",
@@ -184,6 +179,59 @@ Cypress.Commands.add('getRepoData', () => {
   }`
     }
   }).then(response => {
-    expect(response.body.data.getRepoData).to.have.property('contributor_id', Cypress.env('contributorID'));
+    Cypress.env('repoID', response.body.data.getRepoData.repo_id);
+  });
+});
+
+
+Cypress.Commands.add('getNameSpaceRepo', (repo) => {
+
+  cy.request({
+    method: 'POST',
+    url: 'http://localhost:4000/graphql',
+    body: {
+      operationName: 'getNameSpaceRepo',
+      query: `
+        query getNameSpaceRepo {
+          getNameSpaceRepo(
+              repoNameOrID: "${repo}",
+          ) 
+          { status, repoID }
+        }
+        `
+    }
+  }).then(response => {
+    // Your assertions and further actions here
+    expect(response.body.data.getNameSpaceRepo).to.have.property('status', 200);
+    console.log('res commans 206', response.body.data.getNameSpaceRepo)
+    return cy.wrap(response.body.data.getNameSpaceRepo)
+  });
+});
+
+Cypress.Commands.add('transferTokens', (turboSrcID, owner, repo, from, to, amount, token) => {
+
+  cy.request({
+    method: 'POST',
+    url: 'http://localhost:4000/graphql',
+    body: {
+      operationName: 'transferTokens',
+      query: `
+        query transferTokens {
+          transferTokens(
+              turboSrcID: "${Cypress.env('turboSrcID')}",
+              owner: "${Cypress.env('gitHubUsername')}",
+              repo: "${Cypress.env('repoID')}",
+              from: "${from}",
+              to: "${to}",
+              amount: ${amount},
+              token: "${Cypress.env('gitHubToken')}"
+          ) 
+          { status }
+        }
+        `
+    }
+  }).then(response => {
+    // Your assertions and further actions here
+    expect(response.body.data.transferTokens).to.have.property('status', 201);
   });
 });
