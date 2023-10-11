@@ -98,7 +98,7 @@ export default function Onboard2() {
     const repoName = `${owner}/${repo}`
     await postCreateRepo(owner, repoName, '', user.ethereumAddress, '', user.token).then(res => {
       setLoader(false);
-      if (res.status === 201) {
+      if (res.status === 201 || res.status === 200) {
         navigate('/home');
       } else {
         setErrorText('There was an error creating this repository.');
