@@ -77,7 +77,10 @@ function VoteButton({
   contributerName,
   githubUser,
   clickVoteHandler,
-  setClickVoteHandler
+  setClickVoteHandler,
+  totalPercent,
+  votePower,
+  quorum
 }) {
   const [disabledButton, setDisabledButton] = useState(false);
   const [option, setOption] = useState(side);
@@ -93,6 +96,12 @@ function VoteButton({
     // Toggle clickVoteHandler to update vote data
     setClickVoteHandler(!clickVoteHandler)
     socket.emit('vote cast', user, repoID, issueID)
+    // Calculate if this vote will meet the quorum, if so, socket update repo to render frozen buttons:
+    let difference = 1 / Number(quorum)
+    let newTotalPercent = ((votePower / 1_000_000) + totalPercent) * difference
+    if (newTotalPercent >= quorum) {
+      socket.emit('update repo', repoID);
+    }
   };
 
   //Set switch case use effect:

@@ -142,6 +142,9 @@ const ModalVote = props => {
             contributorName={contributor_name}
             voteTotals={vote_totals}
             githubUser={githubUser}
+            totalPercent={totalPercent}
+            votePower={votePower}
+            quorum={quorum}
           />
           <VoteTotalResults
             totalPercent={totalPercent}

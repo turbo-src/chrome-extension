@@ -20,7 +20,7 @@ const BtnGroupVote = styled.div`
   }
 `;
 
-export default function VoteButtonGroup({disabled, setDisabled, clickVoteHandler, setClickVoteHandler, setVoted, voted, setChosenSide, chosenSide, user, repo, repoID, issueID, contributorID, contributorName, voteTotals, githubUser}) {
+export default function VoteButtonGroup({disabled, setDisabled, clickVoteHandler, setClickVoteHandler, setVoted, voted, setChosenSide, chosenSide, user, repo, repoID, issueID, contributorID, contributorName, voteTotals, githubUser, totalPercent, votePower, quorum}) {
   return (
     <BtnGroupVote>
       <VoteButton
@@ -40,6 +40,9 @@ export default function VoteButtonGroup({disabled, setDisabled, clickVoteHandler
         contributorID={contributorID}
         contributerName={contributorName}
         githubUser={githubUser}
+        totalPercent={totalPercent}
+        votePower={votePower}
+        quorum={quorum}
       ></VoteButton>
       <VoteButton
         disabled={disabled}
@@ -58,6 +61,9 @@ export default function VoteButtonGroup({disabled, setDisabled, clickVoteHandler
         contributorID={contributorID}
         contributerName={contributorName}
         githubUser={githubUser}
+        totalPercent={totalPercent}
+        votePower={votePower}
+        quorum={quorum}
       ></VoteButton>
     </BtnGroupVote>
   );
