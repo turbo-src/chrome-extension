@@ -63,7 +63,6 @@ Cypress.Commands.add('login', () => {
 Cypress.Commands.add(
   'findOrCreateUser',
   (turbosrcID, owner, repo, contributor_id, contributor_name, contributor_signature, token) => {
-    console.log(contributor_name);
     cy.request({
       method: 'POST',
       url: 'http://localhost:4000/graphql',
@@ -183,9 +182,7 @@ Cypress.Commands.add('getRepoData', () => {
   });
 });
 
-
-Cypress.Commands.add('getNameSpaceRepo', (repo) => {
-
+Cypress.Commands.add('getNameSpaceRepo', repo => {
   cy.request({
     method: 'POST',
     url: 'http://localhost:4000/graphql',
@@ -203,13 +200,11 @@ Cypress.Commands.add('getNameSpaceRepo', (repo) => {
   }).then(response => {
     // Your assertions and further actions here
     expect(response.body.data.getNameSpaceRepo).to.have.property('status', 200);
-    console.log('res commans 206', response.body.data.getNameSpaceRepo)
-    return cy.wrap(response.body.data.getNameSpaceRepo)
+    return cy.wrap(response.body.data.getNameSpaceRepo);
   });
 });
 
 Cypress.Commands.add('transferTokens', (turboSrcID, owner, repo, from, to, amount, token) => {
-
   cy.request({
     method: 'POST',
     url: 'http://localhost:4000/graphql',

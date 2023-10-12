@@ -4,7 +4,8 @@ try {
 } catch (error) {
   console.warn('No cypress.env.json file in root directory. To run tests, follow the readme in /cypress');
 }
-const setVoteReq = (turboSrcID, owner, repo, defaultHash, childDefaultHash, mergeable, contributor_id, side, token) => {
+
+const setVoteRequestBody = (turboSrcID, owner, repo, defaultHash, childDefaultHash, mergeable, contributor_id, side, token) => {
   return {
     method: 'POST',
     url: 'http://localhost:4000/graphql',
@@ -28,6 +29,7 @@ const setVoteReq = (turboSrcID, owner, repo, defaultHash, childDefaultHash, merg
     }
   };
 };
+
 describe('Voting', () => {
   it('should vote on PR #1', () => {
     cy.login();
@@ -39,24 +41,22 @@ describe('Voting', () => {
       let bot = testers[objectKey];
       let { key, apiToken } = bot;
 
+      const testerVoteRequestBody = setVoteRequestBody(
+        Cypress.env('turboSrcID'),
+        Cypress.env('gitHubUsername'),
+        res.repoID,
+        'issue_1',
+        'issue_1',
+        true,
+        key,
+        'yes',
+        apiToken
+      );
+
       cy.getNameSpaceRepo(`${Cypress.env('gitHubUsername')}/${Cypress.env('gitHubRepo')}`).then(res =>
-        cy
-          .request(
-            setVoteReq(
-              Cypress.env('turboSrcID'),
-              Cypress.env('gitHubUsername'),
-              res.repoID,
-              'issue_1',
-              'issue_1',
-              true,
-              key,
-              'yes',
-              apiToken
-            )
-          )
-          .then(response => {
-            expect(response.body.data.setVote).to.equal('201');
-          })
+        cy.request(testerVoteRequestBody).then(response => {
+          expect(response.body.data.setVote).to.equal('201');
+        })
       );
     }
   });
