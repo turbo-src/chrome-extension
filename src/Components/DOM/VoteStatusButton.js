@@ -2,6 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
 import useGetVotes from '../../hooks/useGetVotes.js';
 import Skeleton from '@mui/material/Skeleton';
+import styled from 'styled-components';
+
+const ButtonVote = styled.button`
+  color: white;
+  width: 80px;
+  height: 30px;
+`;
+
+const SpanVote = styled.span`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 export default function VoteStatusButton({
   user,
@@ -59,8 +72,10 @@ export default function VoteStatusButton({
   }
 
   return (
-    <Button style={{ color: 'white', background: voteStatusButton.color, width: '80px' }} onClick={e => handleClick(e)}>
-      {voteStatusButton.text}
-    </Button>
+    <ButtonVote style={{ background: voteStatusButton.color }} onClick={e => handleClick(e)}>
+     <ButtonSpan>
+        {voteStatusButton.text}
+      </ButtonSpan>
+    </ButtonVote>
   );
 }
