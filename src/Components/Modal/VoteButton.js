@@ -99,7 +99,7 @@ function VoteButton({
     // Calculate if this vote will meet the quorum, if so, socket update repo to render frozen buttons:
     let difference = 1 / Number(quorum)
     let newTotalPercent = ((votePower / 1_000_000) + totalPercent) * difference
-    if (newTotalPercent >= quorum) {
+    if (newTotalPercent >= .1) {
       socket.emit('update repo', repoID);
     }
   };
