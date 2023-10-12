@@ -96,7 +96,7 @@ function VoteButton({
     // Toggle clickVoteHandler to update vote data
     setClickVoteHandler(!clickVoteHandler)
     socket.emit('vote cast', user, repoID, issueID)
-    // Calculate if this vote will meet the quorum, if so, socket update repo to render frozen buttons:
+    // Calculate if this vote will exceed 10% of the quorum, if so, socket update repo to toggle frozen vote status buttons:
     let difference = 1 / Number(quorum)
     let newTotalPercent = ((votePower / 1_000_000) + totalPercent) * difference
     if (newTotalPercent >= .1) {
