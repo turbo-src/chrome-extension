@@ -36,15 +36,10 @@ const KeyAPI = styled.div`
   padding: 1rem;
 `;
 
-const PermsList = styled.ul`
-  li {
-    list-style-type: disc;
-  }
-`;
-
 const Exclamation = styled.img`
   margin-right: 5px;
-`
+`;
+
 const PermsText = styled.div`
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
   font-family: 'Inter', sans-serif;
@@ -64,18 +59,15 @@ export default function PermissionsNotice({ errorText, perms }) {
         <form name="create">
           <KeyAPI>
             <PermsNotice>
-
               <Exclamation src={Importance} style={{ height: '13px', width: '13px' }} />
               {perms.push_permissions
                 ? 'Additional permissions are required to add this repository to Turbosrc:'
                 : 'You do not have push permissions to this repository.'}
             </PermsNotice>
             <PermsText>
-              <PermsList>
-                {perms.push_permissions
-                  ? '•  Read/write access to your public repositories'
-                  : 'You can only create VotePower for repositories you maintain.'}
-              </PermsList>
+              {perms.push_permissions
+                ? '•  Read/write access to your public repositories'
+                : 'You can only create VotePower for repositories you maintain.'}
             </PermsText>
             {perms.push_permissions && (
               <BtnSpan>
