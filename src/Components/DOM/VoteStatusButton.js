@@ -3,11 +3,13 @@ import { Button } from 'react-bootstrap';
 import useGetVotes from '../../hooks/useGetVotes.js';
 import Skeleton from '@mui/material/Skeleton';
 import styled from 'styled-components';
+import LockIcon from '../../../icons/Lock.png';
 
 const ButtonVote = styled.button`
   color: white;
   width: 80px;
   height: 30px;
+  border: 0px;
 `;
 
 const SpanVote = styled.span`
@@ -15,6 +17,14 @@ const SpanVote = styled.span`
   justify-content: center;
   align-items: center;
 `;
+
+const LockImg = styled.img`
+  width: 15px;
+  height: 15px;
+  
+`;
+
+
 
 export default function VoteStatusButton({
   user,
@@ -60,6 +70,7 @@ export default function VoteStatusButton({
       const buttonText = buttonStyle[prData.state][1];
       setVoteStatusButton({ color: buttonColor, text: buttonText });
     }
+    console.log(voteStatusButton.text);
   }, [prData, loading, socketEvents]);
 
   const handleClick = e => {
@@ -73,9 +84,9 @@ export default function VoteStatusButton({
 
   return (
     <ButtonVote style={{ background: voteStatusButton.color }} onClick={e => handleClick(e)}>
-     <ButtonSpan>
-        {voteStatusButton.text}
-      </ButtonSpan>
+     <SpanVote>
+      {prData.state === 'merge' ? <LockImg src={LockIcon}/> : null}{voteStatusButton.text}
+      </SpanVote>
     </ButtonVote>
   );
 }
