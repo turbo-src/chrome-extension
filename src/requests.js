@@ -103,6 +103,7 @@ async function postCreateUser(owner, repo, contributor_id, contributor_name, con
 
 // deprecated
 async function postGetContributorName(owner, repo, defaultHash, contributor_id) {
+  console.warn('Deprecated of unused function called, postGetContributorName.')
   const repoName = `${owner}/${repo}`;
   const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
   const res = await superagent
@@ -157,6 +158,7 @@ async function postGetContributorID(owner, repo, defaultHash, contributor_name) 
 
 // Unused but not deprecated.
 async function postGetContributorSignature(owner, repo, defaultHash, contributor_id) {
+  console.warn('Deprecated of unused function called, postGetContributorSignature.')
   const repoName = `${owner}/${repo}`;
   const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
   const res = await superagent
@@ -329,6 +331,7 @@ async function postTransferTokens(owner, repo, from, to, amount, token) {
 
 // deprecated
 async function postNewPullRequest(owner, repo, defaultHash, contributor_id, side) {
+  console.warn('Deprecated of unused function called, postGetNewPullRequest.')
   const repoName = `${owner}/${repo}`;
   const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
   superagent
@@ -381,6 +384,7 @@ async function postSetVote(owner, repo, defaultHash, childDefaultHash, mergeable
 
 // deprecated
 async function getRepoStatus(repo_id) {
+  console.warn('Deprecated of unused function called, getRepoStatus.')
   const repoID = repo_id;
   const turboSrcID = await getTurboSrcIDFromRepoID(repoID);
   if (turboSrcID == null || turboSrcID === 'null') {
@@ -401,6 +405,7 @@ async function getRepoStatus(repo_id) {
 
 // Deprecated
 async function get_authorized_contributor(contributor_id, repo_id) {
+  console.warn('Deprecated of unused function called, get_authoried_contributor.')
   const repoID = repo_id;
   const turboSrcID = await getTurboSrcIDFromRepoID(repoID);
   if (turboSrcID == null || turboSrcID === 'null') {
@@ -418,6 +423,7 @@ async function get_authorized_contributor(contributor_id, repo_id) {
 
 // Not used but not deprecated.
 async function postPullFork(owner, repo, issue_id, contributor_id) {
+  console.warn('Deprecated of unused function called, postPullFork.')
   const repoName = `${owner}/${repo}`;
   const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
   return await superagent
@@ -430,6 +436,7 @@ async function postPullFork(owner, repo, issue_id, contributor_id) {
 
 // Not used but not deprecated.
 async function postGetPRforkStatus(owner, repo, issue_id, contributor_id) {
+  console.warn('Deprecated of unused function called, postGetPRforkStatus.')
   const repoName = `${owner}/${repo}`;
   const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
   const res = await superagent
@@ -447,6 +454,7 @@ async function postGetPRforkStatus(owner, repo, issue_id, contributor_id) {
 
 // Not used (deprecated?)
 async function postGetPullRequest(owner, repo, defaultHash, contributor_id, side) {
+  console.warn('Deprecated of unused function called, postGetPullRequest.')
   const repoName = `${owner}/${repo}`;
   var turboSrcID = await getTurboSrcIDFromRepoName(repoName);
   if (turboSrcID == null || turboSrcID === 'null') {
@@ -469,6 +477,7 @@ async function postGetPullRequest(owner, repo, defaultHash, contributor_id, side
 
 // Deprecated.
 async function postGetPRpercentVotedQuorum(owner, repo, defaultHash, contributor_id, side) {
+  console.warn('Deprecated of unused function called, postGetPRpercentVotedQuorum.')
   const repoName = `${owner}/${repo}`;
   const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
   const res = await superagent
@@ -495,6 +504,7 @@ async function postGetPRpercentVotedQuorum(owner, repo, defaultHash, contributor
 
 // Deprecated.
 async function postGetPRvoteTotals(owner, repo, defaultHash, contributor_id, side) {
+  console.warn('Deprecated of unused function called, postGetPRvoteTotals.')
   const repoName = `${owner}/${repo}`;
   const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
   const res = await superagent
@@ -521,6 +531,7 @@ async function postGetPRvoteTotals(owner, repo, defaultHash, contributor_id, sid
 
 // Deprecated.
 async function postGetPRvoteYesTotals(owner, repo, defaultHash, contributor_id, side) {
+  console.warn('Deprecated of unused function called, postGetPRvoteYesTotals.')
   const repoName = `${owner}/${repo}`;
   const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
   const res = await superagent
@@ -547,6 +558,7 @@ async function postGetPRvoteYesTotals(owner, repo, defaultHash, contributor_id, 
 
 // Deprecated.
 async function postGetPRvoteNoTotals(owner, repo, defaultHash, contributor_id, side) {
+  console.warn('Deprecated of unused function called, postGetPRvoteNoTotals.')
   const repoName = `${owner}/${repo}`;
   const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
   const res = await superagent
@@ -573,6 +585,7 @@ async function postGetPRvoteNoTotals(owner, repo, defaultHash, contributor_id, s
 
 // Deprecated.
 async function postClosePullRequest(owner, repo, defaultHash, contributor_id, side) {
+  console.warn('Deprecated of unused function called, postClosePullRequest.')
   const repoName = `${owner}/${repo}`;
   const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
   superagent
@@ -596,6 +609,7 @@ async function postClosePullRequest(owner, repo, defaultHash, contributor_id, si
 
 // Deprecated.
 async function postMergePullRequest(owner, repo, defaultHash, contributor_id, side) {
+  console.warn('Deprecated of unused function called, postMergePullRequest.')
   const repoName = `${owner}/${repo}`;
   const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
   superagent
@@ -619,6 +633,7 @@ async function postMergePullRequest(owner, repo, defaultHash, contributor_id, si
 
 // Deprecated.
 async function postCreatePullRequest(owner, repo, fork_branch, issue_id, title) {
+  console.warn('Deprecated of unused function called, postCreatePullRequest.')
   const repoName = `${owner}/${repo}`;
   const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
   superagent
@@ -642,6 +657,7 @@ async function postCreatePullRequest(owner, repo, fork_branch, issue_id, title) 
 
 // Unused, but not deprecated.
 async function postFork(owner, repo, org) {
+  console.warn('Deprecated of unused function called, postFork.')
   const repoName = `${owner}/${repo}`;
   const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
   superagent
@@ -663,6 +679,7 @@ async function postFork(owner, repo, org) {
 
 // Deprecated.
 async function getGitHubPullRequest(owner, repo, defaultHash, contributor_id) {
+  console.warn('Deprecated of unused function called, getGitHubPullRequest.')
   const repoName = `${owner}/${repo}`;
   const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
   console.log('get github pr called', defaultHash, contributor_id);
