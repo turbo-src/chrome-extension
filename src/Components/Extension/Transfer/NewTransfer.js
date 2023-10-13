@@ -202,6 +202,8 @@ export default function StartTransfer({
 
     if (e.target.value.length > 1) {
       setChecking(true);
+      // Change to currentRepo.repoID
+      // Currently `owner` is real and not ""
       await postGetContributorID(owner, repo, '', e.target.value)
         .then(res => setTransfer({ ...transfer, recipientName: e.target.value, recipientId: res }))
         .catch(error => console.log('error', error));
