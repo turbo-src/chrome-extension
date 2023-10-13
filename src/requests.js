@@ -17,7 +17,7 @@ let turboSrcIDfromInstance;
 // The hash is the reibaseID (possibly superflous in
 // offline, no router configuration).
 
-(async function() {
+(async function () {
   if (url === 'https://turbosrc-marialis.dev') {
     url = url + '/graphql';
   }
@@ -67,6 +67,26 @@ async function getTurboSrcIDFromRepoName(reponame) {
   }
 }
 
+async function getTurboSrcIDFromRepoID(repoID) {
+  console.log('getTurboSrcIDFromRepoID repoID', repoID);
+  if (url === 'http://localhost:4000/graphql') {
+    console.log('local\ngetTurboSrcIDFromRepoID turboSrcID', turboSrcIDfromInstance);
+    return turboSrcIDfromInstance;
+  } else {
+    const res = await superagent
+      .post(`${url}`)
+      .send({
+        query: `{ getTurboSrcIDFromRepoID(repoID: "${repoID}") }`
+      })
+      .set('accept', 'json');
+
+    const json = JSON.parse(res.text);
+    const turboSrcID = json.data.turboSrcID;
+    console.log('Egress\ngetTurboSrcIDFromRepoID turboSrcID', turboSrcID);
+    return turboSrcID; // return turboSrcID directly from data
+  }
+}
+
 async function postCreateUser(owner, repo, contributor_id, contributor_name, contributor_signature, token) {
   const repoName = `${owner}/${repo}`;
   const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
@@ -81,6 +101,7 @@ async function postCreateUser(owner, repo, contributor_id, contributor_name, con
   return json.data.createUser;
 }
 
+// deprecated
 async function postGetContributorName(owner, repo, defaultHash, contributor_id) {
   const repoName = `${owner}/${repo}`;
   const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
@@ -107,6 +128,7 @@ async function postGetContributorName(owner, repo, defaultHash, contributor_id) 
   return json.data.getContributorName;
 }
 
+// Uses real owner. Will switch to repoID in future.
 async function postGetContributorID(owner, repo, defaultHash, contributor_name) {
   const repoName = `${owner}/${repo}`;
   const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
@@ -133,6 +155,7 @@ async function postGetContributorID(owner, repo, defaultHash, contributor_name) 
   return json.data.getContributorID;
 }
 
+// Unused but not deprecated.
 async function postGetContributorSignature(owner, repo, defaultHash, contributor_id) {
   const repoName = `${owner}/${repo}`;
   const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
@@ -158,6 +181,8 @@ async function postGetContributorSignature(owner, repo, defaultHash, contributor
   console.log(json);
   return json.data.getContributorSignature;
 }
+
+// Takes real owner and repo
 async function postFindOrCreateUser(owner, repo, contributor_id, contributor_name, contributor_signature, token) {
   const repoName = `${owner}/${repo}`;
   var turboSrcID = await getTurboSrcIDFromRepoName(repoName);
@@ -189,6 +214,8 @@ async function postFindOrCreateUser(owner, repo, contributor_id, contributor_nam
   const json = JSON.parse(res.text);
   return json.data.findOrCreateUser;
 }
+
+// Takes real owner and repo.
 async function postCheckGithubTokenPermissions(owner, repo, contributor_name, token) {
   const repoName = `${owner}/${repo}`;
   var turboSrcID = await getTurboSrcIDFromRepoName(repoName);
@@ -205,6 +232,8 @@ async function postCheckGithubTokenPermissions(owner, repo, contributor_name, to
   const json = JSON.parse(res.text);
   return json.data.checkGithubTokenPermissions;
 }
+
+// Takes real owner and repo.
 async function postCreateRepo(owner, repo, defaultHash, contributor_id, side, token) {
   const repoName = `${owner}/${repo}`;
   var turboSrcID = await getTurboSrcIDFromRepoName(repoName);
@@ -239,9 +268,14 @@ async function postCreateRepo(owner, repo, defaultHash, contributor_id, side, to
   return json.data.createRepo;
 }
 
+// Take repoID
 async function postGetVotePowerAmount(owner, repo, defaultHash, contributor_id, side, token) {
-  const repoName = `${owner}/${repo}`;
-  const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
+  console.log('postGetVotePowerAmount', 'repoID', repo)
+  const repoID = repo;
+  const turboSrcID = await getTurboSrcIDFromRepoID(repoID);
+  if (turboSrcID == null || turboSrcID === 'null') {
+    turboSrcID = turboSrcIDfromInstance;
+  }
   const res = await superagent
     .post(`${url}`)
     .send(
@@ -265,9 +299,13 @@ async function postGetVotePowerAmount(owner, repo, defaultHash, contributor_id, 
   return json.data.getVotePowerAmount;
 }
 
+// Takes repoID
 async function postTransferTokens(owner, repo, from, to, amount, token) {
-  const repoName = `${owner}/${repo}`;
-  const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
+  const repoID = repo;
+  const turboSrcID = await getTurboSrcIDFromRepoID(repoID);
+  if (turboSrcID == null || turboSrcID === 'null') {
+    turboSrcID = turboSrcIDfromInstance;
+  }
   const res = await superagent
     .post(`${url}`)
     .send(
@@ -289,6 +327,7 @@ async function postTransferTokens(owner, repo, from, to, amount, token) {
   return json.data.transferTokens;
 }
 
+// deprecated
 async function postNewPullRequest(owner, repo, defaultHash, contributor_id, side) {
   const repoName = `${owner}/${repo}`;
   const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
@@ -311,9 +350,14 @@ async function postNewPullRequest(owner, repo, defaultHash, contributor_id, side
     });
 }
 
+// Takes repoID
 async function postSetVote(owner, repo, defaultHash, childDefaultHash, mergeable, contributor_id, side, token) {
-  const repoName = `${owner}/${repo}`;
-  const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
+  console.log('postSetVote', 'repoID', repo)
+  const repoID = repo;
+  const turboSrcID = await getTurboSrcIDFromRepoID(repoID);
+  if (turboSrcID == null || turboSrcID === 'null') {
+    turboSrcID = turboSrcIDfromInstance;
+  }
   const res = await superagent
     .post(`${url}`)
     .send(
@@ -335,9 +379,13 @@ async function postSetVote(owner, repo, defaultHash, childDefaultHash, mergeable
   return json.data.setVote;
 }
 
+// deprecated
 async function getRepoStatus(repo_id) {
-  const repoName = repo_id;
-  const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
+  const repoID = repo_id;
+  const turboSrcID = await getTurboSrcIDFromRepoID(repoID);
+  if (turboSrcID == null || turboSrcID === 'null') {
+    turboSrcID = turboSrcIDfromInstance;
+  }
   const res = await superagent
     .post(`${url}`)
     .send({
@@ -351,9 +399,13 @@ async function getRepoStatus(repo_id) {
   return json.data.getRepoStatus;
 }
 
+// Deprecated
 async function get_authorized_contributor(contributor_id, repo_id) {
-  const repoName = repo_id;
-  const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
+  const repoID = repo_id;
+  const turboSrcID = await getTurboSrcIDFromRepoID(repoID);
+  if (turboSrcID == null || turboSrcID === 'null') {
+    turboSrcID = turboSrcIDfromInstance;
+  }
   const res = await superagent
     .post(`${url}`)
     .send({
@@ -364,6 +416,7 @@ async function get_authorized_contributor(contributor_id, repo_id) {
   return json.data.getAuthorizedContributor;
 }
 
+// Not used but not deprecated.
 async function postPullFork(owner, repo, issue_id, contributor_id) {
   const repoName = `${owner}/${repo}`;
   const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
@@ -375,6 +428,7 @@ async function postPullFork(owner, repo, issue_id, contributor_id) {
     .set('accept', 'json');
 }
 
+// Not used but not deprecated.
 async function postGetPRforkStatus(owner, repo, issue_id, contributor_id) {
   const repoName = `${owner}/${repo}`;
   const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
@@ -391,6 +445,7 @@ async function postGetPRforkStatus(owner, repo, issue_id, contributor_id) {
   return json.data.getPRforkStatus;
 }
 
+// Not used (deprecated?)
 async function postGetPullRequest(owner, repo, defaultHash, contributor_id, side) {
   const repoName = `${owner}/${repo}`;
   var turboSrcID = await getTurboSrcIDFromRepoName(repoName);
@@ -412,6 +467,7 @@ async function postGetPullRequest(owner, repo, defaultHash, contributor_id, side
   return json.data.getPullRequest;
 }
 
+// Deprecated.
 async function postGetPRpercentVotedQuorum(owner, repo, defaultHash, contributor_id, side) {
   const repoName = `${owner}/${repo}`;
   const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
@@ -437,6 +493,7 @@ async function postGetPRpercentVotedQuorum(owner, repo, defaultHash, contributor
   return json.data.percentVotedQuorum;
 }
 
+// Deprecated.
 async function postGetPRvoteTotals(owner, repo, defaultHash, contributor_id, side) {
   const repoName = `${owner}/${repo}`;
   const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
@@ -462,6 +519,7 @@ async function postGetPRvoteTotals(owner, repo, defaultHash, contributor_id, sid
   return json.data.getPRvoteTotals;
 }
 
+// Deprecated.
 async function postGetPRvoteYesTotals(owner, repo, defaultHash, contributor_id, side) {
   const repoName = `${owner}/${repo}`;
   const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
@@ -487,6 +545,7 @@ async function postGetPRvoteYesTotals(owner, repo, defaultHash, contributor_id, 
   return json.data.getPRvoteYesTotals;
 }
 
+// Deprecated.
 async function postGetPRvoteNoTotals(owner, repo, defaultHash, contributor_id, side) {
   const repoName = `${owner}/${repo}`;
   const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
@@ -512,6 +571,7 @@ async function postGetPRvoteNoTotals(owner, repo, defaultHash, contributor_id, s
   return json.data.getPRvoteNoTotals;
 }
 
+// Deprecated.
 async function postClosePullRequest(owner, repo, defaultHash, contributor_id, side) {
   const repoName = `${owner}/${repo}`;
   const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
@@ -534,6 +594,7 @@ async function postClosePullRequest(owner, repo, defaultHash, contributor_id, si
     });
 }
 
+// Deprecated.
 async function postMergePullRequest(owner, repo, defaultHash, contributor_id, side) {
   const repoName = `${owner}/${repo}`;
   const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
@@ -556,6 +617,7 @@ async function postMergePullRequest(owner, repo, defaultHash, contributor_id, si
     });
 }
 
+// Deprecated.
 async function postCreatePullRequest(owner, repo, fork_branch, issue_id, title) {
   const repoName = `${owner}/${repo}`;
   const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
@@ -578,6 +640,7 @@ async function postCreatePullRequest(owner, repo, fork_branch, issue_id, title) 
     });
 }
 
+// Unused, but not deprecated.
 async function postFork(owner, repo, org) {
   const repoName = `${owner}/${repo}`;
   const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
@@ -598,6 +661,7 @@ async function postFork(owner, repo, org) {
     });
 }
 
+// Deprecated.
 async function getGitHubPullRequest(owner, repo, defaultHash, contributor_id) {
   const repoName = `${owner}/${repo}`;
   const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
@@ -615,9 +679,10 @@ async function getGitHubPullRequest(owner, repo, defaultHash, contributor_id) {
   return json.data.getGitHubPullRequest;
 }
 
+// Takes repoID.
 async function postGetRepoData(repo_id, contributor_id) {
-  const repoName = repo_id;
-  var turboSrcID = await getTurboSrcIDFromRepoName(repoName);
+  const repoID = repo_id;
+  const turboSrcID = await getTurboSrcIDFromRepoID(repoID);
   if (turboSrcID == null || turboSrcID === 'null') {
     turboSrcID = turboSrcIDfromInstance;
   }
@@ -681,9 +746,15 @@ async function postGetRepoData(repo_id, contributor_id) {
   console.log(json.data.getRepoData);
   return json.data.getRepoData;
 }
+
+// Takes repoID.
 async function postGetVotes(repo, defaultHash, contributor_id) {
-  const repoName = repo;
-  const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
+  console.log('postGetVotes', 'repoID', repo)
+  const repoID = repo;
+  const turboSrcID = await getTurboSrcIDFromRepoID(repoID);
+  if (turboSrcID == null || turboSrcID === 'null') {
+    turboSrcID = turboSrcIDfromInstance;
+  }
   const res = await superagent
     .post(`${url}`)
     .send({
@@ -708,7 +779,32 @@ async function postGetVotes(repo, defaultHash, contributor_id) {
   return json.data.getVotes;
 }
 
+// Takes repoID or repoName.
 async function getNameSpaceRepo(repoNameOrID) {
+  const isValidEthereumAddress = (address) => {
+      try {
+          const regex = /^0x[a-fA-F0-9]{40}$/;
+          return regex.test(address);
+      } catch (e) {
+          console.error(`Failed to check if provided string is a valid Ethereum address. Error: ${e.message}`);
+          console.error(e.stack);
+          return false;
+      }
+  }
+
+  let turboSrcID;
+  if (isValidEthereumAddress(repoNameOrID)) {
+       let repoID = repoNameOrID;
+       turboSrcID = await getTurboSrcIDFromRepoID(repoID);
+  } else {
+       let repoName = repoNameOrID;
+       turboSrcID = await getTurboSrcIDFromRepoID(repoName);
+  }
+
+  if (turboSrcID == null || turboSrcID === 'null') {
+      turboSrcID = turboSrcIDfromInstance;
+  }
+
   const res = await superagent
     .post(`${url}`)
     .send({
