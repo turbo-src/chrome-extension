@@ -10,18 +10,18 @@ const RepoButton = styled.button`
   border: none;
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
   font-family: 'Inter', sans-serif;
-  font-weight: 500;
+  font-weight: 600;
 `;
 
 const PermsNotice = styled.span`
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
   font-family: 'Inter', sans-serif;
-  font-weight: 700;
+  font-weight: 600;
   color: black;
   text-align: center;
-  margin: 1rem 0;
-  line-height: 1.75;
-  font-size: 17px;
+  margin: 0 0 30px 0;
+  line-height: 1.5;
+  font-size: 16px;
 `;
 
 const BtnSpan = styled.span`
@@ -49,7 +49,7 @@ const PermsText = styled.div`
   width: 95%;
   margin: 0px auto 40px auto;
   line-height: 1.5;
-  font-size: 15px;
+  font-size: 14px;
 `;
 
 export default function PermissionsNotice({ errorText, perms }) {
