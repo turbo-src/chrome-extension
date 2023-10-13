@@ -158,14 +158,15 @@ export default function Account() {
       font-weight: 400;
       `;
 
-  useEffect(() => {
-    const getTokenAmount = async () => {
-      await postGetVotePowerAmount(owner, repo, '', user.ethereumAddress, '', user.token)
-        .then(res => useCommas(res.amount))
-        .then(tokens => setTokenAmount(tokens));
-    };
-    getTokenAmount();
-  });
+  //useEffect(() => {
+  //  const getTokenAmount = async () => {
+  //    // Currently no repoID accessible (but functionality could added)
+  //    await postGetVotePowerAmount(owner, repo, '', user.ethereumAddress, '', user.token)
+  //      .then(res => useCommas(res.amount))
+  //      .then(tokens => setTokenAmount(tokens));
+  //  };
+  //  getTokenAmount();
+  //});
 
   return (
     <AccountContent>
