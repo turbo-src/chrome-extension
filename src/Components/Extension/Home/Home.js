@@ -258,6 +258,7 @@ export default function Home() {
   const getRepoIDHandler = async () => {
     try {
       const response = await getNameSpaceRepo(`${owner}/${repo}`).then(res => {
+        console.log('getRepoIDHandler repoID: ' + res.repoID)
         setRepoID(res.repoID);
       });
     } catch (error) {
@@ -267,6 +268,7 @@ export default function Home() {
 
   const getRepoDataHandler = async () => {
     try {
+      console.log('getRepoDataHandler repoID: ' + repoID)
       const response = await postGetRepoData(repoID, user.ethereumAddress).then(res => {
         if (res != null || res != undefined) {
           setTokenized(true);

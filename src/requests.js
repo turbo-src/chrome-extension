@@ -81,6 +81,7 @@ async function getTurboSrcIDFromRepoID(repoID) {
       .set('accept', 'json');
 
     const json = JSON.parse(res.text);
+    console.log('getTurboSrcIDFromRepoID json\n', json)
     const turboSrcID = json.data.turboSrcID;
     console.log('Egress\ngetTurboSrcIDFromRepoID turboSrcID', turboSrcID);
     return turboSrcID; // return turboSrcID directly from data
@@ -698,6 +699,7 @@ async function getGitHubPullRequest(owner, repo, defaultHash, contributor_id) {
 
 // Takes repoID.
 async function postGetRepoData(repo_id, contributor_id) {
+  console.log('postGetRepoDatal repoID: ' + repo_id)
   const repoID = repo_id;
   const turboSrcID = await getTurboSrcIDFromRepoID(repoID);
   if (turboSrcID == null || turboSrcID === 'null') {
@@ -798,6 +800,7 @@ async function postGetVotes(repo, defaultHash, contributor_id) {
 
 // Takes repoID or repoName.
 async function getNameSpaceRepo(repoNameOrID) {
+  console.log('getNameSpaceRepo repoNameOrID: ' + repoNameOrID)
   const isValidEthereumAddress = (address) => {
       try {
           const regex = /^0x[a-fA-F0-9]{40}$/;
@@ -815,17 +818,20 @@ async function getNameSpaceRepo(repoNameOrID) {
        turboSrcID = await getTurboSrcIDFromRepoID(repoID);
   } else {
        let repoName = repoNameOrID;
-       turboSrcID = await getTurboSrcIDFromRepoID(repoName);
+       turboSrcID = await getTurboSrcIDFromRepoName(repoName);
   }
+
+  console.log('getNameSpaceRepo turboSrcID: ' + turboSrcID)
 
   if (turboSrcID == null || turboSrcID === 'null') {
       turboSrcID = turboSrcIDfromInstance;
+      console.log('getNameSpaceRepo default turboSrcID: ' + turboSrcID)
   }
 
   const res = await superagent
     .post(`${url}`)
     .send({
-      query: `{ getNameSpaceRepo(repoNameOrID: "${repoNameOrID}") {status, repoName, repoID, repoSignature, message}}`
+      query: `{ getNameSpaceRepo(turboSrcID: "${turboSrcID}", repoNameOrID: "${repoNameOrID}") {status, repoName, repoID, repoSignature, message}}`
     })
     .set('accept', 'json');
   const json = JSON.parse(res.text);
