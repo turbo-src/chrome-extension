@@ -7,7 +7,6 @@ const LockIcon = 'https://www.reibase.rs/lock.png';
 const UpArrow = 'https://www.reibase.rs/triangle-arrow-up.png';
 const DownArrow = 'https://www.reibase.rs/triangle-arrow-down.png';
 
-
 const ButtonVote = styled.button`
   color: white;
   width: 80px;
@@ -22,13 +21,19 @@ const SpanVote = styled.span`
   align-items: center;
 `;
 
-const LockImg = styled.img`
-  width: 15px;
-  height: 15px;
-  
+const IconImg = styled.img`
+  width: 12px;
+  height: 8px;
+  margin-right: 3px;
+  margin-top: 3px;
 `;
 
-
+const iconMap = {
+  frozen: LockIcon,
+  upvote: UpArrow,
+  downvote: DownArrow
+};
+let iconKey;
 
 export default function VoteStatusButton({
   user,
@@ -46,19 +51,26 @@ export default function VoteStatusButton({
   });
 
   const { prData, loading } = useGetVotes(user, repoID, issueID, contributorID, side, socketEvents, clicked);
-  const totalYesVotes = prData?.voteData?.voteTotals?.totalYesVotes
-  const totalNoVotes = prData?.voteData?.voteTotals?.totalNoVotes
-  let icon;
+  const totalYesVotes = prData?.voteData?.voteTotals?.totalYesVotes;
+  const totalNoVotes = prData?.voteData?.voteTotals?.totalNoVotes;
+
+  if (prData?.state === 'frozen') {
+    iconKey = 'frozen';
+  } else if ((prData?.state === 'pre-open' || prData?.state === 'open') && totalYesVotes >= totalNoVotes) {
+    iconKey = 'upvote';
+  } else if ((prData?.state === 'pre-open' || prData?.state === 'open') && totalYesVotes < totalNoVotes) {
+    iconKey = 'downvote';
+  } else {
+    iconKey = null;
+  }
+
   const buttonStyle = {
     vote: ['#61D25E', 'vote'],
     'pre-open': [
       totalYesVotes >= totalNoVotes ? '#61D25E' : '#FA4D57',
       prData?.voteData?.voteTotals?.totalVotePercent + '%'
     ],
-    open: [
-      totalYesVotes >= totalNoVotes ? '#09AE10' : '#E2222D',
-      prData?.voteData?.voteTotals?.totalVotePercent + '%'
-    ],
+    open: [totalYesVotes >= totalNoVotes ? '#09AE10' : '#E2222D', prData?.voteData?.voteTotals?.totalVotePercent + '%'],
     frozen: [
       totalYesVotes >= totalNoVotes ? '#8ECA8C' : '#E2222D',
       prData?.voteData?.voteTotals?.totalVotePercent > 0 ? prData?.voteData?.voteTotals?.totalVotePercent + '%' : 'vote'
@@ -72,15 +84,6 @@ export default function VoteStatusButton({
     if (!loading) {
       const buttonColor = buttonStyle[prData.state][0];
       const buttonText = buttonStyle[prData.state][1];
-      if ((prData.state === 'pre-open' || prData.state === 'open') && totalYesVotes >= totalNoVotes){
-        icon = <img src={UpArrow}/>;
-      } else if ((prData.state === 'pre-open' || prData.state === 'open') && totalYesVotes < totalNoVotes){
-        icon = <img src={DownArrow}/>;
-      } else if (prData.state === 'frozen'){
-        icon = <img src={LockIcon}/>;
-      }
-      icon = <img src={LockIcon}/>;
-      console.log(icon, 'icon');
       setVoteStatusButton({ color: buttonColor, text: buttonText });
     }
     console.log(voteStatusButton.text);
@@ -97,9 +100,9 @@ export default function VoteStatusButton({
 
   return (
     <ButtonVote style={{ background: voteStatusButton.color }} onClick={e => handleClick(e)}>
-     
-     <SpanVote>
-      {icon}{voteStatusButton.text}
+      <SpanVote>
+        {iconKey && <IconImg src={iconMap[iconKey]} alt={iconKey} />}
+        {voteStatusButton.text}
       </SpanVote>
     </ButtonVote>
   );
