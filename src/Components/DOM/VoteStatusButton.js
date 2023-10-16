@@ -3,13 +3,17 @@ import { Button } from 'react-bootstrap';
 import useGetVotes from '../../hooks/useGetVotes.js';
 import Skeleton from '@mui/material/Skeleton';
 import styled from 'styled-components';
-import LockIcon from '../../../icons/Lock.png';
+const LockIcon = 'https://www.reibase.rs/lock.png';
+const UpArrow = 'https://www.reibase.rs/triangle-arrow-up.png';
+const DownArrow = 'https://www.reibase.rs/triangle-arrow-down.png';
+
 
 const ButtonVote = styled.button`
   color: white;
   width: 80px;
   height: 30px;
   border: 0px;
+  font-weight: 500;
 `;
 
 const SpanVote = styled.span`
@@ -44,7 +48,7 @@ export default function VoteStatusButton({
   const { prData, loading } = useGetVotes(user, repoID, issueID, contributorID, side, socketEvents, clicked);
   const totalYesVotes = prData?.voteData?.voteTotals?.totalYesVotes
   const totalNoVotes = prData?.voteData?.voteTotals?.totalNoVotes
-
+  let icon;
   const buttonStyle = {
     vote: ['#61D25E', 'vote'],
     'pre-open': [
@@ -59,15 +63,24 @@ export default function VoteStatusButton({
       totalYesVotes >= totalNoVotes ? '#8ECA8C' : '#E2222D',
       prData?.voteData?.voteTotals?.totalVotePercent > 0 ? prData?.voteData?.voteTotals?.totalVotePercent + '%' : 'vote'
     ],
-    conflict: ['orange', 'conflict'],
-    merge: ['darkorchid', 'merged'],
-    close: ['red', 'closed']
+    conflict: ['#FC9A28', 'conflict'],
+    merge: ['#613E8E', 'merged'],
+    close: ['#DA2D38', 'closed']
   };
 
   useEffect(() => {
     if (!loading) {
       const buttonColor = buttonStyle[prData.state][0];
       const buttonText = buttonStyle[prData.state][1];
+      if ((prData.state === 'pre-open' || prData.state === 'open') && totalYesVotes >= totalNoVotes){
+        icon = <img src={UpArrow}/>;
+      } else if ((prData.state === 'pre-open' || prData.state === 'open') && totalYesVotes < totalNoVotes){
+        icon = <img src={DownArrow}/>;
+      } else if (prData.state === 'frozen'){
+        icon = <img src={LockIcon}/>;
+      }
+      icon = <img src={LockIcon}/>;
+      console.log(icon, 'icon');
       setVoteStatusButton({ color: buttonColor, text: buttonText });
     }
     console.log(voteStatusButton.text);
@@ -84,8 +97,9 @@ export default function VoteStatusButton({
 
   return (
     <ButtonVote style={{ background: voteStatusButton.color }} onClick={e => handleClick(e)}>
+     
      <SpanVote>
-      {prData.state === 'merge' ? <LockImg src={LockIcon}/> : null}{voteStatusButton.text}
+      {icon}{voteStatusButton.text}
       </SpanVote>
     </ButtonVote>
   );
