@@ -1,24 +1,17 @@
+import createHTTPClient from './httpClient';
+
 export const createRepoRequestBody = (repoName, contributorID, token) => {
-  return {
-    method: 'POST',
-    url: 'http://localhost:4000/graphql',
-    body: {
-      operationName: 'createRepo',
-      query: `
-          query createRepo {
-            createRepo(
-                turboSrcID: "${Cypress.env('turboSrcID')}",
-                owner: "",
-                repo: "${repoName}",
-                defaultHash: "",
-                contributor_id: "${contributorID}",
-                side: "",
-                token: "${token}"
-            ) 
-          }
-          `
-    }
-  };
+  const reqBody = `createRepo(
+        turboSrcID: "${Cypress.env('turboSrcID')}",
+        owner: "",
+        repo: "${repoName}",
+        defaultHash: "",
+        contributor_id: "${contributorID}",
+        side: "",
+        token: "${token}"
+    )`;
+
+  return createHTTPClient('createRepo', reqBody);
 };
 
 export const findOrCreateUserRequestBody = (
@@ -27,14 +20,8 @@ export const findOrCreateUserRequestBody = (
   contributorSignature = 'none',
   token
 ) => {
-  return {
-    method: 'POST',
-    url: 'http://localhost:4000/graphql',
-    body: {
-      operationName: 'findOrCreateUser',
-      query: `
-      query findOrCreateUser {
-        findOrCreateUser(
+  const reqBody = `
+    findOrCreateUser(
           turboSrcID: "${Cypress.env('turbosrcID')}",
           owner: "${Cypress.env('gitHubUsername')}",
           repo: "${Cypress.env('gitHubRepo')}",
@@ -43,21 +30,15 @@ export const findOrCreateUserRequestBody = (
           contributor_signature: "${contributorSignature}",
           token: "${token}"
     ) 
-    { contributor_name, contributor_id, contributor_signature, token }
-      }
-      `
+    {
+    contributor_name, contributor_id, contributor_signature, token
     }
-  };
+    `;
+  return createHTTPClient('findOrCreateUser', reqBody);
 };
 
 export const transferVotePowerRequestBody = (repoID, from, to, amount) => {
-  return {
-    method: 'POST',
-    url: 'http://localhost:4000/graphql',
-    body: {
-      operationName: 'transferTokens',
-      query: `
-      query transferTokens {
+  const reqBody = `
         transferTokens(
             turboSrcID: "${Cypress.env('turboSrcID')}",
             owner: "${Cypress.env('gitHubUsername')}",
@@ -68,20 +49,12 @@ export const transferVotePowerRequestBody = (repoID, from, to, amount) => {
             token: "${Cypress.env('gitHubToken')}"
         ) 
         { status }
-      }
-      `
-    }
-  };
+      `;
+  return createHTTPClient('transferTokens', reqBody);
 };
 
 export const setVoteRequestBody = (repoID, defaultHash, childDefaultHash, mergeable, contributor_id, side, token) => {
-  return {
-    method: 'POST',
-    url: 'http://localhost:4000/graphql',
-    body: {
-      operationName: 'setVote',
-      query: `
-            query setVote {
+  const reqBody = `
               setVote(
                   turboSrcID: "${Cypress.env('turboSrcID')}",
                   owner: "",
@@ -93,20 +66,12 @@ export const setVoteRequestBody = (repoID, defaultHash, childDefaultHash, mergea
                   side: "${side}",
                   token: "${token}"
               )
-            }
-            `
-    }
-  };
+            `;
+  return createHTTPClient('setVote', reqBodyÍ);
 };
 
 export const getVotesRequestBody = (repoID, defaultHash, contributorID) => {
-  return {
-    method: 'POST',
-    url: 'http://localhost:4000/graphql',
-    body: {
-      operationName: 'getVotes',
-      query: `
-          query getVotes { 
+  const reqBody = `
             getVotes(
                 turboSrcID: "${Cypress.env('turboSrcID')}", 
                 repo: "${repoID}", 
@@ -131,11 +96,10 @@ export const getVotesRequestBody = (repoID, defaultHash, contributorID) => {
           voteTotals {
             totalVotes, totalYesVotes, totalNoVotes, votesToQuorum, votesToMerge, votesToClose, totalVotePercent, yesPercent, noPercent, quorum
           },
-          votes { contributor_id, side, votePower, createdAt }
-          },
-        }
-    }
-          `
-    }
-  };
+          votes { 
+            contributor_id, side, votePower, createdAt
+          }
+        },
+       }`;
+  return createHTTPClient('getRepoData', reqBody);
 };

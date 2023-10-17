@@ -7,8 +7,8 @@ try {
 
 import { setVoteRequestBody, getVotesRequestBody } from './requests';
 
-describe('Voting', () => {
-  it('should vote on PR #1', () => {
+describe('Contributors vote', () => {
+  it('each contributor should vote "yes" on PR #1', () => {
     const demoRepoName = `${Cypress.env('gitHubUsername')}/${Cypress.env('gitHubRepo')}`;
 
     cy.login();
@@ -21,9 +21,9 @@ describe('Voting', () => {
       let { key, apiToken } = tester;
       cy.wait(1000);
       cy.getNameSpaceRepo(demoRepoName).then(res => {
-        const testerVoteRequestBody = setVoteRequestBody(res.repoID, 'issue_1', 'issue_1', true, key, 'yes', apiToken);
+        const reqBody = setVoteRequestBody(res.repoID, 'issue_1', 'issue_1', true, key, 'yes', apiToken);
 
-        cy.request(testerVoteRequestBody).then(response => {
+        cy.request(reqBody).then(response => {
           expect(response.body.data.setVote).to.equal('201');
         });
       });
@@ -46,7 +46,7 @@ describe('Check PR state', () => {
 });
 
 describe('Majority vote', () => {
-  it('should exceed the quorum and vote to merge', () => {
+  it('the maintainer should vote "yes" to exceed the quorum', () => {
     const demoRepoName = `${Cypress.env('gitHubUsername')}/${Cypress.env('gitHubRepo')}`;
 
     cy.login();
@@ -54,9 +54,17 @@ describe('Majority vote', () => {
     cy.visit(`https://github.com/${Cypress.env('gitHubUsername')}/${Cypress.env('gitHubRepo')}/pulls`);
 
     cy.getNameSpaceRepo(demoRepoName).then(res => {
-      const testerVoteRequestBody = setVoteRequestBody(res.repoID, 'issue_1', 'issue_1', true, Cypress.env('contributorID'), 'yes', Cypress.env('gitHubToken'));
+      const reqBody = setVoteRequestBody(
+        res.repoID,
+        'issue_1',
+        'issue_1',
+        true,
+        Cypress.env('contributorID'),
+        'yes',
+        Cypress.env('gitHubToken')
+      );
 
-      cy.request(testerVoteRequestBody).then(response => {
+      cy.request(reqBody).then(response => {
         expect(response.body.data.setVote).to.equal('201');
       });
     });
