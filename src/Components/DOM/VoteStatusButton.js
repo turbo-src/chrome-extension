@@ -28,12 +28,14 @@ const IconImg = styled.img`
   margin-top: 3px;
 `;
 
-const iconMap = {
+const getIconMap = (totalYesVotes, totalNoVotes, prState) => ({
+  visible: prState !== 'merge',
   frozen: LockIcon,
-  upvote: UpArrow,
-  downvote: DownArrow
-};
-let iconKey;
+  'pre-open': totalYesVotes >= totalNoVotes ? UpArrow : DownArrow,
+  open: totalYesVotes >= totalNoVotes ? UpArrow : DownArrow,
+  merge: null
+});
+
 
 export default function VoteStatusButton({
   user,
@@ -53,16 +55,7 @@ export default function VoteStatusButton({
   const { prData, loading } = useGetVotes(user, repoID, issueID, contributorID, side, socketEvents, clicked);
   const totalYesVotes = prData?.voteData?.voteTotals?.totalYesVotes;
   const totalNoVotes = prData?.voteData?.voteTotals?.totalNoVotes;
-
-  if (prData?.state === 'frozen') {
-    iconKey = 'frozen';
-  } else if ((prData?.state === 'pre-open' || prData?.state === 'open') && totalYesVotes >= totalNoVotes) {
-    iconKey = 'upvote';
-  } else if ((prData?.state === 'pre-open' || prData?.state === 'open') && totalYesVotes < totalNoVotes) {
-    iconKey = 'downvote';
-  } else {
-    iconKey = null;
-  }
+  const iconMap = getIconMap(totalYesVotes, totalNoVotes, prData?.state);
 
   const buttonStyle = {
     vote: ['#61D25E', 'vote'],
@@ -101,7 +94,7 @@ export default function VoteStatusButton({
   return (
     <ButtonVote style={{ background: voteStatusButton.color }} onClick={e => handleClick(e)}>
       <SpanVote>
-        {iconKey && <IconImg src={iconMap[iconKey]} alt={iconKey} />}
+        {iconMap.visible && <IconImg src={iconMap[prData.state]} alt={prData.state} />}
         {voteStatusButton.text}
       </SpanVote>
     </ButtonVote>
