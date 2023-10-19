@@ -3,6 +3,7 @@ import { Button } from 'react-bootstrap';
 import useGetVotes from '../../hooks/useGetVotes.js';
 import Skeleton from '@mui/material/Skeleton';
 import styled from 'styled-components';
+import ButtonProgress from './ButtonProgress.js';
 const LockIcon = 'https://www.reibase.rs/lock.png';
 const UpArrow = 'https://www.reibase.rs/triangle-arrow-up.png';
 const DownArrow = 'https://www.reibase.rs/triangle-arrow-down.png';
@@ -13,6 +14,7 @@ const ButtonVote = styled.button`
   height: 30px;
   border: 0px;
   font-weight: 500;
+  border-radius: 5px;
 `;
 
 const SpanVote = styled.span`
@@ -24,7 +26,7 @@ const SpanVote = styled.span`
 const IconImg = styled.img`
   width: 12px;
   height: 8px;
-  margin-right: 3px;
+  margin-right: 10px;
   margin-top: 3px;
 `;
 
@@ -92,11 +94,14 @@ export default function VoteStatusButton({
   }
 
   return (
+    <>
     <ButtonVote style={{ background: voteStatusButton.color }} onClick={e => handleClick(e)}>
       <SpanVote>
         {iconMap.visible && <IconImg src={iconMap[prData.state]} alt={prData.state} />}
         {voteStatusButton.text}
       </SpanVote>
     </ButtonVote>
+    <ButtonProgress yesPercent={prData.voteData.voteTotals.yesPercent} noPercent={prData.voteData.voteTotals.yesPercent} />
+    </>
   );
 }
