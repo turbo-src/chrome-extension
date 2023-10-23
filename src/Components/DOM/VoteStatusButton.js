@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from 'react-bootstrap';
 import useGetVotes from '../../hooks/useGetVotes.js';
 import Skeleton from '@mui/material/Skeleton';
 import styled from 'styled-components';
 import ButtonProgress from './ButtonProgress.js';
 const LockIcon = 'https://www.reibase.rs/lock.png';
-const UpArrow = 'https://www.reibase.rs/triangle-arrow-up.png';
-const DownArrow = 'https://www.reibase.rs/triangle-arrow-down.png';
 
 const ButtonVote = styled.button`
   color: white;
@@ -15,6 +12,7 @@ const ButtonVote = styled.button`
   border: 0px;
   font-weight: 500;
   border-radius: 5px;
+  filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.35));
 `;
 
 const SpanVote = styled.span`
@@ -23,21 +21,22 @@ const SpanVote = styled.span`
   align-items: center;
 `;
 
-const IconImg = styled.img`
-  width: 12px;
-  height: 8px;
-  margin-right: 10px;
-  margin-top: 3px;
+const VoteButtonText = styled.span`
+  position: relative;
+  right: 7px;
 `;
 
-const getIconMap = (totalYesVotes, totalNoVotes, prState) => ({
-  visible: prState !== 'merge',
-  frozen: LockIcon,
-  'pre-open': totalYesVotes >= totalNoVotes ? UpArrow : DownArrow,
-  open: totalYesVotes >= totalNoVotes ? UpArrow : DownArrow,
-  merge: null
-});
+const IconImg = styled.img`
+  width: 16px;
+  height: 11px;
+  position: relative;
+  right: 15px;
+`;
 
+const Placeholder = styled.div`
+  width: 16px;
+  height: 11px;
+`;
 
 export default function VoteStatusButton({
   user,
@@ -50,29 +49,25 @@ export default function VoteStatusButton({
   socketEvents
 }) {
   const [voteStatusButton, setVoteStatusButton] = useState({
-    color: 'lightgreen',
-    text: 'vote'
+    color: '#4AA0D5',
+    text: 'Vote'
   });
 
   const { prData, loading } = useGetVotes(user, repoID, issueID, contributorID, side, socketEvents, clicked);
   const totalYesVotes = prData?.voteData?.voteTotals?.totalYesVotes;
   const totalNoVotes = prData?.voteData?.voteTotals?.totalNoVotes;
-  const iconMap = getIconMap(totalYesVotes, totalNoVotes, prData?.state);
 
   const buttonStyle = {
-    vote: ['#61D25E', 'vote'],
+    vote: ['#4AA0D5', 'Vote'],
     'pre-open': [
-      totalYesVotes >= totalNoVotes ? '#61D25E' : '#FA4D57',
+      totalYesVotes >= totalNoVotes ? '#4AA0D5' : '#4AA0D5',
       prData?.voteData?.voteTotals?.totalVotePercent + '%'
     ],
-    open: [totalYesVotes >= totalNoVotes ? '#09AE10' : '#E2222D', prData?.voteData?.voteTotals?.totalVotePercent + '%'],
-    frozen: [
-      totalYesVotes >= totalNoVotes ? '#8ECA8C' : '#E2222D',
-      prData?.voteData?.voteTotals?.totalVotePercent > 0 ? prData?.voteData?.voteTotals?.totalVotePercent + '%' : 'vote'
-    ],
-    conflict: ['#FC9A28', 'conflict'],
-    merge: ['#613E8E', 'merged'],
-    close: ['#DA2D38', 'closed']
+    open: [totalYesVotes >= totalNoVotes ? '#4AA0D5' : '#4AA0D5', 'Vote'],
+    frozen: [totalYesVotes >= totalNoVotes ? '#919190' : '#919190', 'Vote'],
+    conflict: ['#FC9A28', 'Conflict'],
+    merge: ['#613E8E', 'Merged'],
+    close: ['#DD4747', 'Closed']
   };
 
   useEffect(() => {
@@ -81,7 +76,7 @@ export default function VoteStatusButton({
       const buttonText = buttonStyle[prData.state][1];
       setVoteStatusButton({ color: buttonColor, text: buttonText });
     }
-    console.log(voteStatusButton.text);
+    console.log(prData);
   }, [prData, loading, socketEvents]);
 
   const handleClick = e => {
@@ -95,13 +90,22 @@ export default function VoteStatusButton({
 
   return (
     <>
-    <ButtonVote style={{ background: voteStatusButton.color }} onClick={e => handleClick(e)}>
-      <SpanVote>
-        {iconMap.visible && <IconImg src={iconMap[prData.state]} alt={prData.state} />}
-        {voteStatusButton.text}
-      </SpanVote>
-    </ButtonVote>
-    <ButtonProgress yesPercent={prData.voteData.voteTotals.yesPercent} noPercent={prData.voteData.voteTotals.yesPercent} />
+      <ButtonVote style={{ background: voteStatusButton.color }} onClick={e => handleClick(e)}>
+        <SpanVote>
+          {prData.state === 'frozen' || prData.state === 'conflict' ? (
+            <IconImg src={LockIcon} alt={prData.state} />
+          ) : (
+            <Placeholder />
+          )}
+          <VoteButtonText>{voteStatusButton.text}</VoteButtonText>
+        </SpanVote>
+      </ButtonVote>
+      <ButtonProgress
+        yesPercent={prData.voteData.voteTotals.yesPercent}
+        noPercent={prData.voteData.voteTotals.noPercent}
+        quorum={prData.voteData.voteTotals.quorum}
+        totalVotes={prData.voteData.voteTotals.totalVotes}
+      />
     </>
   );
 }
