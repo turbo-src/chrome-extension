@@ -13,9 +13,6 @@ const ButtonVote = styled.button`
   font-weight: 500;
   border-radius: 5px;
   filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.35));
-`;
-
-const SpanVote = styled.span`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -91,14 +88,12 @@ export default function VoteStatusButton({
   return (
     <>
       <ButtonVote style={{ background: voteStatusButton.color }} onClick={e => handleClick(e)}>
-        <SpanVote>
-          {prData.state === 'frozen' || prData.state === 'conflict' ? (
-            <IconImg src={LockIcon} alt={prData.state} />
-          ) : (
-            <Placeholder />
-          )}
-          <VoteButtonText>{voteStatusButton.text}</VoteButtonText>
-        </SpanVote>
+        {prData.state === 'frozen' || prData.state === 'conflict' ? (
+          <IconImg src={LockIcon} alt={prData.state} />
+        ) : (
+          <Placeholder />
+        )}
+        <VoteButtonText>{voteStatusButton.text}</VoteButtonText>
       </ButtonVote>
       <ButtonProgress
         yesPercent={prData.voteData.voteTotals.yesPercent}
