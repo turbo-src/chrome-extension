@@ -16,6 +16,12 @@ const ButtonVote = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: var(--button-color);
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: var(--button-dark-color);
+  }
 `;
 
 const VoteButtonText = styled.span`
@@ -58,13 +64,21 @@ export default function VoteStatusButton({
     vote: ['#4AA0D5', 'Vote'],
     'pre-open': [
       totalYesVotes >= totalNoVotes ? '#4AA0D5' : '#4AA0D5',
-      prData?.voteData?.voteTotals?.totalVotePercent + '%'
+      'Vote' + '%'
     ],
     open: [totalYesVotes >= totalNoVotes ? '#4AA0D5' : '#4AA0D5', 'Vote'],
     frozen: [totalYesVotes >= totalNoVotes ? '#919190' : '#919190', 'Vote'],
     conflict: ['#FC9A28', 'Conflict'],
-    merge: ['#613E8E', 'Merged'],
+    merge: ['#794D9A', 'Merged'],
     close: ['#DD4747', 'Closed']
+  };
+
+  const transitionColors = {
+    '#4AA0D5': '#2391D6',
+    '#919190': '#82827E',
+    '#794D9A': '#66358B',
+    '#DD4747': '#C32424',
+    '#FC9A28': '#F1880C'
   };
 
   useEffect(() => {
@@ -87,7 +101,11 @@ export default function VoteStatusButton({
 
   return (
     <>
-      <ButtonVote style={{ background: voteStatusButton.color }} onClick={e => handleClick(e)}>
+      <ButtonVote style={{ 
+        '--button-color': voteStatusButton.color,
+        '--button-dark-color': transitionColors[voteStatusButton.color] || voteStatusButton.color
+        }}  
+        onClick={e => handleClick(e)} >
         {prData.state === 'frozen' || prData.state === 'conflict' ? (
           <IconImg src={LockIcon} alt={prData.state} />
         ) : (
