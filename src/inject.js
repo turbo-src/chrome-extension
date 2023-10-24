@@ -26,13 +26,13 @@ var githubUserObject = {};
 
 const testMode = window.location.pathname === '/__/' ? true : false;
 
-socket.on('connect', () => {
-  console.log(socket.id); // x8WIv7-mJelg7on_ALbx
-});
-
-socket.on('disconnect', () => {
-  console.log(socket.id); // undefined
-});
+//socket.on('connect', () => {
+//  console.log(socket.id); // x8WIv7-mJelg7on_ALbx
+//});
+//
+//socket.on('disconnect', () => {
+//  console.log(socket.id); // undefined
+//});
 
 //OAuth Code: ***
 //Github redirects to localhost:5000/authenticated?code=...
@@ -328,20 +328,20 @@ let getFromStorage = keys =>
     };
 
     // Socket listener for above actions. Every time a user votes our socket will check if it's for the current repo and update
-    socket.on('vote received', function(ownerFromServer, repoFromServer, issueIDFromServer) {
-      if (user === ownerFromServer && repoID === repoFromServer) {
-        /* To update the correct VoteStatusButton & VotesTable we need to both update the socketEvents variable 
-          and call the React render function for them. */
-        socketEvents += 1;
-        updateVoteStatusButton(issueIDFromServer);
-        updateModalVotesTable(issueIDFromServer);
-      }
-    });
-    socket.on('repo updated', function(repoIDFromServer) {
-      if (repoID === repoIDFromServer) {
-        socketEvents += 1;
-        renderVoteButtons();
-      }
-    });
+    //socket.on('vote received', function(ownerFromServer, repoFromServer, issueIDFromServer) {
+    //  if (user === ownerFromServer && repoID === repoFromServer) {
+    //    /* To update the correct VoteStatusButton & VotesTable we need to both update the socketEvents variable 
+    //      and call the React render function for them. */
+    //    socketEvents += 1;
+    //    updateVoteStatusButton(issueIDFromServer);
+    //    updateModalVotesTable(issueIDFromServer);
+    //  }
+    //});
+    //socket.on('repo updated', function(repoIDFromServer) {
+    //  if (repoID === repoIDFromServer) {
+    //    socketEvents += 1;
+    //    renderVoteButtons();
+    //  }
+    //});
   }
 })();

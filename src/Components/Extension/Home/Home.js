@@ -295,11 +295,11 @@ export default function Home() {
     setPullRequestsLoaded(false);
   }, [repoID]);
 
-  socket.on('vote received', function(ownerFromServer, repoFromServer, issueIDFromServer) {
-    if (owner === ownerFromServer && repo === repoFromServer) {
-      getRepoDataHandler();
-    }
-  });
+  //socket.on('vote received', function(ownerFromServer, repoFromServer, issueIDFromServer) {
+  //  if (owner === ownerFromServer && repo === repoFromServer) {
+  //    getRepoDataHandler();
+  //  }
+  //});
 
   let getVotes = async () => await postGetVotes(repo_id, issue_id, contributor_id);
  
