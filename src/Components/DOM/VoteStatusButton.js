@@ -1,102 +1,120 @@
 import React, { useState, useEffect } from 'react';
-import { render } from 'react-dom';
-import { postGetPullRequest, postGetPRvoteYesTotals, postGetPRvoteNoTotals } from '../../requests';
-import { Button } from 'react-bootstrap';
+import useGetVotes from '../../hooks/useGetVotes.js';
+import Skeleton from '@mui/material/Skeleton';
+import styled from 'styled-components';
+import ButtonProgress from './ButtonProgress.js';
+const LockIcon = 'https://www.reibase.rs/lock.png';
 
-export default function VoteStatusButton(props){
+const ButtonVote = styled.button`
+  color: white;
+  width: 80px;
+  height: 30px;
+  border: 0px;
+  font-weight: 500;
+  border-radius: 5px;
+  filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.35));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--button-color);
+  transition: background-color 0.3s ease;
 
-    const [user, setUser] = useState(props.user);
-    const [repo, setRepo] = useState(props.repo);
-    const [issueID, setIssueID] = useState(props.issueID);
-    const [contributorID, setContributorID] = useState(props.contributorID);
-    const [voteStatusButton, setVoteStatusButton] = useState({ color: 'gray', text: '?' });
-    const [tsrcPRStatus, setTsrcPRStatus] = useState(props.tsrcPRstatus || {state: 'vote', mergeableCodeHost: true});
-    const [voteYesTotalState, setVoteYesTotalState] = useState(0.0);
-    const [voteNoTotalState, setVoteNoTotalState] = useState(0.0);
-    const [voteTotals, setVoteTotals] = useState(0);
-    const [yesPercent, setYesPercent] = useState(0);
-    const [noPercent, setNoPercent] = useState(0);
-    const [side, setSide] = useState(props.side);
-    const [clicked, setClicked] = useState(props.clicked);
-    const buttonStyle = {
-      vote: ['lightgreen', 'vote'],
-      'pre-open': ['green', voteTotals],
-      open: ['orchid', voteTotals],
-      conflict: ['orange', 'conflict'],
-      merge: ['darkorchid', 'merged'],
-      close: ['red', 'closed']
-    };
-    
-    const fetchVoteStatus = async () => {
-      let textMath = voteStatusButton.textMath;
-      let tsrcPRStatusComponent
-      try {
-          tsrcPRStatusComponent = await postGetPullRequest(
-          user,
-          repo,
-          issueID,
-          contributorID,
-          side
-          );
-        const voteYesTotal = await postGetPRvoteYesTotals(
-          user,
-          repo,
-          issueID,
-          contributorID,
-          ""
-        );
-        const voteNoTotal = await postGetPRvoteNoTotals(
-          user,
-          repo,
-          issueID,
-          contributorID,
-          ""
-        );
-        let quorum = 0.5;
-        const totalVotes = voteYesTotal + voteNoTotal;
-        const totalPossibleVotes = 1_000_000;
-        const totalPercent = (totalVotes / totalPossibleVotes) * 100 * (1 / quorum);
-        if (totalPercent !== null) {
-          setVoteTotals(`${Math.floor(totalPercent)}%`);
-        }
-        setVoteYesTotalState(voteYesTotal);
-        setVoteNoTotalState(voteNoTotal);
-        setTsrcPRStatus(tsrcPRStatusComponent);
-      } catch (error) {
-        console.log('fetchVoteStatus error:', error)
-        textMath = "";
-      }
-        };
+  &:hover {
+    background-color: var(--button-dark-color);
+  }
+`;
 
-    useEffect(() => {
-        fetchVoteStatus();
-    }, [props.socketEvents, clicked]);
+const VoteButtonText = styled.span`
+  position: relative;
+  right: 7px;
+`;
 
-    useEffect(() => {
-      
-        if(!tsrcPRStatus) {
-          return;
-        }
-        if(!tsrcPRStatus.mergeableCodeHost) {
-          tsrcPRStatus.state = 'conflict';
-        }
-        const buttonColor = buttonStyle[tsrcPRStatus.state][0]
-        const buttonText = buttonStyle[tsrcPRStatus.state][1]
-        setVoteStatusButton({color: buttonColor, text: buttonText});
-    }, [voteYesTotalState, voteNoTotalState, tsrcPRStatus, voteTotals]);
+const IconImg = styled.img`
+  width: 16px;
+  height: 11px;
+  position: relative;
+  right: 15px;
+`;
 
+const Placeholder = styled.div`
+  width: 16px;
+  height: 11px;
+`;
 
-    const handleClick = (e) => {
-        e.preventDefault();
-        props.toggleModal(e)
-    };
+export default function VoteStatusButton({
+  user,
+  repoID,
+  issueID,
+  contributorID,
+  side,
+  clicked,
+  toggleModal,
+  socketEvents
+}) {
+  const [voteStatusButton, setVoteStatusButton] = useState({
+    color: '#4AA0D5',
+    text: 'Vote'
+  });
 
-    return (
-        <Button
-        style={{ color: 'white', background: voteStatusButton.color }}
-        onClick={(e) => handleClick(e)}
-        >
-        {voteStatusButton.text}
-        </Button>
-    );
-};
+  const { prData, loading } = useGetVotes(user, repoID, issueID, contributorID, side, socketEvents, clicked);
+
+  const buttonStyle = {
+    vote: ['#4AA0D5', 'Vote'],
+    'pre-open': ['#4AA0D5', 'Vote' + '%'],
+    open: ['#4AA0D5', 'Vote'],
+    frozen: ['#919190', 'Vote'],
+    conflict: ['#FC9A28', 'Conflict'],
+    merge: ['#794D9A', 'Merged'],
+    close: ['#DD4747', 'Closed']
+  };
+
+  const transitionColors = {
+    '#4AA0D5': '#2391D6',
+    '#919190': '#82827E',
+    '#794D9A': '#66358B',
+    '#DD4747': '#C32424',
+    '#FC9A28': '#F1880C'
+  };
+
+  useEffect(() => {
+    if (!loading) {
+      const buttonColor = buttonStyle[prData.state][0];
+      const buttonText = buttonStyle[prData.state][1];
+      setVoteStatusButton({ color: buttonColor, text: buttonText });
+    }
+  }, [prData, loading, socketEvents]);
+
+  const handleClick = e => {
+    e.preventDefault();
+    toggleModal(e);
+  };
+
+  if (loading) {
+    return <Skeleton animation="wave" variant="rounded" width={80} height={30} />;
+  }
+
+  return (
+    <>
+      <ButtonVote
+        style={{
+          '--button-color': voteStatusButton.color,
+          '--button-dark-color': transitionColors[voteStatusButton.color] || voteStatusButton.color
+        }}
+        onClick={e => handleClick(e)}
+      >
+        {prData.state === 'frozen' || prData.state === 'conflict' ? (
+          <IconImg src={LockIcon} alt={prData.state} />
+        ) : (
+          <Placeholder />
+        )}
+        <VoteButtonText>{voteStatusButton.text}</VoteButtonText>
+      </ButtonVote>
+      <ButtonProgress
+        yesPercent={prData.voteData.voteTotals.yesPercent}
+        noPercent={prData.voteData.voteTotals.noPercent}
+        quorum={prData.voteData.voteTotals.quorum}
+        totalVotes={prData.voteData.voteTotals.totalVotes}
+      />
+    </>
+  );
+}
