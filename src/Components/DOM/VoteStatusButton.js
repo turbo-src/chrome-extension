@@ -57,17 +57,12 @@ export default function VoteStatusButton({
   });
 
   const { prData, loading } = useGetVotes(user, repoID, issueID, contributorID, side, socketEvents, clicked);
-  const totalYesVotes = prData?.voteData?.voteTotals?.totalYesVotes;
-  const totalNoVotes = prData?.voteData?.voteTotals?.totalNoVotes;
 
   const buttonStyle = {
     vote: ['#4AA0D5', 'Vote'],
-    'pre-open': [
-      totalYesVotes >= totalNoVotes ? '#4AA0D5' : '#4AA0D5',
-      'Vote' + '%'
-    ],
-    open: [totalYesVotes >= totalNoVotes ? '#4AA0D5' : '#4AA0D5', 'Vote'],
-    frozen: [totalYesVotes >= totalNoVotes ? '#919190' : '#919190', 'Vote'],
+    'pre-open': ['#4AA0D5', 'Vote' + '%'],
+    open: ['#4AA0D5', 'Vote'],
+    frozen: ['#919190', 'Vote'],
     conflict: ['#FC9A28', 'Conflict'],
     merge: ['#794D9A', 'Merged'],
     close: ['#DD4747', 'Closed']
@@ -101,11 +96,13 @@ export default function VoteStatusButton({
 
   return (
     <>
-      <ButtonVote style={{ 
-        '--button-color': voteStatusButton.color,
-        '--button-dark-color': transitionColors[voteStatusButton.color] || voteStatusButton.color
-        }}  
-        onClick={e => handleClick(e)} >
+      <ButtonVote
+        style={{
+          '--button-color': voteStatusButton.color,
+          '--button-dark-color': transitionColors[voteStatusButton.color] || voteStatusButton.color
+        }}
+        onClick={e => handleClick(e)}
+      >
         {prData.state === 'frozen' || prData.state === 'conflict' ? (
           <IconImg src={LockIcon} alt={prData.state} />
         ) : (
