@@ -82,7 +82,6 @@ export default function VoteStatusButton({
       const buttonText = buttonStyle[prData.state][1];
       setVoteStatusButton({ color: buttonColor, text: buttonText });
     }
-    console.log(prData);
   }, [prData, loading, socketEvents]);
 
   const handleClick = e => {
