@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { postGetVotes } from '../requests';
-const useGetVotes = (user, repoID, issueID, contributorID, side, socketEvents, modalOpen) => {
+const useGetVotes = (repoID, issueID, contributorID, socketEvents) => {
   const [prData, setPRData] = useState({});
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -17,7 +17,7 @@ const useGetVotes = (user, repoID, issueID, contributorID, side, socketEvents, m
     };
 
     fetchData();
-  }, [user, repoID, issueID, contributorID, side, socketEvents, modalOpen]);
+  }, [socketEvents]);
   return { prData, loading };
 };
 
