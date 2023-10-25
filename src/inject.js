@@ -98,7 +98,7 @@ let getFromStorage = keys =>
       'contributor_id is not set correctly. Try logging out and logging back in to the Turbosrc web extension.'
     );
   }
-
+console.log('repo data =>', repoData)
   // Log key variables to debug:
   const keyVariables = {
     testMode: testMode,
@@ -293,6 +293,7 @@ let getFromStorage = keys =>
             repo: repo,
             repoID: repoID,
             issueID: issue_id,
+            prDataFromInject: {prData: repoData.pullRequests.filter(pr => issue_id === pr.issue_id)[0], loading: false},
             contributorName: contributor_name,
             contributorID: contributor_id,
             modalOpen: modalState.modalOpen,

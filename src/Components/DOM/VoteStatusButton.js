@@ -52,14 +52,22 @@ export default function VoteStatusButton({
   side,
   clicked,
   toggleModal,
-  socketEvents
+  socketEvents,
+  prDataFromInject
 }) {
   const [voteStatusButton, setVoteStatusButton] = useState({
     color: '#4AA0D5',
     text: 'Vote'
   });
 
-  const { prData, loading } = useGetVotes(user, repoID, issueID, contributorID, side, socketEvents, clicked);
+  /* We need to do the following: 
+   - if it is the first ever render on a created repo page, use useGetVotes to get PR data
+   - all future renders should just inherit it from inject (getRepoData)
+   - if socket events are updated, then call useGetVotes
+
+   Currently only the first two of these goals are being acheived with the following:
+   */
+  let { prData, loading } = prDataFromInject.status ? prDataFromInject : useGetVotes(repoID, issueID, contributorID, socketEvents);
 
   const buttonStyle = {
     vote: ['#4AA0D5', 'Vote'],
