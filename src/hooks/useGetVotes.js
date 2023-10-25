@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
 import { postGetVotes } from '../requests';
+
 const useGetVotes = (repoID, issueID, contributorID, socketEvents) => {
   const [prData, setPRData] = useState({});
   const [loading, setLoading] = useState(true);
   useEffect(() => {
+    console.log('use get votes called')
+
     const fetchData = async () => {
       try {
         let getVotesRes = await postGetVotes(repoID, issueID, contributorID);
