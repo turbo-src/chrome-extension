@@ -67,7 +67,17 @@ export default function VoteStatusButton({
 
    Currently only the first two of these goals are being acheived with the following:
    */
-  let { prData, loading } = prDataFromInject.status ? prDataFromInject : useGetVotes(repoID, issueID, contributorID, socketEvents);
+
+  // If new repo or cached repo:
+  let { prData, loading } = prDataFromInject.prData.state
+    ? prDataFromInject
+    : useGetVotes(repoID, issueID, contributorID, socketEvents);
+  console.log('prDaataFromInject', prDataFromInject);
+  
+  // if Socket events:
+  // let useGetVotesRes = useGetVotes(repoID, issueID, contributorID, socketEvents)
+  // prData = useGetVotesRes.prData
+  // loading = useGetVotesRes.loading
 
   const buttonStyle = {
     vote: ['#4AA0D5', 'Vote'],
