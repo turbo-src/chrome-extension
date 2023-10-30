@@ -777,6 +777,7 @@ async function postGetRepoData(repo_id, contributor_id) {
     voteTotals {
       yesPercent,
       noPercent,
+      totalVotePercent,
       totalVotes,
       totalYesVotes,
       totalNoVotes,
@@ -794,7 +795,7 @@ async function postGetRepoData(repo_id, contributor_id) {
     })
     .set('accept', 'json');
   const json = JSON.parse(res.text);
-  console.log(json.data.getRepoData);
+  console.log(';)', json.data.getRepoData);
   return json.data.getRepoData;
 }
 

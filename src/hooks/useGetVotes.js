@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { postGetVotes } from '../requests';
 
-const useGetVotes = (repoID, issueID, contributorID, socketEvents) => {
+const useGetVotes = (repoID, issueID, contributorID) => {
   const [prData, setPRData] = useState({});
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    console.log('use get votes called')
+    console.log('use get votes called. Should only be called from here upon ')
 
     const fetchData = async () => {
       try {
@@ -20,7 +20,7 @@ const useGetVotes = (repoID, issueID, contributorID, socketEvents) => {
     };
 
     fetchData();
-  }, [socketEvents]);
+  }, []);
   return { prData, loading };
 };
 

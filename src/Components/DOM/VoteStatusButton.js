@@ -59,25 +59,7 @@ export default function VoteStatusButton({
     color: '#4AA0D5',
     text: 'Vote'
   });
-
-  /* We need to do the following: 
-   - if it is the first ever render on a created repo page, use useGetVotes to get PR data
-   - all future renders should just inherit it from inject (getRepoData)
-   - if socket events are updated, then call useGetVotes
-
-   Currently only the first two of these goals are being acheived with the following:
-   */
-
-  // If new repo or cached repo:
-  let { prData, loading } = prDataFromInject.prData.state
-    ? prDataFromInject
-    : useGetVotes(repoID, issueID, contributorID, socketEvents);
-  console.log('prDaataFromInject', prDataFromInject);
-  
-  // if Socket events:
-  // let useGetVotesRes = useGetVotes(repoID, issueID, contributorID, socketEvents)
-  // prData = useGetVotesRes.prData
-  // loading = useGetVotesRes.loading
+  const { prData, loading } = prDataFromInject.prDta ? prDataFromInject : useGetVotes(repoID, issueID, contributorID, socketEvents);
 
   const buttonStyle = {
     vote: ['#4AA0D5', 'Vote'],
@@ -98,12 +80,20 @@ export default function VoteStatusButton({
   };
 
   useEffect(() => {
+    console.log('PR DATA', prData)
+    console.log('PR DATA from INJECT', prDataFromInject)
+
     if (!loading) {
       const buttonColor = buttonStyle[prData.state][0];
       const buttonText = buttonStyle[prData.state][1];
       setVoteStatusButton({ color: buttonColor, text: buttonText });
     }
-  }, [prData, loading, socketEvents]);
+
+    // Not sure if this clean up function is at all necessary:
+    return () => {
+     prDataFromInject = {prData: false, loading: false}
+  }
+  }, [loading, prData, prDataFromInject]);
 
   const handleClick = e => {
     e.preventDefault();

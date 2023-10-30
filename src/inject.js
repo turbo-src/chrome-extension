@@ -286,6 +286,8 @@ console.log('repo data =>', repoData)
       for (var i = startIndex; i < containerItems.length; i++) {
         issue_id = containerItems[i].getAttribute('id');
         const [domContainerTurboSrcButton] = querySelectorAllFrames(`#turbo-src-btn-${issue_id}`);
+        const prDataFromInject = {prData: repoData.pullRequests.filter(pr => issue_id === pr.issue_id)[0] || false, loading: false}
+        console.log('pr data from inject', prDataFromInject)
         render(
           ce(VoteStatusButton, {
             socketEvents: socketEvents,
@@ -293,7 +295,7 @@ console.log('repo data =>', repoData)
             repo: repo,
             repoID: repoID,
             issueID: issue_id,
-            prDataFromInject: {prData: repoData.pullRequests.filter(pr => issue_id === pr.issue_id)[0], loading: false},
+            prDataFromInject: prDataFromInject,
             contributorName: contributor_name,
             contributorID: contributor_id,
             modalOpen: modalState.modalOpen,
@@ -311,6 +313,7 @@ console.log('repo data =>', repoData)
     const updateVoteStatusButton = async issueID => {
       issue_id = issueID;
       const [domContainerTurboSrcButton] = querySelectorAllFrames(`#turbo-src-btn-${issue_id}`);
+      const prDataFromInject = {prData: repoData.pullRequests.filter(pr => issue_id === pr.issue_id)[0] || false, loading: false}
       render(
         ce(VoteStatusButton, {
           user: user,
@@ -319,7 +322,7 @@ console.log('repo data =>', repoData)
           issueID: issue_id,
           contributorName: contributor_name,
           contributorID: contributor_id,
-          repoData: repoData,
+          prDataFromInject: prDataFromInject,
           modalOpen: modalState.modalOpen,
           toggleModal: toggleModal,
           socketEvents: socketEvents
@@ -329,19 +332,26 @@ console.log('repo data =>', repoData)
     };
 
     // Socket listener for above actions. Every time a user votes our socket will check if it's for the current repo and update
-    socket.on('vote received', function(ownerFromServer, repoFromServer, issueIDFromServer) {
+    socket.on('vote received', async function(ownerFromServer, repoFromServer, issueIDFromServer) {
       if (user === ownerFromServer && repoID === repoFromServer) {
-        /* To update the correct VoteStatusButton & VotesTable we need to both update the socketEvents variable 
-          and call the React render function for them. */
-        socketEvents += 1;
-        updateVoteStatusButton(issueIDFromServer);
-        updateModalVotesTable(issueIDFromServer);
+   // updateVoteStatusButton(issueIDFromServer);
+   const newPR = await postGetVotes(repoID, issueIDFromServer, contributor_id);
+   const newPRs = repoData.pullRequests.map(pr => {
+     if (pr.issue_id === issueIDFromServer) {
+      pr.state = newPR.state
+      pr.voteData = newPR.voteData;
+     }
+     return pr;
+   });
+   repoData.pullRequests = newPRs;
+   updateVoteStatusButton(issueIDFromServer);
+   updateModalVotesTable(issueIDFromServer);
       }
     });
-    socket.on('repo updated', function(repoIDFromServer) {
+    socket.on('repo updated', async function(repoIDFromServer) {
       if (repoID === repoIDFromServer) {
-        socketEvents += 1;
-        renderVoteButtons();
+      repoData = await postGetRepoData(repoID, contributor_id);
+      renderVoteButtons();
       }
     });
   }
