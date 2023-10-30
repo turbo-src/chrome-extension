@@ -48,37 +48,30 @@ async function getTurboSrcIDfromInstance() {
   }
 }
 
-async function getTurboSrcSystemInfo(turboSrcID, clientCurrentVersion) {
+async function getTurboSrcSystemInfo(repoName, clientCurrentVersion) {
   console.log('getTurboSrcSystemInfo turboSrcID', turboSrcID, 'clientCurrentVersion', clientCurrentVersion);
-
-  if (url === 'http://localhost:4000/graphql') {
-    // Handle local logic if necessary
-    console.log('local\ngetTurboSrcSystemInfo instanceCompatilbeWithRouter', instanceCompatilbeWithRouter);
-    console.log('local\ngetTurboSrcSystemInfo message', message);
-    return { instanceCompatilbeWithRouter, message };
-  } else {
-    const res = await superagent
-      .post(`${url}`)
-      .send({
-        query: `
-          {
-            getTurboSrcSystemInfo(turboSrcID: "${turboSrcID}", clientCurrentVersion: "${clientCurrentVersion}") {
-              instanceCompatilbeWithRouter
-              message
-            }
+  const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
+  const res = await superagent
+    .post(`${url}`)
+    .send({
+      query: `
+        {
+          getTurboSrcSystemInfo(turboSrcID: "${turboSrcID}", clientCurrentVersion: "${clientCurrentVersion}") {
+            instanceCompatilbeWithRouter
+            message
           }
-        `
-      })
-      .set('accept', 'json');
+        }
+      `
+    })
+    .set('accept', 'json');
 
-    const json = JSON.parse(res.text);
-    const { instanceCompatilbeWithRouter, message } = json.data.getTurboSrcSystemInfo;
+  const json = JSON.parse(res.text);
+  const { instanceCompatilbeWithRouter, message } = json.data.getTurboSrcSystemInfo;
 
-    console.log('Egress\ngetTurboSrcSystemInfo instanceCompatilbeWithRouter', instanceCompatilbeWithRouter);
-    console.log('Egress\ngetTurboSrcSystemInfo message', message);
+  console.log('Egress\ngetTurboSrcSystemInfo instanceCompatilbeWithRouter', instanceCompatilbeWithRouter);
+  console.log('Egress\ngetTurboSrcSystemInfo message', message);
 
-    return { instanceCompatilbeWithRouter, message };
-  }
+  return { instanceCompatilbeWithRouter, message };
 }
 
 async function getTurboSrcIDFromRepoName(reponame) {
@@ -302,6 +295,14 @@ async function postCreateRepo(owner, repo, defaultHash, contributor_id, side, to
     .set('accept', 'json');
 
   const json = JSON.parse(res.text);
+
+  // Mocking getTurboSrcSystemInfo for testing
+  const mockClientCurrentVersion = '0xbh3ka';
+  console.log('Getting system info');
+  const systemInfo = await getTurboSrcSystemInfo(repoName, mockClientCurrentVersion);
+  console.log('Received system info:', systemInfo);
+  // Remove this mock.
+
   return json.data.createRepo;
 }
 
@@ -901,5 +902,6 @@ export {
   getGitHubPullRequest,
   postGetRepoData,
   postGetVotes,
-  getNameSpaceRepo
+  getNameSpaceRepo,
+  getTurboSrcSystemInfo
 };
