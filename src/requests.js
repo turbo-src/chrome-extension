@@ -47,6 +47,40 @@ async function getTurboSrcIDfromInstance() {
     return null;
   }
 }
+
+async function getTurboSrcSystemInfo(turboSrcID, clientCurrentVersion) {
+  console.log('getTurboSrcSystemInfo turboSrcID', turboSrcID, 'clientCurrentVersion', clientCurrentVersion);
+
+  if (url === 'http://localhost:4000/graphql') {
+    // Handle local logic if necessary
+    console.log('local\ngetTurboSrcSystemInfo instanceCompatilbeWithRouter', instanceCompatilbeWithRouter);
+    console.log('local\ngetTurboSrcSystemInfo message', message);
+    return { instanceCompatilbeWithRouter, message };
+  } else {
+    const res = await superagent
+      .post(`${url}`)
+      .send({
+        query: `
+          {
+            getTurboSrcSystemInfo(turboSrcID: "${turboSrcID}", clientCurrentVersion: "${clientCurrentVersion}") {
+              instanceCompatilbeWithRouter
+              message
+            }
+          }
+        `
+      })
+      .set('accept', 'json');
+
+    const json = JSON.parse(res.text);
+    const { instanceCompatilbeWithRouter, message } = json.data.getTurboSrcSystemInfo;
+
+    console.log('Egress\ngetTurboSrcSystemInfo instanceCompatilbeWithRouter', instanceCompatilbeWithRouter);
+    console.log('Egress\ngetTurboSrcSystemInfo message', message);
+
+    return { instanceCompatilbeWithRouter, message };
+  }
+}
+
 async function getTurboSrcIDFromRepoName(reponame) {
   console.log('getTurboSrcIDFromRepoName reponame', reponame);
   if (url === 'http://localhost:4000/graphql') {
@@ -803,30 +837,30 @@ async function postGetVotes(repo, defaultHash, contributor_id) {
 async function getNameSpaceRepo(repoNameOrID) {
   console.log('getNameSpaceRepo repoNameOrID: ' + repoNameOrID)
   const isValidEthereumAddress = (address) => {
-      try {
-          const regex = /^0x[a-fA-F0-9]{40}$/;
-          return regex.test(address);
-      } catch (e) {
-          console.error(`Failed to check if provided string is a valid Ethereum address. Error: ${e.message}`);
-          console.error(e.stack);
-          return false;
-      }
+    try {
+      const regex = /^0x[a-fA-F0-9]{40}$/;
+      return regex.test(address);
+    } catch (e) {
+      console.error(`Failed to check if provided string is a valid Ethereum address. Error: ${e.message}`);
+      console.error(e.stack);
+      return false;
+    }
   }
 
   let turboSrcID;
   if (isValidEthereumAddress(repoNameOrID)) {
-       let repoID = repoNameOrID;
-       turboSrcID = await getTurboSrcIDFromRepoID(repoID);
+    let repoID = repoNameOrID;
+    turboSrcID = await getTurboSrcIDFromRepoID(repoID);
   } else {
-       let repoName = repoNameOrID;
-       turboSrcID = await getTurboSrcIDFromRepoName(repoName);
+    let repoName = repoNameOrID;
+    turboSrcID = await getTurboSrcIDFromRepoName(repoName);
   }
 
   console.log('getNameSpaceRepo turboSrcID: ' + turboSrcID)
 
   if (turboSrcID == null || turboSrcID === 'null') {
-      turboSrcID = turboSrcIDfromInstance;
-      console.log('getNameSpaceRepo default turboSrcID: ' + turboSrcID)
+    turboSrcID = turboSrcIDfromInstance;
+    console.log('getNameSpaceRepo default turboSrcID: ' + turboSrcID)
   }
 
   const res = await superagent
