@@ -297,7 +297,7 @@ async function postCreateRepo(owner, repo, defaultHash, contributor_id, side, to
   const json = JSON.parse(res.text);
 
   // Mocking getTurboSrcSystemInfo for testing
-  const mockClientCurrentVersion = '0xbh3ka';
+  const mockClientCurrentVersion = 'c0f94620f6ceec58b449782e5beb8d53073395fb';
   console.log('Getting system info');
   const systemInfo = await getTurboSrcSystemInfo(repoName, mockClientCurrentVersion);
   console.log('Received system info:', systemInfo);
