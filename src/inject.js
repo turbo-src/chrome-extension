@@ -287,7 +287,6 @@ console.log('repo data =>', repoData)
         issue_id = containerItems[i].getAttribute('id');
         const [domContainerTurboSrcButton] = querySelectorAllFrames(`#turbo-src-btn-${issue_id}`);
         const prDataFromInject = {prData: repoData.pullRequests.filter(pr => issue_id === pr.issue_id)[0] || false, loading: false}
-        console.log('pr data from inject', prDataFromInject)
         render(
           ce(VoteStatusButton, {
             socketEvents: socketEvents,
@@ -334,7 +333,6 @@ console.log('repo data =>', repoData)
     // Socket listener for above actions. Every time a user votes our socket will check if it's for the current repo and update
     socket.on('vote received', async function(ownerFromServer, repoFromServer, issueIDFromServer) {
       if (user === ownerFromServer && repoID === repoFromServer) {
-   // updateVoteStatusButton(issueIDFromServer);
    const newPR = await postGetVotes(repoID, issueIDFromServer, contributor_id);
    const newPRs = repoData.pullRequests.map(pr => {
      if (pr.issue_id === issueIDFromServer) {

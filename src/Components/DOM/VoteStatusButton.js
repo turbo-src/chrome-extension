@@ -3,6 +3,7 @@ import useGetVotes from '../../hooks/useGetVotes.js';
 import Skeleton from '@mui/material/Skeleton';
 import styled from 'styled-components';
 import ButtonProgress from './ButtonProgress.js';
+import { postGetVotes } from '../../requests.js';
 const LockIcon = 'https://www.reibase.rs/lock.png';
 
 const ButtonVote = styled.button`
@@ -52,14 +53,20 @@ export default function VoteStatusButton({
   side,
   clicked,
   toggleModal,
-  socketEvents,
   prDataFromInject
 }) {
+
+export default function VoteStatusButton({ repoID, issueID, contributorID, toggleModal, prDataFromInject }) {
   const [voteStatusButton, setVoteStatusButton] = useState({
     color: '#4AA0D5',
     text: 'Vote'
   });
-  const { prData, loading } = prDataFromInject.prDta ? prDataFromInject : useGetVotes(repoID, issueID, contributorID, socketEvents);
+  const [state, setState] = useState({ prData: false, loading: true });
+  const { loading, prData } = state;
+
+  const getVotesHandler = async () => {
+    await postGetVotes(repoID, issueID, contributorID).then(res => setState({ prData: res, loading: false }));
+  };
 
   const buttonStyle = {
     vote: ['#4AA0D5', 'Vote'],
@@ -79,21 +86,23 @@ export default function VoteStatusButton({
     '#FC9A28': '#F1880C'
   };
 
+  // Set prData and loading either from props or from API if new PR:
   useEffect(() => {
-    console.log('PR DATA', prData)
-    console.log('PR DATA from INJECT', prDataFromInject)
+    if (prDataFromInject.prData) {
+      setState(prDataFromInject);
+    } else {
+      getVotesHandler();
+    }
+  }, [prDataFromInject.prData]);
 
+  // Style button based on the PR's state:
+  useEffect(() => {
     if (!loading) {
       const buttonColor = buttonStyle[prData.state][0];
       const buttonText = buttonStyle[prData.state][1];
       setVoteStatusButton({ color: buttonColor, text: buttonText });
     }
-
-    // Not sure if this clean up function is at all necessary:
-    return () => {
-     prDataFromInject = {prData: false, loading: false}
-  }
-  }, [loading, prData, prDataFromInject]);
+  }, [loading, prData]);
 
   const handleClick = e => {
     e.preventDefault();
