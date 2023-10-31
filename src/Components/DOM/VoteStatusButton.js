@@ -19,17 +19,17 @@ const ButtonVote = styled.button`
   background-color: var(--button-color);
   transition: background-color 0.3s ease;
   margin-bottom: ${props => (props.zeroVotes ? '14px' : '0')};
-
+  
   &:hover {
     background-color: var(--button-dark-color);
   }
-
 
 `;
 
 const VoteButtonText = styled.span`
   position: relative;
   right: 7px;
+  pointer-events: none;
 `;
 
 const IconImg = styled.img`
@@ -37,11 +37,13 @@ const IconImg = styled.img`
   height: 11px;
   position: relative;
   right: 15px;
+  pointer-events: none;
 `;
 
 const Placeholder = styled.div`
   width: 16px;
   height: 11px;
+  pointer-events: none;
 `;
 
 export default function VoteStatusButton({
