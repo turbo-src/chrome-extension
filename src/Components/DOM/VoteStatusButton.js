@@ -18,10 +18,13 @@ const ButtonVote = styled.button`
   align-items: center;
   background-color: var(--button-color);
   transition: background-color 0.3s ease;
+  margin-bottom: ${props => (props.zeroVotes ? '14px' : '0')};
 
   &:hover {
     background-color: var(--button-dark-color);
   }
+
+
 `;
 
 const VoteButtonText = styled.span`
@@ -60,7 +63,7 @@ export default function VoteStatusButton({
 
   const buttonStyle = {
     vote: ['#4AA0D5', 'Vote'],
-    'pre-open': ['#4AA0D5', 'Vote' + '%'],
+    'pre-open': ['#4AA0D5', 'Vote'],
     open: ['#4AA0D5', 'Vote'],
     frozen: ['#919190', 'Vote'],
     conflict: ['#FC9A28', 'Conflict'],
@@ -96,6 +99,7 @@ export default function VoteStatusButton({
   return (
     <>
       <ButtonVote
+        zeroVotes={prData.voteData.voteTotals.totalVotes === 0}
         style={{
           '--button-color': voteStatusButton.color,
           '--button-dark-color': transitionColors[voteStatusButton.color] || voteStatusButton.color
