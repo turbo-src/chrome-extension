@@ -7,6 +7,7 @@ const CONFIG = require('./config.js');
 //const port = "https://turbosrc-marialis.dev";
 
 var url = CONFIG.url;
+let clientCurrentVersion = CONFIG.currentVersion
 //turboSrcID = CONFIG.turboSrcID
 //const url = "http://localhost:4006/graphql"
 //turboSrcID = "0x892a7abaf9f30db81e9b98f97cb3d64caccc6c27"
@@ -296,10 +297,9 @@ async function postCreateRepo(owner, repo, defaultHash, contributor_id, side, to
 
   const json = JSON.parse(res.text);
 
-  // Mocking getTurboSrcSystemInfo for testing
-  const mockClientCurrentVersion = 'c0f94620f6ceec58b449782e5beb8d53073395fb';
+  // Mocking getT urboSrcSystemInfo for testing
   console.log('Getting system info');
-  const systemInfo = await getTurboSrcSystemInfo(repoName, mockClientCurrentVersion);
+  const systemInfo = await getTurboSrcSystemInfo(repoName, clientCurrentVersion);
   console.log('Received system info:', systemInfo);
   // Remove this mock.
 
