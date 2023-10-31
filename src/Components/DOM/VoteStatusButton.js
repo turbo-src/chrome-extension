@@ -28,6 +28,7 @@ const ButtonVote = styled.button`
 const VoteButtonText = styled.span`
   position: relative;
   right: 7px;
+  pointer-events: none;
 `;
 
 const IconImg = styled.img`
@@ -35,11 +36,13 @@ const IconImg = styled.img`
   height: 11px;
   position: relative;
   right: 15px;
+  pointer-events: none;
 `;
 
 const Placeholder = styled.div`
   width: 16px;
   height: 11px;
+  pointer-events: none;
 `;
 
 export default function VoteStatusButton({
