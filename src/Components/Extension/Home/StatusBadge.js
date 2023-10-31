@@ -4,6 +4,7 @@ const statusMap = {
     "merge": ['#4A00BA', 'MERGED'],
     "pre-open": ['#4A00BA', 'PRE-OPEN'],
     "new": ['#1ED61B', 'NEW'],
+    "vote": ['#1ED61B', 'NEW'],
     "conflict": ['#FF8A00', 'CONFLICT'],
     "close": ['#D33131', 'CLOSED'],
     "open": ['#FF6489', 'OPEN'],
