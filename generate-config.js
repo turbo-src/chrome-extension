@@ -6,12 +6,15 @@ const env = process.env.TSRC_EXT_NODE_ENV || 'devLocal';
 const configFilePath = path.join(__dirname, `config.${env}.json`);
 const config = require(configFilePath);
 
-// Add the myGithubName and myTurboSrcID constants if they exist in the config file
+// Add the myGithubName, myTurboSrcID, and currentVersion constants if they exist in the config file
 if (config.myGithubName) {
     config.myGithubName = config.myGithubName;
 }
 if (config.myTurboSrcID) {
     config.myTurboSrcID = config.myTurboSrcID;
+}
+if (config.currentVersion) {
+    config.currentVersion = config.currentVersion;
 }
 
 // Generate a JavaScript file with the required variables
