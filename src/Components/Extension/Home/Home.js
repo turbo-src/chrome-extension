@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import superagent from 'superagent';
-import { postGetRepoData } from '../../../requests';
+import { getTurboSrcSystemInfo, postGetRepoData } from '../../../requests';
 import useCommas from '../../../hooks/useCommas';
 import styled from 'styled-components';
 import PullRequestRow from './PullRequestRow.js';
@@ -223,6 +223,15 @@ export default function Home() {
   let username = user?.login;
   let [tokenAmount, setTokenAmount] = useState('');
 
+  //const clientVersion = CONFIG.clientVersion
+
+  let clientIsCompatilbleWithRouter="no"
+  let isCompatibleTurboSrcID = "yes"
+  let message ="https://github.com/turbo-src/turbo-src" /*= getTurboSrcSystemInfo(repoName="7db9a", clientVersion "xb7da")*/
+
+  clientIsCompatilbleWithRouter = clientIsCompatilbleWithRouter === "yes" ? true : false;
+  isCompatibleTurboSrcID = isCompatibleTurboSrcID === "yes" ? true : false;
+
   let avatar = user?.avatar_url || null;
 
   useEffect(() => {
@@ -303,9 +312,9 @@ export default function Home() {
 
   let getVotes = async () => await postGetVotes(repo_id, issue_id, contributor_id);
  
-  if (oldVersion){
+  if (!clientIsCompatilbleWithRouter){
     return (
-      <TurbosrcNotice>Your version of Turbosrc is out of date and needs to be updated to continue.</TurbosrcNotice>
+      <TurbosrcNotice>Your version of Turbosrc is out of date and needs to be updated to continue to {message}.</TurbosrcNotice>
     );
   } else if (owner === 'none' && repo === 'none') {
     return <TurbosrcNotice>Please visit a Github repo page in your browser to use Turbosrc.</TurbosrcNotice>;
