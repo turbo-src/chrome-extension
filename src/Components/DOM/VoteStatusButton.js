@@ -9,33 +9,32 @@ const ButtonVote = styled.button`
   color: white;
   width: 80px;
   height: 30px;
-  border: 0px;
+  border: none;
   font-weight: 500;
   border-radius: 5px;
   filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.35));
   display: flex;
-  justify-content: center;
+  justify-content: space-around; 
   align-items: center;
   background-color: var(--button-color);
   transition: background-color 0.3s ease;
   margin-bottom: ${props => (props.zeroVotes ? '14px' : '0')};
-
   &:hover {
     background-color: var(--button-dark-color);
   }
 `;
 
 const VoteButtonText = styled.span`
-  position: relative;
-  right: 7px;
+  flex: 1;
+  text-align: center;
   pointer-events: none;
+  margin-right: 10px;
 `;
 
 const IconImg = styled.img`
   width: 16px;
   height: 11px;
-  position: relative;
-  right: 15px;
+  margin-right: auto;
   pointer-events: none;
 `;
 
@@ -107,7 +106,7 @@ export default function VoteStatusButton({
         }}
         onClick={e => handleClick(e)}
       >
-        {prData.state === 'frozen' || prData.state === 'conflict' ? (
+        {prData.state === 'conflict' || prData.state === 'frozen' ? (
           <IconImg src={LockIcon} alt={prData.state} />
         ) : (
           <Placeholder />
