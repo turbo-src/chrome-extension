@@ -50,7 +50,7 @@ async function getTurboSrcIDfromInstance() {
 }
 
 async function getTurboSrcSystemInfo(repoName, clientCurrentVersion) {
-  console.log('getTurboSrcSystemInfo turboSrcID', turboSrcID, 'clientCurrentVersion', clientCurrentVersion);
+  console.log('getTurboSrcSystemInfo', 'clientCurrentVersion', clientCurrentVersion);
   const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
   const res = await superagent
     .post(`${url}`)
@@ -58,7 +58,8 @@ async function getTurboSrcSystemInfo(repoName, clientCurrentVersion) {
       query: `
         {
           getTurboSrcSystemInfo(turboSrcID: "${turboSrcID}", clientCurrentVersion: "${clientCurrentVersion}") {
-            instanceCompatilbeWithRouter
+            clientIsCompatibleWithRouter
+            isCompatibleTurboSrcID
             message
           }
         }
@@ -67,12 +68,14 @@ async function getTurboSrcSystemInfo(repoName, clientCurrentVersion) {
     .set('accept', 'json');
 
   const json = JSON.parse(res.text);
-  const { instanceCompatilbeWithRouter, message } = json.data.getTurboSrcSystemInfo;
+  const { clientIsCompatibleWithRouter, isCompatibleTurboSrcID, message } = json.data.getTurboSrcSystemInfo;
 
-  console.log('Egress\ngetTurboSrcSystemInfo instanceCompatilbeWithRouter', instanceCompatilbeWithRouter);
+  console.log('Egress\ngetTurboSrcSystemInfo clientIsCompatibleWithRouter', clientIsCompatibleWithRouter);
+  console.log('Egress\ngetTurboSrcSystemInfo isCompatibleTurboSrcID', isCompatibleTurboSrcID);
   console.log('Egress\ngetTurboSrcSystemInfo message', message);
 
-  return { instanceCompatilbeWithRouter, message };
+  // Assuming you need to return clientIsCompatibleWithRouter and message based on the previous function signature
+  return { clientIsCompatibleWithRouter, message };
 }
 
 async function getTurboSrcIDFromRepoName(reponame) {
