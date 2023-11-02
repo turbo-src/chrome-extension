@@ -225,16 +225,29 @@ export default function Home() {
 
   //const clientVersion = CONFIG.clientVersion
 
-  let clientIsCompatilbleWithRouter="no"
-  let isCompatibleTurboSrcID = "yes"
-  let message ="https://github.com/turbo-src/turbo-src" /*= getTurboSrcSystemInfo(repoName="7db9a", clientVersion "xb7da")*/
+  let [clientIsCompatilbleWithRouter, setClientIsCompatibleWithRouter]= useState("yes")
+  let [isCompatibleTurboSrcID, setIsCompatibleTurboSrcID] = useState("yes")
+  let [message, setMessage] =useState("https://github.com/turbo-src/turbo-src") /*= getTurboSrcSystemInfo(repoName="7db9a", clientVersion "xb7da")*/
 
   clientIsCompatilbleWithRouter = clientIsCompatilbleWithRouter === "yes" ? true : false;
   isCompatibleTurboSrcID = isCompatibleTurboSrcID === "yes" ? true : false;
 
+ const checkTurboSrcSystemHandler = async () => {
+   //const res = await getTurboSrcSystemInfo('7db9a/demo', '1839a2f5a01d4d6aaadc33887bf3285d6380c2c9')
+
+   setClientIsCompatibleWithRouter("no" /*res.clientIsCompatibleWithRouter*/)
+   setIsCompatibleTurboSrcID("yes"/*res.isCompatibleTurboSrcID*/)
+   setMessage(res.message)
+ }
+
+  useEffect(() => {
+checkTurboSrcSystemHandler()
+  }, []);
+
   let avatar = user?.avatar_url || null;
 
   useEffect(() => {
+
     //Set current logged in contributor/id to chrome storage for inject to verify user for voting
     chrome.storage.local.set({ contributor_name: user.login });
     chrome.storage.local.set({ contributor_id: user.ethereumAddress });
@@ -311,12 +324,17 @@ export default function Home() {
   });
 
   let getVotes = async () => await postGetVotes(repo_id, issue_id, contributor_id);
- 
+
   if (!clientIsCompatilbleWithRouter){
     return (
       <TurbosrcNotice>Your version of Turbosrc is out of date and needs to be updated to continue to {message}.</TurbosrcNotice>
     );
-  } else if (owner === 'none' && repo === 'none') {
+  } if (!isCompatibleTurboSrcID) {
+    return (
+      <TurbosrcNotice>The owner of the repo is using an out of date version of Turbosrc. Owner should follow instructions here to update {message}.</TurbosrcNotice>
+    );
+  }
+    else if (owner === 'none' && repo === 'none') {
     return <TurbosrcNotice>Please visit a Github repo page in your browser to use Turbosrc.</TurbosrcNotice>;
   }
 
