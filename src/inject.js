@@ -221,10 +221,11 @@ console.log('repo data =>', repoData)
       const divHTML = event.target.parentElement;
       var idName = divHTML.id;
       const idBtnSplit = idName.split('turbo-src-btn');
-
-      // Render the modal with the relevant PR data using the issue ID
       if (idBtnSplit.length > 1) {
         const idNameSplit = idName.split('-');
+        const prDataFromInject = {prData: repoData.pullRequests.filter(pr => idNameSplit[idNameSplit.length - 1] === pr.issue_id)[0] || false, loading: false}
+      // Render the modal with the relevant PR data using the issue ID
+      
         issue_id = idNameSplit[3];
         modal.style.display = 'block';
         modalState.currentIssueID = issue_id;
@@ -242,6 +243,7 @@ console.log('repo data =>', repoData)
             githubUser: githubUserObject,
             voteRes: getVotesRes,
             getVotes: getVotes,
+            prDataFromInject: prDataFromInject,
             toggleModal: toggleModal,
             socketEvents: socketEvents
           }),
@@ -286,6 +288,7 @@ console.log('repo data =>', repoData)
       for (var i = startIndex; i < containerItems.length; i++) {
         issue_id = containerItems[i].getAttribute('id');
         const [domContainerTurboSrcButton] = querySelectorAllFrames(`#turbo-src-btn-${issue_id}`);
+        console.log(repoData);
         const prDataFromInject = {prData: repoData.pullRequests.filter(pr => issue_id === pr.issue_id)[0] || false, loading: false}
         render(
           ce(VoteStatusButton, {
