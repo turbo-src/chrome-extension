@@ -234,12 +234,12 @@ export default function Home() {
 
 const checkTurboSrcSystemHandler = async () => {
   try {
-    const res = await getTurboSrcSystemInfo('7db9a/demo', '1839a2f5a01d4d6aaadc33887bf3285d6380c2c9');
+    const res = await getTurboSrcSystemInfo('7db9a/demo', '5832bdef30389132c1b523aca4ccbd8312e70eab');
     console.log('getTurboSrcSystemInfo 237');
     console.log(JSON.stringify(res));
 
-    setClientIsCompatibleWithRouter("yes" /*res.clientIsCompatibleWithRouter*/)
-    setIsCompatibleTurboSrcID("yes" /*res.isCompatibleTurboSrcID*/)
+    setClientIsCompatibleWithRouter(res.clientIsCompatibleWithRouter)
+    setIsCompatibleTurboSrcID(res.isCompatibleTurboSrcID)
     setMessage(res.message)
   } catch (error) {
     console.error('Error in checkTurboSrcSystemHandler:', error);
