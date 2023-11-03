@@ -14,6 +14,7 @@ import { set } from '../../../utils/storageUtil';
 const { socket } = require('../../../socketConfig');
 const { postGetVotes, getNameSpaceRepo } = require('../../../requests');
 import { setRepo } from '../../../store/repo';
+import CONFIG from '../../../config';
 
 const VoteText = styled.span`
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -234,7 +235,8 @@ export default function Home() {
 
 const checkTurboSrcSystemHandler = async () => {
   try {
-    const res = await getTurboSrcSystemInfo('7db9a/demo', '5832bdef30389132c1b523aca4ccbd8312e70eab');
+    const currentClientVersion = CONFIG.currentVersion
+    const res = await getTurboSrcSystemInfo(`"${owner}"/"${repo}"`, currentClientVersion);
     console.log('getTurboSrcSystemInfo 237');
     console.log(JSON.stringify(res));
 
