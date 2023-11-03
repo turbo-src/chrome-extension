@@ -232,13 +232,19 @@ export default function Home() {
   clientIsCompatilbleWithRouter = clientIsCompatilbleWithRouter === "yes" ? true : false;
   isCompatibleTurboSrcID = isCompatibleTurboSrcID === "yes" ? true : false;
 
- const checkTurboSrcSystemHandler = async () => {
-   //const res = await getTurboSrcSystemInfo('7db9a/demo', '1839a2f5a01d4d6aaadc33887bf3285d6380c2c9')
+const checkTurboSrcSystemHandler = async () => {
+  try {
+    const res = await getTurboSrcSystemInfo('7db9a/demo', '1839a2f5a01d4d6aaadc33887bf3285d6380c2c9');
+    console.log('getTurboSrcSystemInfo 237');
+    console.log(JSON.stringify(res));
 
-   setClientIsCompatibleWithRouter("no" /*res.clientIsCompatibleWithRouter*/)
-   setIsCompatibleTurboSrcID("yes"/*res.isCompatibleTurboSrcID*/)
-   setMessage(res.message)
- }
+    setClientIsCompatibleWithRouter("yes" /*res.clientIsCompatibleWithRouter*/)
+    setIsCompatibleTurboSrcID("yes" /*res.isCompatibleTurboSrcID*/)
+    setMessage(res.message)
+  } catch (error) {
+    console.error('Error in checkTurboSrcSystemHandler:', error);
+  }
+};
 
   useEffect(() => {
 checkTurboSrcSystemHandler()

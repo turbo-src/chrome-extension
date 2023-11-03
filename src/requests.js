@@ -55,27 +55,18 @@ async function getTurboSrcSystemInfo(repoName, clientCurrentVersion) {
   const res = await superagent
     .post(`${url}`)
     .send({
-      query: `
-        {
-          getTurboSrcSystemInfo(turboSrcID: "${turboSrcID}", clientCurrentVersion: "${clientCurrentVersion}") {
-            clientIsCompatibleWithRouter
-            isCompatibleTurboSrcID
-            message
-          }
-        }
-      `
+      query: `{getTurboSrcSystemInfo(turboSrcID: "${turboSrcID}", clientCurrentVersion: "${clientCurrentVersion}")}`
     })
     .set('accept', 'json');
 
   const json = JSON.parse(res.text);
-  const { clientIsCompatibleWithRouter, isCompatibleTurboSrcID, message } = json.data.getTurboSrcSystemInfo;
 
-  console.log('Egress\ngetTurboSrcSystemInfo clientIsCompatibleWithRouter', clientIsCompatibleWithRouter);
-  console.log('Egress\ngetTurboSrcSystemInfo isCompatibleTurboSrcID', isCompatibleTurboSrcID);
-  console.log('Egress\ngetTurboSrcSystemInfo message', message);
+  //console.log('Egress\ngetTurboSrcSystemInfo clientIsCompatibleWithRouter', clientIsCompatibleWithRouter);
+  //console.log('Egress\ngetTurboSrcSystemInfo isCompatibleTurboSrcID', isCompatibleTurboSrcID);
+  //console.log('Egress\ngetTurboSrcSystemInfo message', message);
 
   // Assuming you need to return clientIsCompatibleWithRouter and message based on the previous function signature
-  return { clientIsCompatibleWithRouter, message };
+  return json.data.getTurboSrcSystemInfo;
 }
 
 async function getTurboSrcIDFromRepoName(reponame) {
@@ -299,12 +290,6 @@ async function postCreateRepo(owner, repo, defaultHash, contributor_id, side, to
     .set('accept', 'json');
 
   const json = JSON.parse(res.text);
-
-  // Mocking getT urboSrcSystemInfo for testing
-  console.log('Getting system info');
-  const systemInfo = await getTurboSrcSystemInfo(repoName, clientCurrentVersion);
-  console.log('Received system info:', systemInfo);
-  // Remove this mock.
 
   return json.data.createRepo;
 }
