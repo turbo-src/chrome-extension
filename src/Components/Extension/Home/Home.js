@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import superagent from 'superagent';
-import { getTurboSrcSystemInfo, postGetRepoData } from '../../../requests';
+import { postGetRepoData } from '../../../requests';
 import useCommas from '../../../hooks/useCommas';
 import styled from 'styled-components';
 import PullRequestRow from './PullRequestRow.js';
@@ -14,7 +14,6 @@ import { set } from '../../../utils/storageUtil';
 const { socket } = require('../../../socketConfig');
 const { postGetVotes, getNameSpaceRepo } = require('../../../requests');
 import { setRepo } from '../../../store/repo';
-import CONFIG from '../../../config';
 
 const VoteText = styled.span`
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -37,16 +36,7 @@ const VotePower = styled(VoteText)`
   letter-spacing: 0.2px;
 `;
 
-const TurbosrcNotice = styled.div`
-  @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300&display=swap');
-  font-family: 'Roboto Mono', monospace;
-  font-weight: 300;
-  font-size: 14px;
-  letter-spacing: 0.2px;
-  text-align: center;
-  position: relative;
-  top: 150px;
-`;
+
 const CenteredWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -195,7 +185,6 @@ export default function Home() {
   const currentRepo = useSelector(state => state.repo);
   const dispatch = useDispatch()
 
-  const oldVersion = false;
   const [pullRequests, setPullRequests] = useState([]);
   const [tokenized, setTokenized] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -223,34 +212,6 @@ export default function Home() {
   let name = user?.name;
   let username = user?.login;
   let [tokenAmount, setTokenAmount] = useState('');
-
-  //const clientVersion = CONFIG.clientVersion
-
-  let [clientIsCompatilbleWithRouter, setClientIsCompatibleWithRouter]= useState("yes")
-  let [isCompatibleTurboSrcID, setIsCompatibleTurboSrcID] = useState("yes")
-  let [message, setMessage] =useState("https://github.com/turbo-src/turbo-src") /*= getTurboSrcSystemInfo(repoName="7db9a", clientVersion "xb7da")*/
-
-  clientIsCompatilbleWithRouter = clientIsCompatilbleWithRouter === "yes" ? true : false;
-  isCompatibleTurboSrcID = isCompatibleTurboSrcID === "yes" ? true : false;
-
-const checkTurboSrcSystemHandler = async () => {
-  try {
-    const currentClientVersion = CONFIG.currentVersion
-    const res = await getTurboSrcSystemInfo(`"${owner}"/"${repo}"`, currentClientVersion);
-    console.log('getTurboSrcSystemInfo 237');
-    console.log(JSON.stringify(res));
-
-    setClientIsCompatibleWithRouter(res.clientIsCompatibleWithRouter)
-    setIsCompatibleTurboSrcID(res.isCompatibleTurboSrcID)
-    setMessage(res.message)
-  } catch (error) {
-    console.error('Error in checkTurboSrcSystemHandler:', error);
-  }
-};
-
-  useEffect(() => {
-checkTurboSrcSystemHandler()
-  }, []);
 
   let avatar = user?.avatar_url || null;
 
@@ -333,18 +294,6 @@ checkTurboSrcSystemHandler()
 
   let getVotes = async () => await postGetVotes(repo_id, issue_id, contributor_id);
 
-  if (!clientIsCompatilbleWithRouter){
-    return (
-      <TurbosrcNotice>Your version of Turbosrc is out of date and needs to be updated to continue to {message}.</TurbosrcNotice>
-    );
-  } if (!isCompatibleTurboSrcID) {
-    return (
-      <TurbosrcNotice>The owner of the repo is using an out of date version of Turbosrc. Owner should follow instructions here to update {message}.</TurbosrcNotice>
-    );
-  }
-    else if (owner === 'none' && repo === 'none') {
-    return <TurbosrcNotice>Please visit a Github repo page in your browser to use Turbosrc.</TurbosrcNotice>;
-  }
 
   switch (seeModal) {
     case true:

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-export default function Nav() {
+export default function Nav({disabled}) {
   const navigate = useNavigate();
   return (
     <div className="nav">
@@ -17,7 +17,7 @@ export default function Nav() {
         </span>
         <span>Community</span>
       </span>
-      <span className="navIcon" onClick={() => navigate('/transfer')}>
+      <span className="navIcon" onClick={() => !disabled && navigate('/transfer')}>
         <span>
           <img src="../icons/transfer.png" />
         </span>

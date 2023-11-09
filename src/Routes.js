@@ -14,11 +14,25 @@ import { setRepo } from './store/repo';
 import { useEffect, useState } from 'react';
 import superagent from 'superagent';
 import { postFindOrCreateUser} from './requests';
+import styled from 'styled-components';
+import CONFIG from './config';
+import { getTurboSrcSystemInfo } from './requests';
+
+const TurbosrcNotice = styled.div`
+  @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300&display=swap');
+  font-family: 'Roboto Mono', monospace;
+  font-weight: 300;
+  font-size: 14px;
+  letter-spacing: 0.2px;
+  text-align: center;
+  position: relative;
+  margin-top: 5rem;
+`;
 
 export default function Routes(props) {
   const auth = useSelector(state => state.auth);
   const dispatch = useDispatch();
-
+console.log('props:', props)
   useEffect(()=>{
     dispatch(setRepo(props.currentRepo))
     },[])
@@ -58,6 +72,79 @@ export default function Routes(props) {
         dispatch(setAuth(githubUser));
     }
   }, [user]);
+
+    let [clientIsCompatibleWithRouter, setClientIsCompatibleWithRouter]= useState("yes")
+    let [isCompatibleTurboSrcID, setIsCompatibleTurboSrcID] = useState("yes")
+    let [repoPage, setRepoPage] = useState(false)
+    let [message, setMessage] = useState("")
+
+  const checkTurboSrcSystemHandler = async () => {
+    try {
+      if (props.currentRepo?.name === 'none') {
+        setMessage('Please visit a GitHub repository page to use Turbosrc.');
+        return;
+      } else {
+        setRepoPage(true);
+      }
+      const currentClientVersion = CONFIG.currentVersion || '';
+      let owner = props.currentRepo?.owner?.login;
+      let repo = props.currentRepo?.name;
+      if(owner === 'none' && repo === 'none') {
+        owner = 'reibase'
+        repo = 'marialis'
+      }
+      const repoName = `${owner}/${repo}`;
+      const res = await getTurboSrcSystemInfo(repoName, currentClientVersion);
+
+      if (res.clientIsCompatibleWithRouter === 'yes') {
+        setClientIsCompatibleWithRouter(true);
+      } else if (res.clientIsCompatibleWithRouter === 'no') {
+        setClientIsCompatibleWithRouter(false);
+        setMessage(
+          'Your version of Turbosrc is out of date and needs to be updated to continue to https://github.com/turbo-src/turbo-src'
+        );
+        return;
+      }
+      if (res.isCompatibleTurboSrcID === 'yes') {
+        setIsCompatibleTurboSrcID(true);
+      } else if (res.isCompatibleTurboSrcID === 'no') {
+        setIsCompatibleTurboSrcID(false);
+        setMessage(
+          'The owner of the repo is using an out of date version of Turbosrc. Owner should follow instructions here to update https://github.com/turbo-src/turbo-src'
+        );
+      }
+    } catch (error) {
+      console.error('Error in checkTurboSrcSystemHandler:', error);
+    }
+  };
+  
+    useEffect(() => {
+      checkTurboSrcSystemHandler();
+    }, []);
+
+  if (!clientIsCompatibleWithRouter || !isCompatibleTurboSrcID || !repoPage) {
+    return auth.isLoggedIn ? (
+      <BrowserRouter>
+        <div className="container">
+          <Header />
+          <Switch>
+            <Route exact path="/popup.html" element={<TurbosrcNotice>{message}</TurbosrcNotice>} />
+            <Route exact path="/home" element={<TurbosrcNotice>{message}</TurbosrcNotice>} />
+            <Route exact path="/account" element={<Account />} />
+          </Switch>
+        </div>
+        <Nav disabled={true} />
+      </BrowserRouter>
+    ) : (
+      <BrowserRouter>
+        <div className="container">
+          <Switch>
+            <Route exact path="/popup.html" element={<Auth />} />
+          </Switch>
+        </div>
+      </BrowserRouter>
+    );
+  }
 
   return auth.isLoggedIn ? (
     <BrowserRouter>
