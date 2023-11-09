@@ -32,7 +32,7 @@ const TurbosrcNotice = styled.div`
 export default function Routes(props) {
   const auth = useSelector(state => state.auth);
   const dispatch = useDispatch();
-console.log('props:', props)
+
   useEffect(()=>{
     dispatch(setRepo(props.currentRepo))
     },[])
