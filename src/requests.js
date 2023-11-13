@@ -51,7 +51,14 @@ async function getTurboSrcIDfromInstance() {
 
 async function getTurboSrcSystemInfo(repoName, clientCurrentVersion) {
   console.log('getTurboSrcSystemInfo', 'clientCurrentVersion', clientCurrentVersion);
-  const turboSrcID = await getTurboSrcIDFromRepoName(repoName);
+  var turboSrcID = await getTurboSrcIDFromRepoName(repoName);
+  if (turboSrcID == null || turboSrcID === 'null') {
+    return {
+      clientIsCompatibleWithRouter: "yes",
+      isCompatibleTurboSrcID: "yes",
+      message: "https://github.com/turbo-src/turbo-src",
+    }
+  }
   const res = await superagent
     .post(`${url}`)
     .send({
