@@ -52,7 +52,8 @@ async function getTurboSrcIDfromInstance() {
 async function getTurboSrcSystemInfo(repoName, clientCurrentVersion) {
   console.log('getTurboSrcSystemInfo', 'clientCurrentVersion', clientCurrentVersion);
   var turboSrcID = await getTurboSrcIDFromRepoName(repoName);
-  if (turboSrcID == null || turboSrcID === 'null') {
+  // Get better way to find if in local mode.
+  if (CONFIG.url.includes('localhost')) {
     return {
       clientIsCompatibleWithRouter: "yes",
       isCompatibleTurboSrcID: "yes",
