@@ -45,17 +45,6 @@ const Placeholder = styled.div`
   pointer-events: none;
 `;
 
-export default function VoteStatusButton({
-  user,
-  repoID,
-  issueID,
-  contributorID,
-  side,
-  clicked,
-  toggleModal,
-  prDataFromInject
-}) {
-
 export default function VoteStatusButton({ repoID, issueID, contributorID, toggleModal, prDataFromInject }) {
   const [voteStatusButton, setVoteStatusButton] = useState({
     color: '#4AA0D5',

@@ -261,6 +261,7 @@ console.log('repo data =>', repoData)
     const updateModalVotesTable = async issueID => {
       if (issueID === modalState.currentIssueID && modal.style.display === 'block') {
         const domContainerModal = myModalNode;
+        const prDataFromInject = {prData: repoData.pullRequests.filter(pr => issueID === pr.issue_id)[0] || false, loading: false}
         render(
           ce(ModalVote, {
             user: user,
@@ -273,6 +274,7 @@ console.log('repo data =>', repoData)
             githubUser: githubUserObject,
             voteRes: getVotesRes,
             getVotes: getVotes,
+            prDataFromInject: prDataFromInject,
             toggleModal: toggleModal,
             socketEvents: socketEvents
             //modalOpen: modalState.modalOpen,
