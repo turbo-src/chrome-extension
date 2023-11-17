@@ -3,6 +3,8 @@ import Skeleton from '@mui/material/Skeleton';
 import styled from 'styled-components';
 import ButtonProgress from './ButtonProgress.js';
 import { postGetVotes } from '../../requests.js';
+const {socket} = require("../../socketConfig")
+
 const LockIcon = 'https://www.reibase.rs/lock.png';
 
 const ButtonVote = styled.button`
@@ -56,6 +58,7 @@ export default function VoteStatusButton({ repoID, issueID, contributorID, toggl
     await postGetVotes(repoID, issueID, contributorID).then(res =>
       setState({ prData: res, loading: false })
     );
+    socket.emit('update repo', repoID)
   };
 
   const buttonStyle = {

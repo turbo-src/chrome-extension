@@ -223,10 +223,10 @@ let getFromStorage = keys =>
       const idBtnSplit = idName.split('turbo-src-btn');
       if (idBtnSplit.length > 1) {
         const idNameSplit = idName.split('-');
-        const prDataFromInject = {prData: repoData.pullRequests.filter(pr => idNameSplit[idNameSplit.length - 1] === pr.issue_id)[0] || false, loading: false}
+        issue_id = idNameSplit[3];
+        const prDataFromInject = {prData: repoData.pullRequests.filter(pr => issue_id === pr.issue_id)[0] || false, loading: false}
       // Render the modal with the relevant PR data using the issue ID
       
-        issue_id = idNameSplit[3];
         modal.style.display = 'block';
         modalState.currentIssueID = issue_id;
         const domContainerModal = myModalNode;
