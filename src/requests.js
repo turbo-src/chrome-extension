@@ -781,6 +781,7 @@ async function postGetRepoData(repo_id, contributor_id) {
       totalVotes,
       totalYesVotes,
       totalNoVotes,
+      quorum,
     },
     votes {
       contributor_id,
@@ -811,7 +812,7 @@ async function postGetVotes(repo, defaultHash, contributor_id) {
     .send({
       query: `
       { getVotes(turboSrcID: "${turboSrcID}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id:"${contributor_id}")
-      { status, repo_id, title, head, remoteURL, baseBranch, forkBranch, childDefaultHash, defaultHash, mergeable, state, quorum
+      { status, repo_id, title, head, remoteURL, baseBranch, forkBranch, childDefaultHash, defaultHash, mergeable, state
         voteData {
           contributor {
             voted, side, votePower, createdAt, contributor_id

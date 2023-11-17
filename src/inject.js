@@ -224,7 +224,7 @@ let getFromStorage = keys =>
       if (idBtnSplit.length > 1) {
         const idNameSplit = idName.split('-');
         issue_id = idNameSplit[3];
-        const prDataFromInject = {prData: repoData.pullRequests.filter(pr => issue_id === pr.issue_id)[0] || false, loading: false}
+        const prDataFromInject = {prData: repoData.pullRequests.filter(pr => issue_id === pr?.issue_id)[0] || false, loading: false}
       // Render the modal with the relevant PR data using the issue ID
       
         modal.style.display = 'block';
