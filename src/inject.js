@@ -98,7 +98,7 @@ let getFromStorage = keys =>
       'contributor_id is not set correctly. Try logging out and logging back in to the Turbosrc web extension.'
     );
   }
-console.log('repo data =>', repoData)
+
   // Log key variables to debug:
   const keyVariables = {
     testMode: testMode,
@@ -290,7 +290,6 @@ console.log('repo data =>', repoData)
       for (var i = startIndex; i < containerItems.length; i++) {
         issue_id = containerItems[i].getAttribute('id');
         const [domContainerTurboSrcButton] = querySelectorAllFrames(`#turbo-src-btn-${issue_id}`);
-        console.log(repoData);
         const prDataFromInject = {prData: repoData.pullRequests.filter(pr => issue_id === pr.issue_id)[0] || false, loading: false}
         render(
           ce(VoteStatusButton, {
@@ -314,16 +313,15 @@ console.log('repo data =>', repoData)
     renderVoteButtons();
 
     // Update a voteStatusButton if our socket tells us its associated PR has been voted upon
-    const updateVoteStatusButton = async issueID => {
-      issue_id = issueID;
-      const [domContainerTurboSrcButton] = querySelectorAllFrames(`#turbo-src-btn-${issue_id}`);
-      const prDataFromInject = {prData: repoData.pullRequests.filter(pr => issue_id === pr.issue_id)[0] || false, loading: false}
+    const updateVoteStatusButton = issueID => {
+      const [domContainerTurboSrcButton] = querySelectorAllFrames(`#turbo-src-btn-${issueID}`);
+      const prDataFromInject = {prData: repoData.pullRequests.filter(pr => issueID === pr.issue_id)[0] || false, loading: false}
       render(
         ce(VoteStatusButton, {
           user: user,
           repo: repo,
           repoID: repoID,
-          issueID: issue_id,
+          issueID: issueID,
           contributorName: contributor_name,
           contributorID: contributor_id,
           prDataFromInject: prDataFromInject,

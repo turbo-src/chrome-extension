@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import useGetVotes from '../../hooks/useGetVotes.js';
 import Skeleton from '@mui/material/Skeleton';
 import styled from 'styled-components';
 import ButtonProgress from './ButtonProgress.js';
@@ -15,7 +14,7 @@ const ButtonVote = styled.button`
   border-radius: 5px;
   filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.35));
   display: flex;
-  justify-content: space-around; 
+  justify-content: space-around;
   align-items: center;
   background-color: var(--button-color);
   transition: background-color 0.3s ease;
@@ -54,7 +53,9 @@ export default function VoteStatusButton({ repoID, issueID, contributorID, toggl
   const { loading, prData } = state;
 
   const getVotesHandler = async () => {
-    await postGetVotes(repoID, issueID, contributorID).then(res => setState({ prData: res, loading: false }));
+    await postGetVotes(repoID, issueID, contributorID).then(res =>
+      setState({ prData: res, loading: false })
+    );
   };
 
   const buttonStyle = {
