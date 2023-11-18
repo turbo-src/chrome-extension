@@ -123,7 +123,7 @@ export default function Onboard2() {
   if (loader) {
     return <Loader />;
   }
-  if (!permissions.public_repo_scopes) {
+  if (!permissions.public_repo_scopes || !permissions.push_permissions) {
     return (
       <>
         {loadingPerms ? (
