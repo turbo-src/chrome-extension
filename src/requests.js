@@ -53,7 +53,7 @@ async function getTurboSrcSystemInfo(repoName, clientCurrentVersion) {
   console.log('getTurboSrcSystemInfo', 'clientCurrentVersion', clientCurrentVersion);
   var turboSrcID = await getTurboSrcIDFromRepoName(repoName);
   // Get better way to find if in local mode.
-  if (CONFIG.url.includes('localhost') || CONFIG.url.includes('turbosrc-service')) {
+  if (CONFIG.url.includes('localhost') || CONFIG.url.includes('turbosrc-service') || CONFIG.url.includes('ssl-proxy')) {
     return {
       clientIsCompatibleWithRouter: "yes",
       isCompatibleTurboSrcID: "yes",
@@ -79,7 +79,7 @@ async function getTurboSrcSystemInfo(repoName, clientCurrentVersion) {
 
 async function getTurboSrcIDFromRepoName(reponame) {
   console.log('getTurboSrcIDFromRepoName reponame', reponame);
-  if (url === 'http://localhost:4000/graphql' || url === 'http://turbosrc-service:4000/graphql') {
+  if (CONFIG.url.includes('localhost') || CONFIG.url.includes('turbosrc-service') || CONFIG.url.includes('ssl-proxy')) {
     console.log('local\ngetTurboSrcIDFromRepoName turboSrcID', turboSrcIDfromInstance);
     return turboSrcIDfromInstance;
   } else {
@@ -99,7 +99,7 @@ async function getTurboSrcIDFromRepoName(reponame) {
 
 async function getTurboSrcIDFromRepoID(repoID) {
   console.log('getTurboSrcIDFromRepoID repoID', repoID);
-  if (url === 'http://localhost:4000/graphql' || url === 'http://turbosrc-service:4000/graphql') {
+  if (CONFIG.url.includes('localhost') || CONFIG.url.includes('turbosrc-service') || CONFIG.url.includes('ssl-proxy')) {
     console.log('local\ngetTurboSrcIDFromRepoID turboSrcID', turboSrcIDfromInstance);
     return turboSrcIDfromInstance;
   } else {

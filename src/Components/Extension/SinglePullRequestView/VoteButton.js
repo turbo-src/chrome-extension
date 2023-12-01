@@ -90,7 +90,7 @@ function VoteButton({
   const voteHandler = async e => {
     e.preventDefault();
     const res = await postSetVote(owner, repoID, issueID, issueID, false, contributorID, side, githubToken);
-    socket.emit('vote cast', owner, repo, issueID)
+    //socket.emit('vote cast', owner, repo, issueID)
   };
 
   //Set switch case use effect:
