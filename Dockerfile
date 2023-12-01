@@ -13,5 +13,9 @@ RUN yarn install
 # Copy the rest of the application source code
 COPY . .
 
+RUN chown -R node:node /app/
+
+USER node
+
 # Define a default command that keeps the container running
 #CMD ["tail", "-f", "/dev/null"]
