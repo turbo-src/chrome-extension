@@ -49,55 +49,56 @@ const checkVoteButtonConflict = commonUtil.isObjEqual(this.state.voteButton, { c
 const checkVoteButtonProblem = commonUtil.isObjEqual(this.state.voteButton, { color: 'gray', text: '?' } );
 
 modalDisplay = 'hide' // only show modal if open or on vote.
-  if (statusPreOpenComponent) {
-modalDisplay = 'show'
-  //if (statusOpenComponent && gitHubPRstatus.mergeable) {
-if (!checkVoteButtonPreOpen) {
-       this.setState({ voteButton: { color: 'green', text: `${textMath}%` } });
-} else {
-      this.setState({tsrcPRstatus: tsrcPRstatusComponent });
-}
-} else if (statusOpenComponent) {
-  //if (statusOpenComponent && gitHubPRstatus.mergeable) {
-modalDisplay = 'show'
-if (!checkVoteButtonOpen) {
-       this.setState({ voteButton: { color: 'orchid', text: `${textMath}%` } });
-} else {
-      this.setState({tsrcPRstatus: tsrcPRstatusComponent });
-}
-  } else if (statusClosedComponent) {
-if (!checkVoteButtonClosed) {
-      this.setState({ voteButton: { color: 'red', text: 'closed' } });
-} else {
-      this.setState({tsrcPRstatus: tsrcPRstatusComponent });
-}
-  } else if (statusMergedComponent) {
-if (!checkVoteButtonMerged) {
-      this.setState({ voteButton: { color: 'darkorchid', text: 'merged' } });
-} else {
-      this.setState({tsrcPRstatus: tsrcPRstatusComponent });
-}
-} else if (tsrcPRstatusComponent.mergeableCodeHost === true) {
-modalDisplay = 'show'
-if (!checkVoteButtonVote) {
-      this.setState({ voteButton: { color: 'lightgreen', text: 'vote' } });
-} else {
-      this.setState({tsrcPRstatus: tsrcPRstatusComponent });
-}
-} else if (tsrcPRstatusComponent.mergeableCodeHost === false) {
-if (!checkVoteButtonConflict) {
-      this.setState({ voteButton: { color: 'orange', text: 'conflict' } });
-} else {
-      this.setState({tsrcPRstatus: tsrcPRstatusComponent });
-}
-} else if (tsrcPRstatusComponent.mergeableCodeHost === true) {
-      this.setState({ voteButton: { color: 'lightgreen', text: 'vote' } });
+if (statusPreOpenComponent) {
+    modalDisplay = 'show'
+      //if (statusOpenComponent && gitHubPRstatus.mergeable) {
+  if (!checkVoteButtonPreOpen) {
+         this.setState({ voteButton: { color: 'green', text: `${textMath}%` } });
   } else {
-if (!checkVoteButtonProblem) {
-      this.setState({ voteButton: { color: 'gray', text: '?' } });
+        this.setState({tsrcPRstatus: tsrcPRstatusComponent });
+  }
+} else if (statusOpenComponent) {
+    //if (statusOpenComponent && gitHubPRstatus.mergeable) {
+  modalDisplay = 'show'
+  if (!checkVoteButtonOpen) {
+         this.setState({ voteButton: { color: 'orchid', text: `${textMath}%` } });
+  } else {
+        this.setState({tsrcPRstatus: tsrcPRstatusComponent });
+  }
+} else if (statusClosedComponent) {
+  if (!checkVoteButtonClosed) {
+        this.setState({ voteButton: { color: 'red', text: 'closed' } });
+  } else {
+        this.setState({tsrcPRstatus: tsrcPRstatusComponent });
+  }
+} else if (statusMergedComponent) {
+  if (!checkVoteButtonMerged) {
+        this.setState({ voteButton: { color: 'darkorchid', text: 'merged' } });
+  } else {
+        this.setState({tsrcPRstatus: tsrcPRstatusComponent });
+  }
+} else if (tsrcPRstatusComponent.mergeableCodeHost === true) {
+  modalDisplay = 'show'
+  if (!checkVoteButtonVote) {
+        this.setState({ voteButton: { color: 'lightgreen', text: 'vote' } });
+  } else {
+        this.setState({tsrcPRstatus: tsrcPRstatusComponent });
+  }
+} else if (tsrcPRstatusComponent.mergeableCodeHost === false) {
+  if (!checkVoteButtonConflict) {
+        this.setState({ voteButton: { color: 'orange', text: 'conflict' } });
+  } else {
+        this.setState({tsrcPRstatus: tsrcPRstatusComponent });
+  }
+} else if (tsrcPRstatusComponent.mergeableCodeHost === true) {
+      this.setState({ voteButton: { color: 'lightgreen', text: 'vote' } });
 } else {
-      this.setState({tsrcPRstatus: tsrcPRstatusComponent });
-}
+  if (!checkVoteButtonProblem) {
+        this.setState({ voteButton: { color: 'gray', text: '?' } });
+  } else {
+        this.setState({tsrcPRstatus: tsrcPRstatusComponent });
+  }
 }
 
+console.log('tsrcPRstatusComponent\n', tsrcPRstatusComponent)
 };
