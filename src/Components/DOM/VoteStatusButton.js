@@ -61,6 +61,7 @@ export default function VoteStatusButton({
 
   const { prData, loading } = useGetVotes(user, repoID, issueID, contributorID, side, socketEvents, clicked);
 
+
   const buttonStyle = {
     vote: ['#4AA0D5', 'Vote'],
     'pre-open': ['#4AA0D5', 'Vote'],
@@ -78,6 +79,11 @@ export default function VoteStatusButton({
     '#DD4747': '#C32424',
     '#FC9A28': '#F1880C'
   };
+
+  // If null, it will crash the button.
+  if (prData.mergeable === false) {
+     prData.state = "conflict"
+  }
 
   useEffect(() => {
     if (!loading) {
